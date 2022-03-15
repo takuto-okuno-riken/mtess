@@ -132,6 +132,8 @@ output csv file : results/demo-original-8x500_aaft_multi_1.csv
 output csv file : results/demo-original-8x500_mtess_node7.csv
 output csv file : results/demo-original-8x500_mtess_node8.csv
 ~~~
+"surrogate" command reads single multivariate time-series (8x500) file and generates surrogate data (8x500) by (multivariate) FT surrogate, AAFT surrogate and VAR surrogate.
+Then, "mtess" command reads original and surrogate data .csv files, and calculates multivariate time-series similarity.
 
 ## Citing MTESS and GSDGM toolbox
 If you find MTESS and GSDGM toolbox useful in your research, please consider citing: 
