@@ -126,20 +126,7 @@ output csv file : results/demo-original-8x500_var_multi_1.csv
 output csv file : results/demo-original-8x500_ft_multi_1.csv
 output csv file : results/demo-original-8x500_aaft_multi_1.csv
 >> mtess --showmat --showprop --showsig data/demo-original-8x500.csv results/demo-original-8x500_ft_multi_1.csv results/demo-original-8x500_aaft_multi_1.csv results/demo-original-8x500_var_multi_1.csv
-output csv file : results/demo-original-8x500_mtess.csv
-output csv file : results/demo-original-8x500_mtess_M.csv
-output csv file : results/demo-original-8x500_mtess_SD.csv
-output csv file : results/demo-original-8x500_mtess_Amp.csv
-output csv file : results/demo-original-8x500_mtess_FC.csv
-output csv file : results/demo-original-8x500_mtess_PC.csv
-output csv file : results/demo-original-8x500_mtess_CC.csv
-output csv file : results/demo-original-8x500_mtess_PCC.csv
-output csv file : results/demo-original-8x500_mtess_node1.csv
-output csv file : results/demo-original-8x500_mtess_node2.csv
-output csv file : results/demo-original-8x500_mtess_node3.csv
-output csv file : results/demo-original-8x500_mtess_node4.csv
-output csv file : results/demo-original-8x500_mtess_node5.csv
-output csv file : results/demo-original-8x500_mtess_node6.csv
+...
 output csv file : results/demo-original-8x500_mtess_node7.csv
 output csv file : results/demo-original-8x500_mtess_node8.csv
 ~~~
