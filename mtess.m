@@ -279,7 +279,9 @@ function processInputFiles(handles)
     % show 1 vs. others node MTESS
     if handles.showNode > 0
         A = squeeze(nMTS(1,2:length(CX),:));
-        figure; plot(A.'); title('node MTESS : 1 vs. others');
+        figure; plot(A.',':o','LineWidth',1, 'MarkerFaceColor','auto', 'MarkerSize',4);
+        title('node MTESS : 1 vs. others');
+        yticks([0 1 2 3 4 5]);
         legend(names(2:length(CX))); ylim([0,5]);
         xlabel('Node number');
         ylabel('MTESS');

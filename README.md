@@ -85,8 +85,17 @@ This demo inputs
 
 (Copy and paste this command line. Demo data is included in MTESS and GSDGM toolbox.)
 ~~~
-mtess data/cx-8x500-demo-surrogate.mat --format 1 --showmat --showprop --shownode --showsig
+mtess data/cx-8x500-demo-surrogate.mat --format 1 --showmat --showprop --shownode --showsig --showinsig
 ~~~
+.mat file includes input cell data.
+| name | cell | description |
+|:---|:---|:---|
+|CX |&lt;nodes&gt; x &lt;length&gt;(double)|group of multivariate time-series|
+|names |&lt;nodes&gt; x &lt;length&gt;(double)|names of each data|
+
+<div align="center">
+<img src="data/demo1.jpg">
+</div>
 
 ~~~
 >> surrogate -f -a -v data/demo-original-8x500.csv
