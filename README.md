@@ -92,7 +92,7 @@ Input .mat file includes input cell data.
 | name | cell | description |
 |:---|:---|:---|
 |CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
-|names |{'data name string'} x &lt;cell number&gt; |names of each data|
+|names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
 
 Node size must be the same within the group. Time-series length does not have to be the same
 This demo calculates MTESS and shows following figures:
