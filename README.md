@@ -2,7 +2,7 @@
 Multivariate Time-series Ensemble Similarity Score (MTESS) and Group Surrogate Data Generating Model (GSDGM) toolbox
 
 ## Introduction
-MTESS and GSDGM toolbox is a powerful tool for multivariate time-series similarity analysis and data generating model.
+"MTESS and GSDGM toolbox" is a powerful tool for multivariate time-series similarity analysis and surrogate data generation.
 
 
 ## Requirements: software
