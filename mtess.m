@@ -157,7 +157,7 @@ function processInputFiles(handles)
     N = length(handles.csvFiles);
 
     % load each file
-    CX = {}; names = {};
+    CX = {}; names = {}; issetname = false;
     for i = 1:N
         % init data
         X = [];
@@ -173,7 +173,9 @@ function processInputFiles(handles)
             f = load(fname);
             if isfield(f,'CX')
                 CX = f.CX;
-                names = f.names;
+                if isfield(f,'names')
+                    names = f.names;
+                end
             elseif isfield(f,'X')
                 names{i} = strrep(name,'_','-');
                 CX{i} = f.X;
@@ -192,6 +194,11 @@ function processInputFiles(handles)
         end
     end
 
+    % check name
+    if isempty(names)
+        issetname = true;
+    end
+    
     % check each multivariate time-series
     nodeNum = size(CX{1},1);
     xmax = NaN;
@@ -210,6 +217,11 @@ function processInputFiles(handles)
         end
         if isnan(xmin) || xmin > min(X,[],'all')
             xmin = min(X,[],'all');
+        end
+        
+        % check name
+        if issetname
+            names{i} = ['data' num2str(i)];
         end
 
         % show input signals
