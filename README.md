@@ -10,7 +10,7 @@ MTESS and GSDGM toolbox is a powerful tool for multivariate time-series similari
 * Deep Learning Toolbox ver12.1 or later
 * Fuzzy Logic Toolbox ver2.6 or later
 * Parallel Computing Toolbox ver7.1 or later
-* ["VARDNN Toolbox"](https://github.com/takuto-okuno-riken/vardnn)
+* [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn)
 
 ## Command line tool
 ~~~
@@ -82,6 +82,7 @@ usage: surrotest [options] <original>.csv surrogate.mat ...
 
 ## Command line tool Demo
 This demo inputs
+
 (Copy and paste this command line. Demo data is included in MTESS and GSDGM toolbox.)
 ~~~
 mtess data/cx-8x500-demo-surrogate.mat --format 1 --showmat --showprop --shownode --showsig
@@ -114,6 +115,7 @@ output csv file : results/demo-original-8x500_mtess_node8.csv
 
 ## Citing MTESS and GSDGM toolbox
 If you find MTESS and GSDGM useful in your research, please consider citing: 
-Takuto Okuno, Junichi Hata, Hiromichi Tsukada, Ken Nakae, Hideyuki Okano, Alexander Woodward
+
+Takuto Okuno, Junichi Hata, Hiromichi Tsukada, Ken Nakae, Hideyuki Okano, Alexander Woodward,
 ["Similarity quantification and group surrogate data generating models of multivariate time-series: a resting-state fMRI study"](https://www.yahoo.com/), work in progress
 
