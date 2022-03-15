@@ -73,7 +73,7 @@ usage: surrotest [options] <original>.csv surrogate.mat ...
   -g, --gaussian      output Gaussian distribution test (<original>_gauss_test.csv)
   -l, --linear        output Linearity test  (<original>_linear_test.csv)
   -i, --iid           output I.I.D test (<original>_iid_test.csv)
-  --side num          bottm-side(1), both-side(2), top-side(3) (default:2)
+  --side num          bottom-side(1), both-side(2), top-side(3) (default:2)
   --outpath           output files path (default:"results")
   --format type       save file format <type> 0:csv, 1:mat (default:0)
   --showsig           show node status signals of <original>.csv
