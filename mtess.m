@@ -255,6 +255,11 @@ function processInputFiles(handles)
 
     % show all matrix
     if handles.showMat > 0
+        figure; h=bar3(MTS); title('MTESS matrix 3D bar graph');
+        for i=1:length(h) h(i).FaceAlpha=0.6; h(i).EdgeAlpha=0.6; end
+        xlabel('Cell number');
+        ylabel('Cell number');
+        zlabel('MTESS'); zticks([0 1 2 3 4 5]);
         plotMtessAllMatrix(MTS, MTSp, savename);
     end
     
@@ -293,7 +298,9 @@ end
 %
 function saveResultFiles(handles, MTS, MTSp, nMTS, nMTSp, outname)
     if handles.format == 1
-        save([handles.outpath '/' outname '_mtess.mat'], 'MTS', 'MTSp', 'nMTS', 'nMTSp');
+        outfname = [handles.outpath '/' outname '_mtess.mat'];
+        save(outfname, 'MTS', 'MTSp', 'nMTS', 'nMTSp');
+        disp(['output mat file : ' outfname]);
     else
         % output result MTESS matrix csv file
         outputCsvFile(MTS, [handles.outpath '/' outname '_mtess.csv']);

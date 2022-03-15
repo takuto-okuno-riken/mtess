@@ -1,8 +1,8 @@
 %%
 % Caluclate MTESS, MTESS statistical properties, Node MTESS and Node MTESS statistical properties
 % returns MTESS matrix (cell number x cell number)(MTS), MTESS statistical property matrix (cell number x cell number x 7)(MTSp), 
-%   Node MTESS (cell number x cell number x node)(nMTS), Node MTESS and Node MTESS statistical properties (cell number x cell number x node x 7)(nMTSp).
-%   Data in the middle of calculation, such as means (Means), standard deviation (Stds), DFT amplitude (Amps), correlation matrix (FCs),
+%   Node MTESS (cell number x cell number x node)(nMTS) and Node MTESS statistical properties (cell number x cell number x node x 7)(nMTSp).
+%   Data in the middle of calculation, such as mean (Means), standard deviation (Stds), DFT amplitude (Amps), correlation matrix (FCs),
 %   partial correlation matrix (PCs), cross-correlation matrix (CCs) and partial cross-correlation matrix (PCCs).
 % input:
 %  CX               cells of multivariate time series matrix {(node x time series)} x cell number (time series length can be different)
