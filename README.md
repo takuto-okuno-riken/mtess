@@ -12,6 +12,8 @@ MTESS and GSDGM toolbox is a powerful tool for multivariate time-series similari
 * Parallel Computing Toolbox ver7.1 or later
 * [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn)
 
+Please download [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using MTESS and GSDGM toolbox.
+
 ## Command line tool
 ~~~
 >> mtess -h
