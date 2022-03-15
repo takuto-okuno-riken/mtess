@@ -81,22 +81,44 @@ usage: surrotest [options] <original>.csv surrogate.mat ...
 ~~~
 
 ## Command line tool Demo
-This demo inputs
-
+### Demo1
+First demo shows calculation of MTESS and figure output.<br>
 (Copy and paste this command line. Demo data is included in MTESS and GSDGM toolbox.)
 ~~~
-mtess data/cx-8x500-demo-surrogate.mat --format 1 --showmat --showprop --shownode --showsig --showinsig
+>> mtess data/cx-8x500-demo-surrogate.mat --format 1 --showinsig --showmat --showsig --showprop --shownode
+output mat file : results/cx-8x500-demo-surrogate_mtess.mat
 ~~~
-.mat file includes input cell data.
+Input .mat file includes input cell data.
 | name | cell | description |
 |:---|:---|:---|
-|CX |&lt;nodes&gt; x &lt;length&gt;(double)|group of multivariate time-series|
-|names |&lt;nodes&gt; x &lt;length&gt;(double)|names of each data|
+|CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
+|names |{'data name string'} x &lt;cell number&gt; |names of each data|
 
+Node size must be the same within the group. Time-series length does not have to be the same
+This demo calculates MTESS and shows following figures:
 <div align="center">
 <img src="data/demo1.jpg">
 </div>
+"--showinsig" option shows each multivariate time-series signals.<br>
+"--showmat" option shows MTESS matrix and statistical property matrix results.<br>
+"--showsig" option shows comparison time-series plot between first data vs. others.<br>
+"--showprop" option shows MTESS Polar chart result of first data vs. others.<br>
+"--shownode" option shows Node MTESS result of first data vs. others.<br>
+<br>
+Finally, mtess command saves calculation result with .csv or .mat ("--format 1" option).<br>
+Output .mat file includes following matrix data.
 
+| name | matrix | description |
+|:---|:---|:---|
+|MTS |&lt;cell number&gt; x &lt;cell number&gt; | MTESS matrix (2D)|
+|MTSp |&lt;cell number&gt; x &lt;cell number&gt; x 7| MTESS statistical property matrix (3D)|
+|nMTS |&lt;cell number&gt; x &lt;cell number&gt; x &lt;node&gt;| Node MTESS matrix (3D)|
+|nMTSp |&lt;cell number&gt; x &lt;cell number&gt; x &lt;node&gt; x 7| Node MTESS statistical property matrix (4D)|
+
+Similarities of 7 statistical properties are mean, standard deviation, DFT amplitude, correlation, partial correlation, cross-correlation and partial cross-correlation.
+
+### Demo2
+Second demo shows calculation of surrogate data, then calculation of MTESS.
 ~~~
 >> surrogate -f -a -v data/demo-original-8x500.csv
 surrogate sample : 1
@@ -123,7 +145,7 @@ output csv file : results/demo-original-8x500_mtess_node8.csv
 ~~~
 
 ## Citing MTESS and GSDGM toolbox
-If you find MTESS and GSDGM useful in your research, please consider citing: 
+If you find MTESS and GSDGM toolbox useful in your research, please consider citing: 
 
 Takuto Okuno, Junichi Hata, Hiromichi Tsukada, Ken Nakae, Hideyuki Okano, Alexander Woodward,
 ["Similarity quantification and group surrogate data generating models of multivariate time-series: a resting-state fMRI study"](https://www.yahoo.com/), work in progress
