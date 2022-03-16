@@ -140,6 +140,40 @@ If input file type is .mat, file should include input data matrix.
 |:---|:---|:---|
 |X |&lt;nodes&gt; x &lt;length&gt;(double)|node signals|
 
+___
+### Demo3
+
+Linearity test
+~~~
+>> surrogate --format 2 --outnum 399 -f data/demo-original-8x500.csv
+output mat file : results/demo-original-8x500_ft_multi_all.mat
+>> surrotest -l --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_ft_multi_all.mat
+significantly not linear (1 / 8)
+output csv file : results/demo-original-8x500_linear_test_pval.csv
+output csv file : results/demo-original-8x500_linear_test_rank.csv
+~~~
+
+Gaussian distribution test
+~~~
+>> surrogate --format 2 --outnum 399 -g data/demo-original-8x500.csv
+output mat file : results/demo-original-8x500_rg_multi_all.mat
+>> surrotest -g --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_rg_multi_all.mat
+significantly not gaussian (5 / 8)
+output csv file : results/demo-original-8x500_gaussian_test_pval.csv
+output csv file : results/demo-original-8x500_gaussian_test_rank.csv
+~~~
+
+Independent and Identically Distributed (I.I.D) test
+~~~
+>> surrogate --format 2 --outnum 399 -s data/demo-original-8x500.csv
+output mat file : results/demo-original-8x500_rs_multi_all.mat
+>> surrotest -i --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_rs_multi_all.mat
+significantly not I.I.D (8 / 8)
+output csv file : results/demo-original-8x500_iid_test_pval.csv
+output csv file : results/demo-original-8x500_iid_test_rank.csv
+~~~
+
+
 ## Citing MTESS and GSDGM toolbox
 If you find MTESS and GSDGM toolbox useful in your research, please consider citing: 
 
