@@ -143,9 +143,11 @@ If input file type is .mat, file should include input data matrix.
 ___
 ### Demo3
 
-Linearity test
+Linearity test<br>
+1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 of surrogate data from original signal file.
+2. Use "-l" option of "surrotest" command for linearity test. Original signal file and surrogate data file are specified this command.
 ~~~
->> surrogate --format 2 --outnum 399 -f data/demo-original-8x500.csv
+>> surrogate -f --format 2 --outnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_ft_multi_all.mat
 >> surrotest -l --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_ft_multi_all.mat
 significantly not linear (1 / 8)
@@ -154,8 +156,10 @@ output csv file : results/demo-original-8x500_linear_test_rank.csv
 ~~~
 
 Gaussian distribution test
+1. Use RG surrogate ("surrogate -g" command) to generate 399 of surrogate data from original signal file.
+2. Use "-g" option of "surrotest" command for Gaussian distribution test. Original signal file and surrogate data file are specified this command.
 ~~~
->> surrogate --format 2 --outnum 399 -g data/demo-original-8x500.csv
+>> surrogate -g --format 2 --outnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_rg_multi_all.mat
 >> surrotest -g --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_rg_multi_all.mat
 significantly not gaussian (5 / 8)
@@ -164,8 +168,10 @@ output csv file : results/demo-original-8x500_gaussian_test_rank.csv
 ~~~
 
 Independent and Identically Distributed (I.I.D) test
+1. Use RS surrogate ("surrogate -s" command) to generate 399 of surrogate data from original signal file.
+2. Use "-i" option of "surrotest" command for I.I.D test. Original signal file and surrogate data file are specified this command.
 ~~~
->> surrogate --format 2 --outnum 399 -s data/demo-original-8x500.csv
+>> surrogate -s --format 2 --outnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_rs_multi_all.mat
 >> surrotest -i --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_rs_multi_all.mat
 significantly not I.I.D (8 / 8)
