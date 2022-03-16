@@ -26,7 +26,7 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
     % check data file. node num should be same.
     for i=2:cLen
         if size(CX{i},1) ~= nodeNum
-            disp('input time series should have same node number');
+            disp('Error : input time series should have same node number.');
             return;
         end
     end

@@ -157,7 +157,7 @@ function processInputFiles(handles)
     N = length(handles.csvFiles);
 
     % load each file
-    CX = {}; names = {}; issetname = false;
+    CX = {}; names = {};
     for i = 1:N
         % init data
         X = [];
@@ -172,31 +172,32 @@ function processInputFiles(handles)
         if strcmp(ext,'.mat')
             f = load(fname);
             if isfield(f,'CX')
-                CX = f.CX;
+                CX = [CX, f.CX];
                 if isfield(f,'names')
-                    names = f.names;
+                    names = [names, f.names];
+                else
+                    tn = {};
+                    for j=1:length(f.CX)
+                        tn{j} = ['data' num2str(j)];
+                    end
+                    names = [names, tn];
                 end
             elseif isfield(f,'X')
-                names{i} = strrep(name,'_','-');
-                CX{i} = f.X;
+                names = [names, strrep(name,'_','-')];
+                CX = [CX, f.X];
             else
                 disp(['file does not contain "X" matrix or "CX" cell. ignoring : ' fname]);
             end
         else
             T = readtable(fname);
             X = table2array(T);
-            names{i} = strrep(name,'_','-');
-            CX{i} = X;
+            names = [names, strrep(name,'_','-')];
+            CX = [CX, X];
         end
         
         if i==1
             savename = name;
         end
-    end
-
-    % check name
-    if isempty(names)
-        issetname = true;
     end
     
     % check each multivariate time-series
@@ -219,11 +220,6 @@ function processInputFiles(handles)
             xmin = min(X,[],'all');
         end
         
-        % check name
-        if issetname
-            names{i} = ['data' num2str(i)];
-        end
-
         % show input signals
         if handles.showInput > 0
             figure; plot(X.');
@@ -266,7 +262,7 @@ function processInputFiles(handles)
     % show 1 vs. others signals
     if handles.showSig > 0
         for i = 2:length(CX)
-            figure; plotTwoSignals(CX{1},CX{i},0,handles.range);
+            figure; plotTwoSignals(single(CX{1}),single(CX{i}),0,handles.range);
             sgt = sgtitle(['Node signals : ' names{1} ' vs. ' names{i}]);
             sgt.FontSize = 10;
             legend(names([1,i]));

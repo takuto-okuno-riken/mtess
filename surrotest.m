@@ -103,7 +103,7 @@ function showUsage()
     disp('  -g, --gaussian      output Gaussian distribution test (<original>_gauss_test.csv)');
     disp('  -l, --linear        output Linearity test  (<original>_linear_test.csv)');
     disp('  -i, --iid           output I.I.D test (<original>_iid_test.csv)');
-    disp('  --side num          bottm-side(1), both-side(2), top-side(3) (default:2)');
+    disp('  --side num          bottom-side(1), both-side(2), top-side(3) (default:2)');
     disp('  --outpath           output files path (default:"results")');
     disp('  --format type       save file format <type> 0:csv, 1:mat (default:0)');
     disp('  --showsig           show node status signals of <original>.csv');
