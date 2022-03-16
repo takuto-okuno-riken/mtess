@@ -90,7 +90,7 @@ First demo shows calculation of MTESS and figure output.<br>
 >> mtess data/cx-8x500-demo-surrogate.mat --format 1 --showinsig --showmat --showsig --showprop --shownode
 output mat file : results/cx-8x500-demo-surrogate_mtess.mat
 ~~~
-Input .mat file includes input cell data.
+Input .mat file should include input cell data.
 | name | cell | description |
 |:---|:---|:---|
 |CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
@@ -114,8 +114,8 @@ Output .mat file includes following matrix data.
 |:---|:---|:---|
 |MTS |&lt;cell number&gt; x &lt;cell number&gt; | MTESS matrix (2D)|
 |MTSp |&lt;cell number&gt; x &lt;cell number&gt; x 7| MTESS statistical property matrix (3D)|
-|nMTS |&lt;cell number&gt; x &lt;cell number&gt; x &lt;node&gt;| Node MTESS matrix (3D)|
-|nMTSp |&lt;cell number&gt; x &lt;cell number&gt; x &lt;node&gt; x 7| Node MTESS statistical property matrix (4D)|
+|nMTS |&lt;cell number&gt; x &lt;cell number&gt; x &lt;nodes&gt;| Node MTESS matrix (3D)|
+|nMTSp |&lt;cell number&gt; x &lt;cell number&gt; x &lt;nodes&gt; x 7| Node MTESS statistical property matrix (4D)|
 
 Similarities of 7 statistical properties are mean, standard deviation, DFT amplitude, correlation, partial correlation, cross-correlation and partial cross-correlation.
 
@@ -134,7 +134,11 @@ output csv file : results/demo-original-8x500_mtess_node7.csv
 output csv file : results/demo-original-8x500_mtess_node8.csv
 ~~~
 "surrogate" command reads single multivariate time-series (8x500) file and generates surrogate data (8x500) by (multivariate) FT surrogate, AAFT surrogate and VAR surrogate.
-Then, "mtess" command reads original and surrogate data .csv files, and calculates multivariate time-series similarity.
+Then, "mtess" command reads original and surrogate data .csv files, and calculates multivariate time-series similarity.<br>
+If input file type is .mat, file should include input data matrix.
+| name | matrix | description |
+|:---|:---|:---|
+|X |&lt;nodes&gt; x &lt;length&gt;(double)|node signals|
 
 ## Citing MTESS and GSDGM toolbox
 If you find MTESS and GSDGM toolbox useful in your research, please consider citing: 
