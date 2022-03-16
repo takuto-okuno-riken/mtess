@@ -52,7 +52,7 @@ usage: surrogate [options] filename.csv ...
   --multi             output multivariate surrogate (default:on)
   --uni               output univariate surrogate (default:off)
   --noise type        noise type for VAR, PCVAR, VARDNN, LL surrogate (default:"gaussian")
-  --outnum num        output surrogate sample number <num> (default:1)
+  --surrnum num       output surrogate sample number <num> (default:1)
   --outpath           output files path (default:"results")
   --format type       save file format <type> 0:csv, 1:mat(each), 2:mat(all) (default:0)
   --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)
@@ -147,7 +147,7 @@ Linearity test<br>
 1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 of surrogate data from original signal file.
 2. Use "-l" option of "surrotest" command for linearity test. Original signal file and surrogate data file are specified this command.
 ~~~
->> surrogate -f --format 2 --outnum 399 data/demo-original-8x500.csv
+>> surrogate -f --format 2 --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_ft_multi_all.mat
 >> surrotest -l --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_ft_multi_all.mat
 significantly not linear (1 / 8)
@@ -159,7 +159,7 @@ Gaussian distribution test
 1. Use RG surrogate ("surrogate -g" command) to generate 399 of surrogate data from original signal file.
 2. Use "-g" option of "surrotest" command for Gaussian distribution test. Original signal file and surrogate data file are specified this command.
 ~~~
->> surrogate -g --format 2 --outnum 399 data/demo-original-8x500.csv
+>> surrogate -g --format 2 --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_rg_multi_all.mat
 >> surrotest -g --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_rg_multi_all.mat
 significantly not gaussian (5 / 8)
@@ -171,7 +171,7 @@ Independent and Identically Distributed (I.I.D) test
 1. Use RS surrogate ("surrogate -s" command) to generate 399 of surrogate data from original signal file.
 2. Use "-i" option of "surrotest" command for I.I.D test. Original signal file and surrogate data file are specified this command.
 ~~~
->> surrogate -s --format 2 --outnum 399 data/demo-original-8x500.csv
+>> surrogate -s --format 2 --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_rs_multi_all.mat
 >> surrotest -i --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_rs_multi_all.mat
 significantly not I.I.D (8 / 8)
