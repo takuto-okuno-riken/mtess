@@ -87,7 +87,7 @@ usage: surrotest [options] <original>.csv surrogate.mat ...
 First demo shows calculation of MTESS and figure output.<br>
 (Copy and paste this command line. Demo data is included in MTESS and GSDGM toolbox.)
 ~~~
->> mtess data/cx-8x500-demo-surrogate.mat --format 1 --showinsig --showmat --showsig --showprop --shownode
+>> mtess --format 1 --showinsig --showmat --showsig --showprop --shownode data/cx-8x500-demo-surrogate.mat 
 output mat file : results/cx-8x500-demo-surrogate_mtess.mat
 ~~~
 Input .mat file should include input cell data.
