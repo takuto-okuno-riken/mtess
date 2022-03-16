@@ -119,6 +119,7 @@ Output .mat file includes following matrix data.
 
 Similarities of 7 statistical properties are mean, standard deviation, DFT amplitude, correlation, partial correlation, cross-correlation and partial cross-correlation.
 
+___
 ### Demo2
 Second demo shows calculation of surrogate data, then calculation of MTESS.
 ~~~
