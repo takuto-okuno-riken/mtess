@@ -38,6 +38,28 @@ usage: mtess [options] file1.csv file2.csv ...
 ~~~
 
 ~~~
+>> gsdgm -h
+model training : gsdgm [options] file1.csv file2.csv ...
+surrogate data : gsdgm [options] file_gsm_<type>.mat
+  -v, --var           output Vector Auto-Regression (VAR) group surrogate model (<filename>_gsm_var.mat)
+  -p, --pcvar         output Principal Component VAR (PCVAR) group surrogate model (<filename>_gsm_pcvar.mat)
+  -d, --vardnn        output VAR Deep Neural Network (VARDNN) group surrogate model (<filename>_gsm_vardnn.mat)
+  --lag num           time lag <num> for VAR, PCVAR, VARDNN surrogate model (default:3)
+  --noise type        noise type for VAR, PCVAR, VARDNN surrogate model (default:"gaussian" or "residuals")
+  --outpath           output files path (default:"results")
+  --transform type    input training signal transform <type> 0:raw, 1:sigmoid (default:0)
+  --transopt num      signal transform option <num> (for type 1:centroid value)
+  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:0)
+  --surrnum num       output surrogate sample number <num> (default:1)
+  --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)
+  --epoch num         VARDNN surrogate training epoch number <num> (default:1000)
+  --showinsig         show each time-series data of <filename>.csv
+  --showsig           show output surrogate time-series data
+  --version           show version number
+  -h, --help          show command line help
+~~~
+
+~~~
 >> surrogate -h
 usage: surrogate [options] filename.csv ...
   -g, --rg            output Random Gaussian (RG) surrogate (<filename>_rg_<variate>_<num>.csv)
