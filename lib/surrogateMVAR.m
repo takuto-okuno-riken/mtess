@@ -1,7 +1,7 @@
 %%
 % Surrogate multivariate signal generation by multivariate VAR
 % based on autoregressive (AR) surrogates (R. Liegeois et al., 2017)
-% returns surrogated signals (Y)
+% returns surrogated signals (node x time series x surrNum)(Y)
 % input:
 %  X            multivariate time series matrix (node x time series)
 %  exSignal     multivariate time series matrix (exogenous input x time series) (optional)

@@ -136,12 +136,24 @@ function processInputFiles(handles)
         if strcmp(ext,'.mat')
             f = load(fname);
             if i==1
-                X = f.X;
-                if isfield(f,'Y')
+                if isfield(f,'X')
+                    X = f.X;
+                end
+                if isfield(f,'CX')
+                    for j=1:length(f.CX)
+                        Y = cat(3,Y,f.CX{j});
+                    end
+                elseif isfield(f,'Y')
                     Y = f.Y;
                 end
             else
-                Y = cat(3,Y,f.Y);
+                if isfield(f,'CX')
+                    for j=1:length(f.CX)
+                        Y = cat(3,Y,f.CX{j});
+                    end
+                elseif isfield(f,'Y')
+                    Y = cat(3,Y,f.Y);
+                end
             end
         else
             if i==1

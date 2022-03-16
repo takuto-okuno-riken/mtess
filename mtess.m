@@ -174,9 +174,13 @@ function processInputFiles(handles)
             if isfield(f,'CX')
                 CX = [CX, f.CX];
                 if isfield(f,'names')
-                    names = [names, f.names];
+                    tn = cell(1,length(f.CX));
+                    for j=1:length(f.CX)
+                        tn{j} = strrep(f.names{j},'_','-');
+                    end
+                    names = [names, tn];
                 else
-                    tn = {};
+                    tn = cell(1,length(f.CX));
                     for j=1:length(f.CX)
                         tn{j} = ['data' num2str(j)];
                     end

@@ -83,7 +83,7 @@ function surrogate(varargin)
             case {'--noise'}
                 handles.noiseType = varargin{i+1};
                 i = i + 1;
-            case {'--outnum'}
+            case {'--surrnum'}
                 handles.surrNum = str2num(varargin{i+1});
                 i = i + 1;
             case {'--outpath'}
@@ -117,7 +117,7 @@ function surrogate(varargin)
             case {'-h','--help'}
                 showUsage();
                 return;
-            case {'-v','--version'}
+            case {'--version'}
                 disp([exeName ' version : ' num2str(versionNumber)]);
                 return;
             otherwise
@@ -165,7 +165,7 @@ function showUsage()
     disp('  --multi             output multivariate surrogate (default:on)');
     disp('  --uni               output univariate surrogate (default:off)');
     disp('  --noise type        noise type for VAR, PCVAR, VARDNN, LL surrogate (default:"gaussian")');
-    disp('  --outnum num        output surrogate sample number <num> (default:1)');
+    disp('  --surrnum num       output surrogate sample number <num> (default:1)');
     disp('  --outpath           output files path (default:"results")');
     disp('  --format type       save file format <type> 0:csv, 1:mat(each), 2:mat(all) (default:0)');
     disp('  --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)');
@@ -176,7 +176,7 @@ function showUsage()
     disp('  --nn num            <num>-nearest neighbor for Lazy Learning (default:2)');
     disp('  --showsig           show node status signals of <filename>.csv');
     disp('  --nocache           do not use cache file for VARDNN training');
-    disp('  -v, --version       show version number');
+    disp('  --version           show version number');
     disp('  -h, --help          show command line help');
 end
 
@@ -206,7 +206,12 @@ function processInputFiles(handles)
         end
         [path,name,ext] = fileparts(fname);
         if strcmp(ext,'.mat')
-            load(fname);
+            f = load(fname);
+            if isfield(f,'X')
+                X = f.X;
+            else
+                disp(['file does not contain "X" matrix. ignoring : ' fname]);
+            end
         else
             T = readtable(fname);
             X = table2array(T);
@@ -377,31 +382,32 @@ end
 %%
 % output result matrix files
 %
-function saveResultFiles(handles, X, outname)
+function saveResultFiles(handles, Y, outname)
     if handles.format == 1
-        for i=1:size(X,3)
-            Y = squeeze(X(:,:,i));
+        for i=1:size(Y,3)
+            X = squeeze(Y(:,:,i));
             outfname = [handles.outpath '/' outname '_' num2str(i) '.mat'];
-            save(outfname,'Y');
+            save(outfname,'X');
             disp(['output mat file : ' outfname]);
         end
     elseif handles.format == 2
-        Y = X;
+        CX = cell(1,size(Y,3)); names = cell(1,size(Y,3));
+        for i=1:size(Y,3), CX{i}=squeeze(Y(:,:,i)); names{i} = [outname '_' num2str(i)]; end
         outfname = [handles.outpath '/' outname '_all.mat'];
-        save(outfname,'Y');
+        save(outfname, 'CX', 'names');
         disp(['output mat file : ' outfname]);
     else
         % output result matrix csv file
-        for i=1:size(X,3)
-            Y = squeeze(X(:,:,i));
-            outputCsvFile(Y, [handles.outpath '/' outname '_' num2str(i) '.csv']);
+        for i=1:size(Y,3)
+            X = squeeze(Y(:,:,i));
+            outputCsvFile(X, [handles.outpath '/' outname '_' num2str(i) '.csv']);
         end
     end
 
     % show first sample of node status signals
     if handles.showSig > 0
-        Y = squeeze(X(:,:,1));
-        figure; plot(Y.');
+        X = squeeze(Y(:,:,1));
+        figure; plot(X.');
         title(['First sample of node signals : ' outname]);
         xlabel('Time Series');
         ylabel('Signal Value');

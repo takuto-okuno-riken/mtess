@@ -16,6 +16,7 @@ function plotMtessAllMatrix(MTS, MTSp, outname)
     S(:,:,3) = sc(:,:,5).' + sc(:,:,4);
     S(:,:,4) = sc(:,:,7).' + sc(:,:,6);
     
+    outname = strrep(outname,'_','-'); % for text bug.
     prop2 = {'MTESS/Amp','Mean/SD','FC/PC','CC/PCC'};
     for i=1:4
         % show MTESS matrix
