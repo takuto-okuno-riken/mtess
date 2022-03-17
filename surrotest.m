@@ -181,10 +181,10 @@ function processInputFiles(handles)
     end
     nodeNum = size(X,1);
 
-    % show node status signals
+    % show input original signals
     if handles.showSig > 0
         figure; plot(X.');
-        title(['Node Status Signals : ' name]);
+        title(['Input Signals : ' strrep(savename,'_','-')]);
         xlabel('Time Series');
         ylabel('Signal Value');
     end
