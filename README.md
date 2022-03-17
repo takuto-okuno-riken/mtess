@@ -210,6 +210,17 @@ usage: surrogate [options] filename.csv ...
   -v, --version       show version number
   -h, --help          show command line help
 ~~~
+Input .csv or .mat file should include input time-series matrix data.
+| name | cell | description |
+|:---|:---|:---|
+|X |&lt;nodes&gt; x &lt;length&gt; | multivariate time-series|
+
+Output (surrogate data) .mat file includes following matrix data.
+
+| name | matrix | description |
+|:---|:---|:---|
+|CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
+|names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
 
 ##
 <b>surrotest command</b><br>
@@ -227,6 +238,18 @@ usage: surrotest [options] <original>.csv surrogate.mat ...
   -v, --version       show version number
   -h, --help          show command line help
 ~~~
+Input .mat file should include input cell data. Node size must be the same within the group.
+| name | cell | description |
+|:---|:---|:---|
+|CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
+|names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
+
+Output .mat file includes following matrix data.
+
+| name | matrix | description |
+|:---|:---|:---|
+|P |&lt;nodes&gt; x 1 | P-value result|
+|Rank |&lt;nodes&gt; x 1 | Rank value of test |
 
 
 ## Citing MTESS and GSDGM toolbox
