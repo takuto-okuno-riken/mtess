@@ -101,7 +101,7 @@ output mat file : results/demo-original-8x500_iid_test.mat
 <b>mtess command</b><br>
 ~~~
 >> mtess -h
-usage: mtess [options] file1.csv file2.csv ...
+usage: mtess [options] file1.mat file2.mat ...
   --range n1:n2       value range [n1, n2] for normalized mean and std dev (default:min and max of input data)
   --ndft num          DFT sampling <number> (even number) (default: 100)
   --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC (dafault:0)
@@ -116,7 +116,7 @@ usage: mtess [options] file1.csv file2.csv ...
   --showsig           show 1 vs. others node signals
   --showprop          show result polar chart of 1 vs. others MTESS statistical properties
   --shownode          show result line plot of 1 vs. others node MTESS
-  --cache filename    use cache <filename> for MTESS calculation
+  --nocache           do not use cache file for MTESS calculation
   -v, --version       show version number
   -h, --help          show command line help
 ~~~
@@ -141,7 +141,7 @@ Similarities of 7 statistical properties are mean, standard deviation, DFT ampli
 <b>gsdgm command</b><br>
 ~~~
 >> gsdgm -h
-model training : gsdgm [options] file1.csv file2.csv ...
+model training : gsdgm [options] file1.mat file2.mat ...
 surrogate data : gsdgm [options] file_gsm_<type>.mat
   -v, --var           output Vector Auto-Regression (VAR) group surrogate model (<filename>_gsm_var.mat)
   -p, --pcvar         output Principal Component VAR (PCVAR) group surrogate model (<filename>_gsm_pcvar.mat)
