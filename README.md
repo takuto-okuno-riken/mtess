@@ -26,7 +26,7 @@ Please download [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) a
 
 ## Command line tools Demo
 <b>Demo1</b><br>
-First demo shows calculation of MTESS and figure output.<br>
+First demo shows calculation of MTESS among time-series signals and figure output.<br>
 (Copy and paste this command line. Demo data is included in MTESS and GSDGM toolbox.)
 ~~~
 >> mtess --showinsig --showmat --showsig --showprop --shownode data/cx-8x500-demo-surrogate.mat 
@@ -37,7 +37,7 @@ This demo calculates MTESS and shows following figures:
 <div align="center">
 <img src="data/demo1.jpg">
 </div>
-"--showinsig" option shows each multivariate time-series signals.<br>
+"--showinsig" option shows each multivariate time-series data.<br>
 "--showmat" option shows MTESS matrix and statistical property matrix results.<br>
 "--showsig" option shows comparison time-series plot between first data vs. others.<br>
 "--showprop" option shows MTESS Polar chart result of first data vs. others.<br>
@@ -47,7 +47,7 @@ Finally, mtess command saves calculation result with .csv or .mat ("--format 1" 
 
 ##
 <b>Demo2</b><br>
-Second demo shows calculation of surrogate data, then calculation of MTESS.
+Second demo shows calculation of surrogate data, then calculation of MTESS between original vs. surrogate data.
 ~~~
 >> surrogate -f -a -v data/demo-original-8x500.csv
 surrogate sample : 1
