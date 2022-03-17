@@ -388,14 +388,14 @@ end
 function saveResultFiles(handles, Y, outname)
     if handles.format == 1
         for i=1:size(Y,3)
-            X = squeeze(Y(:,:,i));
+            X = single(squeeze(Y(:,:,i)));
             outfname = [handles.outpath '/' outname '_' num2str(i) '.mat'];
             save(outfname,'X');
             disp(['output mat file : ' outfname]);
         end
     elseif handles.format == 2
         CX = cell(1,size(Y,3)); names = cell(1,size(Y,3));
-        for i=1:size(Y,3), CX{i}=squeeze(Y(:,:,i)); names{i} = [outname '_' num2str(i)]; end
+        for i=1:size(Y,3), CX{i}=single(squeeze(Y(:,:,i))); names{i} = [outname '_' num2str(i)]; end
         outfname = [handles.outpath '/' outname '_all.mat'];
         save(outfname, 'CX', 'names', '-v7.3');
         disp(['output mat file : ' outfname]);
