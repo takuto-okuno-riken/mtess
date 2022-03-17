@@ -168,13 +168,13 @@ Input .mat file should include input cell data. Node size must be the same withi
 
 Output (group surrogate model) .mat file includes following matrix data.
 
-| name | matrix | description |
+| name | type | description |
 |:---|:---|:---|
 |net | struct |struct of group surrogate model|
 
 Output (group surrogate data) .mat file includes following matrix data.
 
-| name | matrix | description |
+| name | cell | description |
 |:---|:---|:---|
 |CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
 |names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
@@ -211,13 +211,13 @@ usage: surrogate [options] filename.csv ...
   -h, --help          show command line help
 ~~~
 Input .csv or .mat file should include input time-series matrix data.
-| name | cell | description |
+| name | matrix | description |
 |:---|:---|:---|
 |X |&lt;nodes&gt; x &lt;length&gt; | multivariate time-series|
 
 Output (surrogate data) .mat file includes following matrix data.
 
-| name | matrix | description |
+| name | cell | description |
 |:---|:---|:---|
 |CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
 |names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
