@@ -14,95 +14,6 @@ Multivariate Time-series Ensemble Similarity Score (MTESS) and Group Surrogate D
 
 Please download [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using MTESS and GSDGM toolbox.
 
-## Command line tool
-~~~
->> mtess -h
-usage: mtess [options] file1.csv file2.csv ...
-  --range n1:n2       value range [n1, n2] for normalized mean and std dev (default:min and max of input data)
-  --ndft num          DFT sampling <number> (even number) (default: 100)
-  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC (dafault:0)
-  --cclag num         time lag <num> for Cross Correlation (default:8)
-  --pcclag num        time lag <num> for Partial Cross Correlation (default:8)
-  --outpath           output files path (default:"results")
-  --format type       save file format <type> 0:csv, 1:mat (default:0)
-  --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)
-  --transopt num      signal transform option <num> (for type 1:centroid value)
-  --showinsig         show input signals of <filename>.csv
-  --showmat           show result MTESS matrix
-  --showsig           show 1 vs. others node signals
-  --showprop          show result polar chart of 1 vs. others MTESS statistical properties
-  --shownode          show result line plot of 1 vs. others node MTESS
-  --cache filename    use cache <filename> for MTESS calculation
-  -v, --version       show version number
-  -h, --help          show command line help
-~~~
-
-~~~
->> gsdgm -h
-model training : gsdgm [options] file1.csv file2.csv ...
-surrogate data : gsdgm [options] file_gsm_<type>.mat
-  -v, --var           output Vector Auto-Regression (VAR) group surrogate model (<filename>_gsm_var.mat)
-  -p, --pcvar         output Principal Component VAR (PCVAR) group surrogate model (<filename>_gsm_pcvar.mat)
-  -d, --vardnn        output VAR Deep Neural Network (VARDNN) group surrogate model (<filename>_gsm_vardnn.mat)
-  --lag num           time lag <num> for VAR, PCVAR, VARDNN surrogate model (default:3)
-  --noise type        noise type for VAR, PCVAR, VARDNN surrogate model (default:"gaussian" or "residuals")
-  --outpath           output files path (default:"results")
-  --transform type    input training signal transform <type> 0:raw, 1:sigmoid (default:0)
-  --transopt num      signal transform option <num> (for type 1:centroid value)
-  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:0)
-  --surrnum num       output surrogate sample number <num> (default:1)
-  --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)
-  --epoch num         VARDNN surrogate training epoch number <num> (default:1000)
-  --showinsig         show each time-series data of <filename>.csv
-  --showsig           show output surrogate time-series data
-  --version           show version number
-  -h, --help          show command line help
-~~~
-
-~~~
->> surrogate -h
-usage: surrogate [options] filename.csv ...
-  -g, --rg            output Random Gaussian (RG) surrogate (<filename>_rg_<variate>_<num>.csv)
-  -s, --rs            output Random Shuffling (RS) surrogate (<filename>_rs_<variate>_<num>.csv)
-  -f, --ft            output Fourier Transform (FT) surrogate (<filename>_ft_<variate>_<num>.csv)
-  -a, --aaft          output Amplitude Adjusted FT (AAFT) surrogate (<filename>_aaft_<variate>_<num>.csv)
-  -i, --iaaft         output Iterated AAFT (IAAFT) surrogate (<filename>_iaaft_<variate>_<num>.csv)
-  -v, --var           output Vector Auto-Regression (VAR) surrogate (<filename>_var_<variate>_<num>.csv)
-  -p, --pcvar         output Principal Component VAR (PCVAR) surrogate (<filename>_pcvar_<variate>_<num>.csv)
-  -d, --vardnn        output VAR Deep Neural Network (VARDNN) surrogate (<filename>_vardnn_<variate>_<num>.csv)
-  -l, --lazy          output Lazy Learning (LL) surrogate (<filename>_lazy_<variate>_<num>.csv)
-  --multi             output multivariate surrogate (default:on)
-  --uni               output univariate surrogate (default:off)
-  --noise type        noise type for VAR, PCVAR, VARDNN, LL surrogate (default:"gaussian")
-  --surrnum num       output surrogate sample number <num> (default:1)
-  --outpath           output files path (default:"results")
-  --format type       save file format <type> 0:csv, 1:mat(each), 2:mat(all) (default:0)
-  --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)
-  --transopt num      signal transform option <num> (for type 1:centroid value)
-  --lag num           time lag <num> for VAR, PCVAR, VARDNN, LL (default:3)
-  --epoch num         VARDNN training epoch number <num> (default:1000)
-  --l2 num            VARDNN training L2Regularization <num> (default:0.05)
-  --nn num            <num>-nearest neighbor for Lazy Learning (default:2)
-  --showsig           show node status signals of <filename>.csv
-  --nocache           do not use cache file for VARDNN training
-  -v, --version       show version number
-  -h, --help          show command line help
-~~~
-
-~~~
->> surrotest -h
-usage: surrotest [options] <original>.csv surrogate.mat ...
-  -g, --gaussian      output Gaussian distribution test (<original>_gauss_test.csv)
-  -l, --linear        output Linearity test  (<original>_linear_test.csv)
-  -i, --iid           output I.I.D test (<original>_iid_test.csv)
-  --side num          bottom-side(1), both-side(2), top-side(3) (default:2)
-  --outpath           output files path (default:"results")
-  --format type       save file format <type> 0:csv, 1:mat (default:0)
-  --showsig           show node status signals of <original>.csv
-  --showrank          show rank result of <original>.csv
-  -v, --version       show version number
-  -h, --help          show command line help
-~~~
 
 ## Command line tool Demo
 ### Demo1
@@ -199,6 +110,101 @@ output mat file : results/demo-original-8x500_rs_multi_all.mat
 significantly not I.I.D (8 / 8)
 output csv file : results/demo-original-8x500_iid_test_pval.csv
 output csv file : results/demo-original-8x500_iid_test_rank.csv
+~~~
+
+
+## Command line tool
+### mtess command
+~~~
+>> mtess -h
+usage: mtess [options] file1.csv file2.csv ...
+  --range n1:n2       value range [n1, n2] for normalized mean and std dev (default:min and max of input data)
+  --ndft num          DFT sampling <number> (even number) (default: 100)
+  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC (dafault:0)
+  --cclag num         time lag <num> for Cross Correlation (default:8)
+  --pcclag num        time lag <num> for Partial Cross Correlation (default:8)
+  --outpath           output files path (default:"results")
+  --format type       save file format <type> 0:csv, 1:mat (default:0)
+  --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)
+  --transopt num      signal transform option <num> (for type 1:centroid value)
+  --showinsig         show input signals of <filename>.csv
+  --showmat           show result MTESS matrix
+  --showsig           show 1 vs. others node signals
+  --showprop          show result polar chart of 1 vs. others MTESS statistical properties
+  --shownode          show result line plot of 1 vs. others node MTESS
+  --cache filename    use cache <filename> for MTESS calculation
+  -v, --version       show version number
+  -h, --help          show command line help
+~~~
+
+### gsdgm command
+~~~
+>> gsdgm -h
+model training : gsdgm [options] file1.csv file2.csv ...
+surrogate data : gsdgm [options] file_gsm_<type>.mat
+  -v, --var           output Vector Auto-Regression (VAR) group surrogate model (<filename>_gsm_var.mat)
+  -p, --pcvar         output Principal Component VAR (PCVAR) group surrogate model (<filename>_gsm_pcvar.mat)
+  -d, --vardnn        output VAR Deep Neural Network (VARDNN) group surrogate model (<filename>_gsm_vardnn.mat)
+  --lag num           time lag <num> for VAR, PCVAR, VARDNN surrogate model (default:3)
+  --noise type        noise type for VAR, PCVAR, VARDNN surrogate model (default:"gaussian" or "residuals")
+  --outpath           output files path (default:"results")
+  --transform type    input training signal transform <type> 0:raw, 1:sigmoid (default:0)
+  --transopt num      signal transform option <num> (for type 1:centroid value)
+  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:0)
+  --surrnum num       output surrogate sample number <num> (default:1)
+  --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)
+  --epoch num         VARDNN surrogate training epoch number <num> (default:1000)
+  --showinsig         show each time-series data of <filename>.csv
+  --showsig           show output surrogate time-series data
+  --version           show version number
+  -h, --help          show command line help
+~~~
+
+### surrogate command
+~~~
+>> surrogate -h
+usage: surrogate [options] filename.csv ...
+  -g, --rg            output Random Gaussian (RG) surrogate (<filename>_rg_<variate>_<num>.csv)
+  -s, --rs            output Random Shuffling (RS) surrogate (<filename>_rs_<variate>_<num>.csv)
+  -f, --ft            output Fourier Transform (FT) surrogate (<filename>_ft_<variate>_<num>.csv)
+  -a, --aaft          output Amplitude Adjusted FT (AAFT) surrogate (<filename>_aaft_<variate>_<num>.csv)
+  -i, --iaaft         output Iterated AAFT (IAAFT) surrogate (<filename>_iaaft_<variate>_<num>.csv)
+  -v, --var           output Vector Auto-Regression (VAR) surrogate (<filename>_var_<variate>_<num>.csv)
+  -p, --pcvar         output Principal Component VAR (PCVAR) surrogate (<filename>_pcvar_<variate>_<num>.csv)
+  -d, --vardnn        output VAR Deep Neural Network (VARDNN) surrogate (<filename>_vardnn_<variate>_<num>.csv)
+  -l, --lazy          output Lazy Learning (LL) surrogate (<filename>_lazy_<variate>_<num>.csv)
+  --multi             output multivariate surrogate (default:on)
+  --uni               output univariate surrogate (default:off)
+  --noise type        noise type for VAR, PCVAR, VARDNN, LL surrogate (default:"gaussian")
+  --surrnum num       output surrogate sample number <num> (default:1)
+  --outpath           output files path (default:"results")
+  --format type       save file format <type> 0:csv, 1:mat(each), 2:mat(all) (default:0)
+  --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)
+  --transopt num      signal transform option <num> (for type 1:centroid value)
+  --lag num           time lag <num> for VAR, PCVAR, VARDNN, LL (default:3)
+  --epoch num         VARDNN training epoch number <num> (default:1000)
+  --l2 num            VARDNN training L2Regularization <num> (default:0.05)
+  --nn num            <num>-nearest neighbor for Lazy Learning (default:2)
+  --showsig           show node status signals of <filename>.csv
+  --nocache           do not use cache file for VARDNN training
+  -v, --version       show version number
+  -h, --help          show command line help
+~~~
+
+### surrotest command
+~~~
+>> surrotest -h
+usage: surrotest [options] <original>.csv surrogate.mat ...
+  -g, --gaussian      output Gaussian distribution test (<original>_gauss_test.csv)
+  -l, --linear        output Linearity test  (<original>_linear_test.csv)
+  -i, --iid           output I.I.D test (<original>_iid_test.csv)
+  --side num          bottom-side(1), both-side(2), top-side(3) (default:2)
+  --outpath           output files path (default:"results")
+  --format type       save file format <type> 0:csv, 1:mat (default:0)
+  --showsig           show node status signals of <original>.csv
+  --showrank          show rank result of <original>.csv
+  -v, --version       show version number
+  -h, --help          show command line help
 ~~~
 
 
