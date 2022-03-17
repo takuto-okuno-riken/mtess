@@ -4,6 +4,15 @@ Multivariate Time-series Ensemble Similarity Score (MTESS) and Group Surrogate D
 ## Introduction
 "MTESS and GSDGM toolbox" is a powerful tool for multivariate time-series similarity analysis and surrogate data generation.
 
+### Command line tools
+
+| name | description |
+|:---|:---|
+| mtess | Calculating and plotting MTESS from group of multivariate time-series data. |
+| gsdgm | Generating group surrogate model (Vector Auto-Regression (VAR), Principal Component VAR (PCVAR), Vector Auto-Regressive Deep Neural Network (VARDNN) surrogate) and surrogate time-series data.|
+| surrogate | Generating univariate and multivariate surrogate time-series data by Random Gaussian (RG), Random shuffling (RS), Fourier Transfor (FT), Amplitude Adjusted FT (AAFT), Iterated AAFT (IAAFT), VAR, PCVAR, VARDNN surrogate.|
+| surrotest | Constrained-realization monte-carlo method for hypothesis testing (Linearity test, Gaussian distribution test, Independent and Identically Distributed (I.I.D) test) based on J.Theilear and D.Prichard, Physica D: Nonlinear Phenomena (1996) pp.221-235.|
+
 
 ## Requirements: software
 * MATLAB R2019b or later
@@ -15,7 +24,7 @@ Multivariate Time-series Ensemble Similarity Score (MTESS) and Group Surrogate D
 Please download [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using MTESS and GSDGM toolbox.
 
 
-## Command line tool Demo
+## Command line tools Demo
 ### Demo1
 First demo shows calculation of MTESS and figure output.<br>
 (Copy and paste this command line. Demo data is included in MTESS and GSDGM toolbox.)
@@ -113,7 +122,7 @@ output csv file : results/demo-original-8x500_iid_test_rank.csv
 ~~~
 
 
-## Command line tool
+## Command line tools Reference
 ### mtess command
 ~~~
 >> mtess -h
