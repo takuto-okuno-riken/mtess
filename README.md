@@ -47,7 +47,7 @@ Finally, mtess command saves calculation result with .csv or .mat ("--format 1" 
 
 ##
 <b>Demo2</b><br>
-Second demo shows calculation of surrogate data, then calculation of MTESS between original vs. surrogate data.
+Second demo shows calculation of surrogate data, then calculation of MTESS between original time-series vs. surrogate data.
 ~~~
 >> surrogate -f -a -v data/demo-original-8x500.csv
 surrogate sample : 1
