@@ -26,7 +26,7 @@ Please download [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) a
 
 ## Command line tools Demo
 <b>Demo1</b><br>
-First demo shows calculation of MTESS among time-series signals and figure output.<br>
+First demo shows calculation of MTESS among time-series data and figure output.<br>
 (Copy and paste this command line. Demo data is included in MTESS and GSDGM toolbox.)
 ~~~
 >> mtess --showinsig --showmat --showsig --showprop --shownode data/cx-8x500-demo-surrogate.mat 
