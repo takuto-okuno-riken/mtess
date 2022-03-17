@@ -9,8 +9,8 @@ Multivariate Time-series Ensemble Similarity Score (MTESS) and Group Surrogate D
 | name | description |
 |:---|:---|
 | mtess | Calculating and plotting MTESS from group of multivariate time-series data. |
-| gsdgm | Generating group surrogate model (Vector Auto-Regression (VAR), Principal Component VAR (PCVAR), Vector Auto-Regressive Deep Neural Network (VARDNN) surrogate) and surrogate time-series data.|
-| surrogate | Generating univariate and multivariate surrogate time-series data by Random Gaussian (RG), Random shuffling (RS), Fourier Transfor (FT), Amplitude Adjusted FT (AAFT), Iterated AAFT (IAAFT), VAR, PCVAR, VARDNN surrogate.|
+| gsdgm | Generating group surrogate model (Vector Auto-Regression (VAR), Principal Component VAR (PCVAR), Vector Auto-Regressive Deep Neural Network (VARDNN) surrogate) and (multivariate time-series) group surrogate data.|
+| surrogate | Generating univariate and multivariate time-series surrogate data by Random Gaussian (RG), Random shuffling (RS), Fourier Transfor (FT), Amplitude Adjusted FT (AAFT), Iterated AAFT (IAAFT), VAR, PCVAR, VARDNN surrogate.|
 | surrotest | Hypothesis testing based on monte-carlo method (Linearity test, Gaussian distribution test, Independent and Identically Distributed (I.I.D) test). Ref: J.Theilear and D.Prichard, Physica D: Nonlinear Phenomena (1996) pp.221-235.|
 
 
