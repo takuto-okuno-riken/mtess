@@ -4,14 +4,14 @@ Multivariate Time-series Ensemble Similarity Score (MTESS) and Group Surrogate D
 ## Introduction
 "MTESS and GSDGM toolbox" is a powerful tool for multivariate time-series similarity analysis and surrogate data generation.
 
-### Command line tools
+<b>Command line tools</b>
 
 | name | description |
 |:---|:---|
 | mtess | Calculating and plotting MTESS from group of multivariate time-series data. |
 | gsdgm | Generating group surrogate model (Vector Auto-Regression (VAR), Principal Component VAR (PCVAR), Vector Auto-Regressive Deep Neural Network (VARDNN) surrogate) and surrogate time-series data.|
 | surrogate | Generating univariate and multivariate surrogate time-series data by Random Gaussian (RG), Random shuffling (RS), Fourier Transfor (FT), Amplitude Adjusted FT (AAFT), Iterated AAFT (IAAFT), VAR, PCVAR, VARDNN surrogate.|
-| surrotest | Constrained-realization monte-carlo method for hypothesis testing (Linearity test, Gaussian distribution test, Independent and Identically Distributed (I.I.D) test) based on J.Theilear and D.Prichard, Physica D: Nonlinear Phenomena (1996) pp.221-235.|
+| surrotest | Hypothesis testing based on monte-carlo method (Linearity test, Gaussian distribution test, Independent and Identically Distributed (I.I.D) test). Ref: J.Theilear and D.Prichard, Physica D: Nonlinear Phenomena (1996) pp.221-235.|
 
 
 ## Requirements: software
@@ -25,20 +25,14 @@ Please download [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) a
 
 
 ## Command line tools Demo
-### Demo1
+<b>Demo1</b><br>
 First demo shows calculation of MTESS and figure output.<br>
 (Copy and paste this command line. Demo data is included in MTESS and GSDGM toolbox.)
 ~~~
 >> mtess --format 1 --showinsig --showmat --showsig --showprop --shownode data/cx-8x500-demo-surrogate.mat 
 output mat file : results/cx-8x500-demo-surrogate_mtess.mat
 ~~~
-Input .mat file should include input cell data.
-| name | cell | description |
-|:---|:---|:---|
-|CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
-|names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
 
-Node size must be the same within the group. Time-series length does not have to be the same.
 This demo calculates MTESS and shows following figures:
 <div align="center">
 <img src="data/demo1.jpg">
@@ -49,20 +43,10 @@ This demo calculates MTESS and shows following figures:
 "--showprop" option shows MTESS Polar chart result of first data vs. others.<br>
 "--shownode" option shows Node MTESS result of first data vs. others.<br>
 <br>
-Finally, mtess command saves calculation result with .csv or .mat ("--format 1" option).<br>
-Output .mat file includes following matrix data.
+Finally, mtess command saves calculation result with .csv or .mat ("--format 1" option).
 
-| name | matrix | description |
-|:---|:---|:---|
-|MTS |&lt;cell number&gt; x &lt;cell number&gt; | MTESS matrix (2D)|
-|MTSp |&lt;cell number&gt; x &lt;cell number&gt; x 7| MTESS statistical property matrix (3D)|
-|nMTS |&lt;cell number&gt; x &lt;cell number&gt; x &lt;nodes&gt;| Node MTESS matrix (3D)|
-|nMTSp |&lt;cell number&gt; x &lt;cell number&gt; x &lt;nodes&gt; x 7| Node MTESS statistical property matrix (4D)|
-
-Similarities of 7 statistical properties are mean, standard deviation, DFT amplitude, correlation, partial correlation, cross-correlation and partial cross-correlation.
-
-___
-### Demo2
+##
+<b>Demo2</b><br>
 Second demo shows calculation of surrogate data, then calculation of MTESS.
 ~~~
 >> surrogate -f -a -v data/demo-original-8x500.csv
@@ -82,8 +66,8 @@ If input file type is .mat, file should include input data matrix.
 |:---|:---|:---|
 |X |&lt;nodes&gt; x &lt;length&gt;(double)|node signals|
 
-___
-### Demo3
+##
+<b>Demo3</b><br>
 
 Linearity test<br>
 1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 of surrogate data from original signal file.
@@ -123,7 +107,7 @@ output csv file : results/demo-original-8x500_iid_test_rank.csv
 
 
 ## Command line tools Reference
-### mtess command
+<b>mtess command</b><br>
 ~~~
 >> mtess -h
 usage: mtess [options] file1.csv file2.csv ...
@@ -145,8 +129,25 @@ usage: mtess [options] file1.csv file2.csv ...
   -v, --version       show version number
   -h, --help          show command line help
 ~~~
+Input .mat file should include input cell data. Node size must be the same within the group. Time-series length does not have to be the same.
+| name | cell | description |
+|:---|:---|:---|
+|CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
+|names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
 
-### gsdgm command
+Output .mat file includes following matrix data.
+
+| name | matrix | description |
+|:---|:---|:---|
+|MTS |&lt;cell number&gt; x &lt;cell number&gt; | MTESS matrix (2D)|
+|MTSp |&lt;cell number&gt; x &lt;cell number&gt; x 7| MTESS statistical property matrix (3D)|
+|nMTS |&lt;cell number&gt; x &lt;cell number&gt; x &lt;nodes&gt;| Node MTESS matrix (3D)|
+|nMTSp |&lt;cell number&gt; x &lt;cell number&gt; x &lt;nodes&gt; x 7| Node MTESS statistical property matrix (4D)|
+
+Similarities of 7 statistical properties are mean, standard deviation, DFT amplitude, correlation, partial correlation, cross-correlation and partial cross-correlation.
+
+##
+<b>gsdgm command</b><br>
 ~~~
 >> gsdgm -h
 model training : gsdgm [options] file1.csv file2.csv ...
@@ -169,7 +170,8 @@ surrogate data : gsdgm [options] file_gsm_<type>.mat
   -h, --help          show command line help
 ~~~
 
-### surrogate command
+##
+<b>surrogate command</b><br>
 ~~~
 >> surrogate -h
 usage: surrogate [options] filename.csv ...
@@ -200,7 +202,8 @@ usage: surrogate [options] filename.csv ...
   -h, --help          show command line help
 ~~~
 
-### surrotest command
+##
+<b>surrotest command</b><br>
 ~~~
 >> surrotest -h
 usage: surrotest [options] <original>.csv surrogate.mat ...
