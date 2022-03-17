@@ -9,9 +9,9 @@ Multivariate Time-series Ensemble Similarity Score (MTESS) and Group Surrogate D
 | name | description |
 |:---|:---|
 | mtess | Calculating and plotting MTESS from group of multivariate time-series data. |
-| gsdgm | Generating group surrogate model (Vector Auto-Regression (VAR), Principal Component VAR (PCVAR), Vector Auto-Regressive Deep Neural Network (VARDNN) surrogate) and (multivariate time-series) group surrogate data.|
-| surrogate | Generating univariate and multivariate time-series surrogate data by Random Gaussian (RG), Random shuffling (RS), Fourier Transfor (FT), Amplitude Adjusted FT (AAFT), Iterated AAFT (IAAFT), VAR, PCVAR, VARDNN surrogate.|
-| surrotest | Hypothesis testing based on monte-carlo method (Linearity test, Gaussian distribution test, Independent and Identically Distributed (I.I.D) test). Ref: [J.Theilear and D.Prichard (1996)](https://www.sciencedirect.com/science/article/abs/pii/0167278996000504).|
+| gsdgm | Generating group surrogate model (Vector Auto-Regression (VAR), Principal Component VAR (PCVAR), Vector Auto-Regressive Deep Neural Network (VARDNN)[(T.Okuno and A.Woodward, 2021)](https://www.frontiersin.org/articles/10.3389/fnins.2021.764796/full) surrogate) and (multivariate time-series) group surrogate data.|
+| surrogate | Generating univariate and multivariate time-series surrogate data by Random Gaussian (RG), Random shuffling (RS), Fourier Transfor (FT), Amplitude Adjusted FT (AAFT)[(J.Theilear et al., 1992)](https://www.sciencedirect.com/science/article/abs/pii/016727899290102S), Iterated AAFT (IAAFT)[(T.Schreiber and A.Schmitz, 1996)](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.77.635), VAR, PCVAR, VARDNN surrogate.|
+| surrotest | Hypothesis testing based on monte-carlo method (Linearity test, Gaussian distribution test, Independent and Identically Distributed (I.I.D) test)  [(J.Theilear and D.Prichard, 1996)](https://www.sciencedirect.com/science/article/abs/pii/0167278996000504).|
 
 
 ## Requirements: software
