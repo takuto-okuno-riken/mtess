@@ -29,7 +29,7 @@ Please download [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) a
 First demo shows calculation of MTESS and figure output.<br>
 (Copy and paste this command line. Demo data is included in MTESS and GSDGM toolbox.)
 ~~~
->> mtess --format 1 --showinsig --showmat --showsig --showprop --shownode data/cx-8x500-demo-surrogate.mat 
+>> mtess --showinsig --showmat --showsig --showprop --shownode data/cx-8x500-demo-surrogate.mat 
 output mat file : results/cx-8x500-demo-surrogate_mtess.mat
 ~~~
 
@@ -51,20 +51,14 @@ Second demo shows calculation of surrogate data, then calculation of MTESS.
 ~~~
 >> surrogate -f -a -v data/demo-original-8x500.csv
 surrogate sample : 1
-output csv file : results/demo-original-8x500_var_multi_1.csv
-output csv file : results/demo-original-8x500_ft_multi_1.csv
-output csv file : results/demo-original-8x500_aaft_multi_1.csv
->> mtess --showmat --showprop --showsig data/demo-original-8x500.csv results/demo-original-8x500_ft_multi_1.csv results/demo-original-8x500_aaft_multi_1.csv results/demo-original-8x500_var_multi_1.csv
-...
-output csv file : results/demo-original-8x500_mtess_node7.csv
-output csv file : results/demo-original-8x500_mtess_node8.csv
+output mat file : results/demo-original-8x500_var_multi_all.mat
+output mat file : results/demo-original-8x500_ft_multi_all.mat
+output mat file : results/demo-original-8x500_aaft_multi_all.mat
+>> mtess --showmat --showprop --showsig data/demo-original-8x500.csv results/demo-original-8x500_var_multi_all.mat results/demo-original-8x500_ft_multi_all.mat results/demo-original-8x500_aaft_multi_all.mat
+output mat file : results/demo-original-8x500_mtess.mat
 ~~~
 "surrogate" command reads single multivariate time-series (8x500) file and generates surrogate data (8x500) by (multivariate) FT surrogate, AAFT surrogate and VAR surrogate.
-Then, "mtess" command reads original and surrogate data .csv files, and calculates multivariate time-series similarity.<br>
-If input file type is .mat, file should include input data matrix.
-| name | matrix | description |
-|:---|:---|:---|
-|X |&lt;nodes&gt; x &lt;length&gt;(double)|node signals|
+Then, "mtess" command reads original time-series .csv and surrogate time-series data .mat files, and calculates multivariate time-series similarity.
 
 ##
 <b>Demo3</b><br>
@@ -73,36 +67,33 @@ Linearity test<br>
 1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 of surrogate data from original signal file.
 2. Use "-l" option of "surrotest" command for linearity test. Original signal file and surrogate data file are specified this command.
 ~~~
->> surrogate -f --format 2 --surrnum 399 data/demo-original-8x500.csv
+>> surrogate -f --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_ft_multi_all.mat
 >> surrotest -l --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_ft_multi_all.mat
 significantly not linear (1 / 8)
-output csv file : results/demo-original-8x500_linear_test_pval.csv
-output csv file : results/demo-original-8x500_linear_test_rank.csv
+output mat file : results/demo-original-8x500_linear_test.mat
 ~~~
 
 Gaussian distribution test
 1. Use RG surrogate ("surrogate -g" command) to generate 399 of surrogate data from original signal file.
 2. Use "-g" option of "surrotest" command for Gaussian distribution test. Original signal file and surrogate data file are specified this command.
 ~~~
->> surrogate -g --format 2 --surrnum 399 data/demo-original-8x500.csv
+>> surrogate -g --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_rg_multi_all.mat
 >> surrotest -g --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_rg_multi_all.mat
 significantly not gaussian (5 / 8)
-output csv file : results/demo-original-8x500_gaussian_test_pval.csv
-output csv file : results/demo-original-8x500_gaussian_test_rank.csv
+output mat file : results/demo-original-8x500_gaussian_test.mat
 ~~~
 
 Independent and Identically Distributed (I.I.D) test
 1. Use RS surrogate ("surrogate -s" command) to generate 399 of surrogate data from original signal file.
 2. Use "-i" option of "surrotest" command for I.I.D test. Original signal file and surrogate data file are specified this command.
 ~~~
->> surrogate -s --format 2 --surrnum 399 data/demo-original-8x500.csv
+>> surrogate -s --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_rs_multi_all.mat
 >> surrotest -i --showsig --showrank data/demo-original-8x500.csv results/demo-original-8x500_rs_multi_all.mat
 significantly not I.I.D (8 / 8)
-output csv file : results/demo-original-8x500_iid_test_pval.csv
-output csv file : results/demo-original-8x500_iid_test_rank.csv
+output mat file : results/demo-original-8x500_iid_test.mat
 ~~~
 
 
