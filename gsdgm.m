@@ -58,7 +58,7 @@ function gsdgm(varargin)
             case {'--noise'}
                 handles.noiseType = varargin{i+1};
                 i = i + 1;
-            case {'--surr'}
+            case {'--surrnum'}
                 handles.surrNum = str2num(varargin{i+1});
                 i = i + 1;
             case {'--lag'}
@@ -124,17 +124,17 @@ function showUsage()
     global exePath;
     global exeName;
     disp(['model training : ' exeName ' [options] file1.csv file2.csv ...']);
-    disp(['surrogate data : ' exeName ' [options] file_gsdgm.mat']);
-    disp('  -v, --var           output Vector Auto-Regression (VAR) group surrogate model (<filename>_gsdgm_var.mat)');
-    disp('  -p, --pcvar         output Principal Component VAR (PCVAR) group surrogate model (<filename>_gsdgm_pcvar.mat)');
-    disp('  -d, --vardnn        output VAR Deep Neural Network (VARDNN) group surrogate model (<filename>_gsdgm_vardnn.mat)');
+    disp(['surrogate data : ' exeName ' [options] file_gsm_<type>.mat']);
+    disp('  -v, --var           output Vector Auto-Regression (VAR) group surrogate model (<filename>_gsm_var.mat)');
+    disp('  -p, --pcvar         output Principal Component VAR (PCVAR) group surrogate model (<filename>_gsm_pcvar.mat)');
+    disp('  -d, --vardnn        output VAR Deep Neural Network (VARDNN) group surrogate model (<filename>_gsm_vardnn.mat)');
     disp('  --lag num           time lag <num> for VAR, PCVAR, VARDNN surrogate model (default:3)');
     disp('  --noise type        noise type for VAR, PCVAR, VARDNN surrogate model (default:"gaussian" or "residuals")');
     disp('  --outpath           output files path (default:"results")');
     disp('  --transform type    input training signal transform <type> 0:raw, 1:sigmoid (default:0)');
     disp('  --transopt num      signal transform option <num> (for type 1:centroid value)');
     disp('  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:0)');
-    disp('  --surr num          output surrogate sample number <num> (default:1)');
+    disp('  --surrnum num       output surrogate sample number <num> (default:1)');
     disp('  --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)');
     disp('  --epoch num         VARDNN surrogate training epoch number <num> (default:1000)');
     disp('  --showinsig         show each time-series data of <filename>.csv');
@@ -172,11 +172,15 @@ function processInputFiles(handles)
                 % training mode
                 CX = [CX, f.CX];
                 if isfield(f,'names')
-                    names = [names, f.names];
+                    tn = cell(1,length(f.CX));
+                    for j=1:length(f.CX)
+                        tn{j} = strrep(f.names{j},'_','-');
+                    end
+                    names = [names, tn];
                 else
                     tn = {};
                     for j=1:length(f.CX)
-                        tn{j} = ['data' num2str(j)];
+                        tn{j} = [strrep(name,'_','-') '-' num2str(j)];
                     end
                     names = [names, tn];
                 end
@@ -271,7 +275,7 @@ function processInputFiles(handles)
         CX = cell(1,size(Y,3)); names = cell(1,size(Y,3));
         for i=1:length(CX)
             CX{i} = squeeze(Y(:,:,i));
-            names{i} = ['gsd-' nettype '-' num2str(i)];
+            names{i} = [savename '-gsd-' nettype '-' num2str(i)];
         
             % show input signals
             if handles.showSig > 0
@@ -295,14 +299,14 @@ end
 %
 function saveModelFile(handles, net, outname)
     outfname = [handles.outpath '/' outname '.mat'];
-    save(outfname, 'net');
+    save(outfname, 'net', '-v7.3');
     disp(['output group surrogate model file : ' outfname]);
 end
 
 function saveResultFiles(handles, CX, names, outname)
     if handles.format == 1
         outfname = [handles.outpath '/' outname '.mat'];
-        save(outfname, 'CX', 'names');
+        save(outfname, 'CX', 'names', '-v7.3');
         disp(['output mat file : ' outfname]);
     else
         % output result matrix csv file

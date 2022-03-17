@@ -11,10 +11,10 @@
 %  pccFunc          Partial Cross-Correlation function (default: @calcPartialCrossCorrelation)
 %  ccLags           time lags for Cross-Correlation function (default: 8)
 %  pccLags          time lags for Partial Cross-Correlation function (default: 8)
-%  cachefile        cache filename (default: '')
+%  CXNames          CX signals names used for cache filename (default: {})
 
-function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags, cachefile)
-    if nargin < 7, cachefile = ''; end
+function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags, CXNames)
+    if nargin < 7, CXNames = {}; end
     if nargin < 6, pccLags = 8; end
     if nargin < 5, ccLags = 8; end
     if nargin < 4, pccFunc = @calcPartialCrossCorrelation; end
@@ -46,38 +46,45 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
     tRange = range(2) - range(1); % should be positive
 
     % calc statistical properties
-    if ~isempty(cachefile) && exist(cachefile,'file')
-        load(cachefile)
-    else
-        Means = single(nan(cLen,nodeNum));
-        Stds = single(nan(cLen,nodeNum));
-        Amps = single(nan(cLen,nodeNum,nDft/2-1));
-        FCs = single(nan(cLen,nodeNum,nodeNum));
-        PCs = single(nan(cLen,nodeNum,nodeNum));
-        CCs = single(nan(cLen,nodeNum,nodeNum,2*ccLags+1));
-        PCCs = single(nan(cLen,nodeNum,nodeNum,2*pccLags+1));
+    if ~isempty(CXNames) && ~exist('results/cache','dir')
+        mkdir('results/cache');
     end
+    Means = single(nan(cLen,nodeNum));
+    Stds = single(nan(cLen,nodeNum));
+    Amps = single(nan(cLen,nodeNum,nDft/2-1));
+    FCs = single(nan(cLen,nodeNum,nodeNum));
+    PCs = single(nan(cLen,nodeNum,nodeNum));
+    CCs = single(nan(cLen,nodeNum,nodeNum,2*ccLags+1));
+    PCCs = single(nan(cLen,nodeNum,nodeNum,2*pccLags+1));
     for nn=1:cLen
-        if ~isnan(Means(nn,1)), continue; end
         X = CX{nn};
-        Means(nn,:) = mean(X,2);
-        Stds(nn,:) = std(X,1,2);
-        Amps(nn,:,:) = calcDft(X,nDft); % range [min, max] signal
-        CCs(nn,:,:,:) = calcCrossCorrelation(X,[],[],[],ccLags);
-        FCs(nn,:,:) = squeeze(CCs(nn,:,:,ccLags+1));
-        if isequal(pccFunc,@calcSvPartialCrossCorrelation)
-            PCCs(nn,:,:,:) = pccFunc(X,[],[],[],pccLags,'gaussian');
+        if ~isempty(CXNames)
+            cachef = ['results/cache/mtess-' CXNames{nn} '-' num2str(size(X,1)) 'x' num2str(size(X,2)) '.mat'];
+        end
+        if ~isempty(CXNames) && exist(cachef,'file')
+            load(cachef);
         else
-            PCCs(nn,:,:,:) = pccFunc(X,[],[],[],pccLags);
-        end
-        PCs(nn,:,:) = squeeze(PCCs(nn,:,:,pccLags+1));
+            xm = single(mean(X,2));
+            xsd = single(std(X,1,2));
+            xamp = single(calcDft(X,nDft));
+            xcc = single(calcCrossCorrelation(X,[],[],[],ccLags));
+            if isequal(pccFunc,@calcSvPartialCrossCorrelation)
+                xpcc = single(pccFunc(X,[],[],[],pccLags,'gaussian'));
+            else
+                xpcc = single(pccFunc(X,[],[],[],pccLags));
+            end
+            if ~isempty(CXNames)
+                save(cachef, 'xm', 'xsd', 'xamp', 'xcc', 'xpcc');
+            end
+        end        
+        Means(nn,:) = xm;
+        Stds(nn,:) = xsd;
+        Amps(nn,:,:) = xamp;
+        CCs(nn,:,:,:) = xcc;
+        PCCs(nn,:,:,:) = xpcc;
+        FCs(nn,:,:) = squeeze(xcc(:,:,ccLags+1));
+        PCs(nn,:,:) = squeeze(xpcc(:,:,pccLags+1));
 %        PCs(nn,:,:) = calcPartialCorrelation(si);
-        if ~isempty(cachefile) && mod(i,5)==0
-            save(cachefile, 'Means', 'Stds', 'Amps', 'FCs', 'PCs', 'CCs', 'PCCs');
-        end
-    end
-    if ~isempty(cachefile)
-        save(cachefile, 'Means', 'Stds', 'Amps', 'FCs', 'PCs', 'CCs', 'PCCs');
     end
     Amps = Amps * (nDft/2) / (tRange/2); % normalize
 

@@ -243,7 +243,10 @@ function processInputFiles(handles)
         % calc VARDNN surrogate
         if handles.vardnn > 0
             % train VARDNN network
-            vardnnFile = [exePath '/results/cache-vardnn-' name '.mat'];
+            if ~exist('results/cache','dir')
+                mkdir('results/cache');
+            end
+            vardnnFile = [exePath '/results/cache/vardnn-' name '.mat'];
             if exist(vardnnFile, 'file') && handles.noCache == 0
                 disp(['read cache file : ' vardnnFile]);
                 load(vardnnFile);
@@ -266,7 +269,7 @@ function processInputFiles(handles)
                 [time, loss, rsme] = getMvarDnnTrainingResult(net);
                 disp(['VARDNN training result : rsme=' num2str(rsme)]);
                 if handles.noCache == 0
-                    save(vardnnFile, 'net');
+                    save(vardnnFile, 'net', '-v7.3');
                 end
             end
 
@@ -394,7 +397,7 @@ function saveResultFiles(handles, Y, outname)
         CX = cell(1,size(Y,3)); names = cell(1,size(Y,3));
         for i=1:size(Y,3), CX{i}=squeeze(Y(:,:,i)); names{i} = [outname '_' num2str(i)]; end
         outfname = [handles.outpath '/' outname '_all.mat'];
-        save(outfname, 'CX', 'names');
+        save(outfname, 'CX', 'names', '-v7.3');
         disp(['output mat file : ' outfname]);
     else
         % output result matrix csv file

@@ -39,7 +39,7 @@ function mtess(varargin)
     handles.showSig = 0;
     handles.showProp = 0;
     handles.showNode = 0;
-    handles.cache = '';
+    handles.noCache = 0;
 
     % load command line input
     i = 1;
@@ -86,9 +86,8 @@ function mtess(varargin)
                 handles.showProp = 1;
             case {'--shownode'}
                 handles.showNode = 1;
-            case {'--cache'}
-                handles.cache = varargin{i+1};
-                i = i + 1;
+            case {'--nocache'}
+                handles.noCache = 1;
             case {'-h','--help'}
                 showUsage();
                 return;
@@ -141,7 +140,7 @@ function showUsage()
     disp('  --showsig           show 1 vs. others node signals');
     disp('  --showprop          show result polar chart of 1 vs. others MTESS statistical properties');
     disp('  --shownode          show result line plot of 1 vs. others node MTESS');
-    disp('  --cache filename    use cache <filename> for MTESS calculation');
+    disp('  --nocache     use cache <filename> for MTESS calculation');
     disp('  -v, --version       show version number');
     disp('  -h, --help          show command line help');
 end
@@ -182,7 +181,7 @@ function processInputFiles(handles)
                 else
                     tn = cell(1,length(f.CX));
                     for j=1:length(f.CX)
-                        tn{j} = ['data' num2str(j)];
+                        tn{j} = [strrep(name,'_','-') '-' num2str(j)];
                     end
                     names = [names, tn];
                 end
@@ -248,7 +247,12 @@ function processInputFiles(handles)
             pccFunc = @calcSvPartialCrossCorrelation;
         end
     end
-    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, handles.range, handles.nDft, pccFunc, handles.cclag, handles.pcclag, handles.cache);
+    if handles.noCache > 0
+        cache = {};
+    else
+        cache = names;
+    end
+    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, handles.range, handles.nDft, pccFunc, handles.cclag, handles.pcclag, cache);
 
     % output result matrix files
     saveResultFiles(handles, MTS, MTSp, nMTS, nMTSp, savename);
@@ -299,7 +303,7 @@ end
 function saveResultFiles(handles, MTS, MTSp, nMTS, nMTSp, outname)
     if handles.format == 1
         outfname = [handles.outpath '/' outname '_mtess.mat'];
-        save(outfname, 'MTS', 'MTSp', 'nMTS', 'nMTSp');
+        save(outfname, 'MTS', 'MTSp', 'nMTS', 'nMTSp', '-v7.3');
         disp(['output mat file : ' outfname]);
     else
         % output result MTESS matrix csv file
