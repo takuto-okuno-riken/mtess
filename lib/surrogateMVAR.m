@@ -10,10 +10,10 @@
 %  net          mVAR network
 %  dist         distribution of noise to yield surrogates ('gaussian'(default), 'residuals')
 %  surrNum      output number of surrogate samples (default:1)
-%  yRange       range of Y value (default:[-0.2 1.2])
+%  yRange       range of Y value (default:auto)
 
 function Y = surrogateMVAR(X, exSignal, nodeControl, exControl, net, dist, surrNum, yRange)
-    if nargin < 8, yRange = [-0.2 1.2]; end
+    if nargin < 8, yRange = []; end
     if nargin < 7, surrNum = 1; end
     if nargin < 6, dist = 'gaussian'; end
 
@@ -28,6 +28,11 @@ function Y = surrogateMVAR(X, exSignal, nodeControl, exControl, net, dist, surrN
     % set control 3D matrix (node x node x lags)
     [~,~,control] = getControl3DMatrix(nodeControl, exControl, nodeNum, exNum, lags);
 
+    % set surrogate value range
+    if isempty(yRange)
+        yRange = getAutoRange(X);
+    end
+    
     idxs = {};
     rvlen = length(net.rvec{1});
     for i=2:nodeNum, if rvlen > length(net.rvec{i}), rvlen = length(net.rvec{i}); end; end

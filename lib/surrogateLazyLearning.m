@@ -10,10 +10,10 @@
 %  kn           number of k of nearest neighbor (default:1)
 %  dist         distribution of noise to yield surrogates ('gaussian'(default), 'residuals')
 %  surrNum      output number of surrogate samples (default:1)
-%  yRange       range of Y value (default:[-0.2 1.2])
+%  yRange       range of Y value (default:auto)
 
 function Y = surrogateLazyLearning(X, exSignal, nodeControl, exControl, LL, kn, dist, surrNum, yRange)
-    if nargin < 9, yRange = [-0.2 1.2]; end
+    if nargin < 9, yRange = []; end
     if nargin < 8, surrNum = 1; end
     if nargin < 7, dist = 'gaussian'; end
     if nargin < 6, kn = 1; end
@@ -32,7 +32,12 @@ function Y = surrogateLazyLearning(X, exSignal, nodeControl, exControl, LL, kn, 
 
     % set control 3D matrix (node x node x lags)
     [~,~,control] = getControl3DMatrix(nodeControl, exControl, nodeNum, exNum, lags);
-    
+
+    % set surrogate value range
+    if isempty(yRange)
+        yRange = getAutoRange(X);
+    end
+
     idxs = {};
     for i=1:nodeNum
         for k=1:lags

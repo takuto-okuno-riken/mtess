@@ -257,7 +257,7 @@ function processInputFiles(handles)
     
     % surrogate data mode
     if ~isempty(net)
-        % dummy signal for nodeNum, sigLen and surrogate initial value
+        % dummy signal for nodeNum, sigLen and surrogate initial value (also affect surrogate value range)
         X = (mvnrnd(net.cxM, net.cxCov, net.sigLen))';
 
         % generate surrogate data

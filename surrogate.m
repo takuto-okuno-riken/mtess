@@ -235,7 +235,7 @@ function processInputFiles(handles)
         % show node status signals
         if handles.showSig > 0
             figure; plot(X.');
-            title(['Node Status Signals : ' name]);
+            title(['Input Signals : ' strrep(name,'_','-')]);
             xlabel('Time Series');
             ylabel('Signal Value');
         end
@@ -407,11 +407,11 @@ function saveResultFiles(handles, Y, outname)
         end
     end
 
-    % show first sample of node status signals
+    % show first sample of output signals
     if handles.showSig > 0
         X = squeeze(Y(:,:,1));
         figure; plot(X.');
-        title(['First sample of node signals : ' outname]);
+        title(['First sample of output signals : ' strrep(outname,'_','-')]);
         xlabel('Time Series');
         ylabel('Signal Value');
     end
