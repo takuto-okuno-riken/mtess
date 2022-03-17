@@ -73,6 +73,10 @@ output mat file : results/demo-original-8x500_ft_multi_all.mat
 significantly not linear (1 / 8)
 output mat file : results/demo-original-8x500_linear_test.mat
 ~~~
+This plot design is inspired by J.Theilear and D.Prichard, Physica D: Nonlinear Phenomena (1996) pp.221-235.
+<div align="center">
+<img src="data/surrotest1.jpg">
+</div>
 
 Gaussian distribution test
 1. Use RG surrogate ("surrogate -g" command) to generate 399 of surrogate data from original signal file.
