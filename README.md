@@ -117,7 +117,7 @@ usage: mtess [options] file1.csv file2.csv ...
   --cclag num         time lag <num> for Cross Correlation (default:8)
   --pcclag num        time lag <num> for Partial Cross Correlation (default:8)
   --outpath           output files path (default:"results")
-  --format type       save file format <type> 0:csv, 1:mat (default:0)
+  --format type       save file format <type> 0:csv, 1:mat (default:1)
   --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)
   --transopt num      signal transform option <num> (for type 1:centroid value)
   --showinsig         show input signals of <filename>.csv
@@ -160,7 +160,7 @@ surrogate data : gsdgm [options] file_gsm_<type>.mat
   --outpath           output files path (default:"results")
   --transform type    input training signal transform <type> 0:raw, 1:sigmoid (default:0)
   --transopt num      signal transform option <num> (for type 1:centroid value)
-  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:0)
+  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:1)
   --surrnum num       output surrogate sample number <num> (default:1)
   --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)
   --epoch num         VARDNN surrogate training epoch number <num> (default:1000)
@@ -169,6 +169,24 @@ surrogate data : gsdgm [options] file_gsm_<type>.mat
   --version           show version number
   -h, --help          show command line help
 ~~~
+Input .mat file should include input cell data. Node size must be the same within the group. Time-series length does not have to be the same.
+| name | cell | description |
+|:---|:---|:---|
+|CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
+|names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
+
+Output (group surrogate model) .mat file includes following matrix data.
+
+| name | matrix | description |
+|:---|:---|:---|
+|net | struct |struct of group surrogate model|
+
+Output (group surrogate data) .mat file includes following matrix data.
+
+| name | matrix | description |
+|:---|:---|:---|
+|CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
+|names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
 
 ##
 <b>surrogate command</b><br>
@@ -189,7 +207,7 @@ usage: surrogate [options] filename.csv ...
   --noise type        noise type for VAR, PCVAR, VARDNN, LL surrogate (default:"gaussian")
   --surrnum num       output surrogate sample number <num> (default:1)
   --outpath           output files path (default:"results")
-  --format type       save file format <type> 0:csv, 1:mat(each), 2:mat(all) (default:0)
+  --format type       save file format <type> 0:csv, 1:mat(each), 2:mat(all) (default:2)
   --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)
   --transopt num      signal transform option <num> (for type 1:centroid value)
   --lag num           time lag <num> for VAR, PCVAR, VARDNN, LL (default:3)
@@ -212,7 +230,7 @@ usage: surrotest [options] <original>.csv surrogate.mat ...
   -i, --iid           output I.I.D test (<original>_iid_test.csv)
   --side num          bottom-side(1), both-side(2), top-side(3) (default:2)
   --outpath           output files path (default:"results")
-  --format type       save file format <type> 0:csv, 1:mat (default:0)
+  --format type       save file format <type> 0:csv, 1:mat (default:1)
   --showsig           show node status signals of <original>.csv
   --showrank          show rank result of <original>.csv
   -v, --version       show version number
