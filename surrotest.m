@@ -26,7 +26,7 @@ function surrotest(varargin)
     handles.commandError = 0;
     handles.csvFiles = {};
     handles.outpath = 'results';
-    handles.format = 0;
+    handles.format = 1;
     handles.showSig = 0;
     handles.showRank = 0;
 
@@ -105,7 +105,7 @@ function showUsage()
     disp('  -i, --iid           output I.I.D test (<original>_iid_test.csv)');
     disp('  --side num          bottom-side(1), both-side(2), top-side(3) (default:2)');
     disp('  --outpath           output files path (default:"results")');
-    disp('  --format type       save file format <type> 0:csv, 1:mat (default:0)');
+    disp('  --format type       save file format <type> 0:csv, 1:mat (default:1)');
     disp('  --showsig           show node status signals of <original>.csv');
     disp('  --showrank          show rank result of <original>.csv');
     disp('  -v, --version       show version number');

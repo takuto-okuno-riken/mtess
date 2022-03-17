@@ -31,7 +31,7 @@ function mtess(varargin)
     handles.cclag = 8;
     handles.pcclag = 8;
     handles.outpath = 'results';
-    handles.format = 0;
+    handles.format = 1;
     handles.transform = 0;
     handles.transopt = NaN;
     handles.showInput = 0;
@@ -125,14 +125,14 @@ end
 function showUsage()
     global exePath;
     global exeName;
-    disp(['usage: ' exeName ' [options] file1.csv file2.csv ...']);
+    disp(['usage: ' exeName ' [options] file1.mat file2.mat ...']);
     disp('  --range n1:n2       value range [n1, n2] for normalized mean and std dev (default:min and max of input data)');
     disp('  --ndft num          DFT sampling <number> (even number) (default: 100)');
     disp('  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC (dafault:0)');
     disp('  --cclag num         time lag <num> for Cross Correlation (default:8)');
     disp('  --pcclag num        time lag <num> for Partial Cross Correlation (default:8)');
     disp('  --outpath           output files path (default:"results")');
-    disp('  --format type       save file format <type> 0:csv, 1:mat (default:0)');
+    disp('  --format type       save file format <type> 0:csv, 1:mat (default:1)');
     disp('  --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)');
     disp('  --transopt num      signal transform option <num> (for type 1:centroid value)');
     disp('  --showinsig         show input signals of <filename>.csv');
@@ -140,7 +140,7 @@ function showUsage()
     disp('  --showsig           show 1 vs. others node signals');
     disp('  --showprop          show result polar chart of 1 vs. others MTESS statistical properties');
     disp('  --shownode          show result line plot of 1 vs. others node MTESS');
-    disp('  --nocache     use cache <filename> for MTESS calculation');
+    disp('  --nocache           do not use cache file for MTESS calculation');
     disp('  -v, --version       show version number');
     disp('  -h, --help          show command line help');
 end

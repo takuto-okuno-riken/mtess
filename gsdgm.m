@@ -26,7 +26,7 @@ function gsdgm(varargin)
     handles.commandError = 0;
     handles.csvFiles = {};
     handles.outpath = 'results';
-    handles.format = 0;
+    handles.format = 1;
     handles.transform = 0;
     handles.transopt = NaN;
     handles.showInput = 0;
@@ -123,7 +123,7 @@ end
 function showUsage()
     global exePath;
     global exeName;
-    disp(['model training : ' exeName ' [options] file1.csv file2.csv ...']);
+    disp(['model training : ' exeName ' [options] file1.mat file2.mat ...']);
     disp(['surrogate data : ' exeName ' [options] file_gsm_<type>.mat']);
     disp('  -v, --var           output Vector Auto-Regression (VAR) group surrogate model (<filename>_gsm_var.mat)');
     disp('  -p, --pcvar         output Principal Component VAR (PCVAR) group surrogate model (<filename>_gsm_pcvar.mat)');
@@ -133,7 +133,7 @@ function showUsage()
     disp('  --outpath           output files path (default:"results")');
     disp('  --transform type    input training signal transform <type> 0:raw, 1:sigmoid (default:0)');
     disp('  --transopt num      signal transform option <num> (for type 1:centroid value)');
-    disp('  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:0)');
+    disp('  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:1)');
     disp('  --surrnum num       output surrogate sample number <num> (default:1)');
     disp('  --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)');
     disp('  --epoch num         VARDNN surrogate training epoch number <num> (default:1000)');

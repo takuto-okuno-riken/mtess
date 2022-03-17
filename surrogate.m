@@ -29,7 +29,7 @@ function surrogate(varargin)
     handles.lag = 3;
     handles.transform = 0;
     handles.transopt = NaN;
-    handles.format = 0;
+    handles.format = 2;
     handles.showSig = 0;
 
     handles.rg = 0;
@@ -167,7 +167,7 @@ function showUsage()
     disp('  --noise type        noise type for VAR, PCVAR, VARDNN, LL surrogate (default:"gaussian")');
     disp('  --surrnum num       output surrogate sample number <num> (default:1)');
     disp('  --outpath           output files path (default:"results")');
-    disp('  --format type       save file format <type> 0:csv, 1:mat(each), 2:mat(all) (default:0)');
+    disp('  --format type       save file format <type> 0:csv, 1:mat(each), 2:mat(all) (default:2)');
     disp('  --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)');
     disp('  --transopt num      signal transform option <num> (for type 1:centroid value)');
     disp('  --lag num           time lag <num> for VAR, PCVAR, VARDNN, LL (default:3)');
