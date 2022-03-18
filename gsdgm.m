@@ -170,7 +170,16 @@ function processInputFiles(handles)
             f = load(fname);
             if isfield(f,'CX')
                 % training mode
-                CX = [CX, f.CX];
+                if isfield(f,'multiple') && isa(f.CX{1},'uint16')
+                    % uint16 for demo
+                    tn = cell(1,length(f.CX));
+                    for j=1:length(f.CX)
+                        tn{j} = single(f.CX{j}) / f.multiple;
+                    end
+                    CX = [CX, tn];
+                else
+                    CX = [CX, f.CX]; % single
+                end
                 if isfield(f,'names')
                     tn = cell(1,length(f.CX));
                     for j=1:length(f.CX)
