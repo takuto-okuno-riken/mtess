@@ -65,7 +65,7 @@ Then, "mtess" command reads original time-series .csv and surrogate time-series 
 ##
 <b>Demo3</b><br>
 Third demo shows calculation of GSDGM with real fMRI 132 ROI time-series signals. Then calculation of MTESS among group of original time-series and group surrogate data.<br>
-!Caution! MTESS calculation will take a time. 
+(Caution: MTESS calculation will take a time.)
 ~~~
 >> gsdgm -v --lag 1 --surrnum 2 --showsig data/demo-fmri-132x1190s.mat
 output group surrogate model file : results/demo-fmri-132x1190s_gsm_var.mat
