@@ -77,7 +77,7 @@ output group surrogate model file : results/demo-fmri-132x1190s_gsm_var.mat
 surrogate sample : 1
 surrogate sample : 2
 output mat file : results/demo-fmri-132x1190s_gsd_var.mat
->> mtess --showmat --showprop data/demo-fmri-132x1190s.mat results/demo-fmri-132x1190s_gsd_var.mat
+>> mtess --showmat --showprop --showdend ward --showforce data/demo-fmri-132x1190s.mat results/demo-fmri-132x1190s_gsd_var.mat
 ...
 save cache of demo-fmri-132x1190s-gsd-var-1
 save cache of demo-fmri-132x1190s-gsd-var-2
@@ -88,7 +88,7 @@ output mat file : results/demo-fmri-132x1190s_mtess.mat
 <img src="data/gsdgm1.jpg">
 </div>
 As you see in this result, VAR group surrogate data (cell number 7,8) shows higher MTESS than original data (cell number 1-6).
-This means group surrogate data will be the representative and centroid of the group of original time-series data.
+Based on hierarchical clustering and force weight effect graph, group surrogate data will be the representative and centroid of the group of original time-series data.
 
 ##
 <b>Demo4</b><br>
