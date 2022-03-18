@@ -50,17 +50,22 @@ Finally, mtess command saves calculation result with .mat or .csv ("--format 0" 
 <b>Demo2</b><br>
 Second demo shows calculation of surrogate data, then calculation of MTESS between original time-series data vs. surrogate data.
 ~~~
->> surrogate -f -a -v data/demo-original-8x500.csv
+>> surrogate -s -f -a -v data/demo-original-8x500.csv
 surrogate sample : 1
 output mat file : results/demo-original-8x500_var_multi_all.mat
+output mat file : results/demo-original-8x500_rs_multi_all.mat
 output mat file : results/demo-original-8x500_ft_multi_all.mat
 output mat file : results/demo-original-8x500_aaft_multi_all.mat
->> mtess --showmat --showprop --showsig data/demo-original-8x500.csv results/demo-original-8x500_var_multi_all.mat results/demo-original-8x500_ft_multi_all.mat results/demo-original-8x500_aaft_multi_all.mat
+>> mtess --showmat --showprop --showsig data/demo-original-8x500.csv results/demo-original-8x500_rs_multi_all.mat results/demo-original-8x500_var_multi_all.mat results/demo-original-8x500_ft_multi_all.mat results/demo-original-8x500_aaft_multi_all.mat
 ...
 output mat file : results/demo-original-8x500_mtess.mat
 ~~~
-"surrogate" command reads single multivariate time-series (8x500) file and generates surrogate data (8x500) by (multivariate) FT surrogate, AAFT surrogate and VAR surrogate.
+"surrogate" command reads single multivariate time-series (8x500) file and generates surrogate data (8x500) by (multivariate) RS surrogate, VAR surrogate, FT surrogate and AAFT surrogate.
 Then, "mtess" command reads original time-series .csv and surrogate time-series data .mat files, and calculates multivariate time-series similarity.
+<div align="center">
+<img src="data/demo2.jpg">
+</div>
+As you see in this result, VAR, FT and AAFT surrogate data (cell number 3-5) vs. original time-series data (cell number 1) shows higher MTESS (similarity) than RS surrogate data (cell number 2) vs. original data.
 
 ##
 <b>Demo3</b><br>
@@ -72,7 +77,7 @@ output group surrogate model file : results/demo-fmri-132x1190s_gsm_var.mat
 surrogate sample : 1
 surrogate sample : 2
 output mat file : results/demo-fmri-132x1190s_gsd_var.mat
->> mtess --showmat --showprop data/demo-fmri-132x1190s.mat results/demo-fmri-132x1190s_gsd_var.mat
+>> mtess --showmat --showprop --showdend ward --showforce data/demo-fmri-132x1190s.mat results/demo-fmri-132x1190s_gsd_var.mat
 ...
 save cache of demo-fmri-132x1190s-gsd-var-1
 save cache of demo-fmri-132x1190s-gsd-var-2
@@ -82,8 +87,8 @@ output mat file : results/demo-fmri-132x1190s_mtess.mat
 <div align="center">
 <img src="data/gsdgm1.jpg">
 </div>
-As you see in this result, VAR group surrogate data (cell number 7,8) shows higher MTESS than original data (cell number 2-6).
-This means group surrogate data will be the representative and centroid of the group of original time-series data.
+As you see in this result, VAR group surrogate data (cell number 7,8) shows higher MTESS than original data (cell number 1-6).
+Based on hierarchical clustering and force weight effect graph, group surrogate data will be the representative and centroid of the group of original time-series data.
 
 ##
 <b>Demo4</b><br>
