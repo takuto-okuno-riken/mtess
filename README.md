@@ -30,6 +30,7 @@ First demo shows calculation of MTESS among time-series data and figure output.<
 (Copy and paste this command line. Demo data is included in MTESS and GSDGM toolbox.)
 ~~~
 >> mtess --showinsig --showmat --showsig --showprop --shownode data/cx-8x500-demo-surrogate.mat 
+...
 output mat file : results/cx-8x500-demo-surrogate_mtess.mat
 ~~~
 
@@ -55,6 +56,7 @@ output mat file : results/demo-original-8x500_var_multi_all.mat
 output mat file : results/demo-original-8x500_ft_multi_all.mat
 output mat file : results/demo-original-8x500_aaft_multi_all.mat
 >> mtess --showmat --showprop --showsig data/demo-original-8x500.csv results/demo-original-8x500_var_multi_all.mat results/demo-original-8x500_ft_multi_all.mat results/demo-original-8x500_aaft_multi_all.mat
+...
 output mat file : results/demo-original-8x500_mtess.mat
 ~~~
 "surrogate" command reads single multivariate time-series (8x500) file and generates surrogate data (8x500) by (multivariate) FT surrogate, AAFT surrogate and VAR surrogate.
@@ -62,6 +64,23 @@ Then, "mtess" command reads original time-series .csv and surrogate time-series 
 
 ##
 <b>Demo3</b><br>
+Third demo shows calculation of GSDGM with real fMRI 132 ROI time-series signals. Then calculation of MTESS among group of original time-series and group surrogate data.<br>
+!Caution! MTESS calculation will take a time. 
+~~~
+>> gsdgm -v --lag 1 --surrnum 2 --showsig data/demo-fmri-132x1190s.mat
+output group surrogate model file : results/demo-fmri-132x1190s_gsm_var.mat
+surrogate sample : 1
+surrogate sample : 2
+output mat file : results/demo-fmri-132x1190s_gsd_var.mat
+>> mtess --showmat --showprop data/demo-fmri-132x1190s.mat results/demo-fmri-132x1190s_gsd_var.mat
+...
+save cache of demo-fmri-132x1190s-gsd-var-1
+save cache of demo-fmri-132x1190s-gsd-var-2
+output mat file : results/demo-fmri-132x1190s_mtess.mat
+~~~
+
+##
+<b>Demo4</b><br>
 
 Linearity test<br>
 1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 of surrogate data from original signal file.
@@ -253,7 +272,7 @@ Output .mat file includes following matrix data.
 | name | matrix | description |
 |:---|:---|:---|
 |P |&lt;nodes&gt; x 1 | P-value result|
-|Rank |&lt;nodes&gt; x 1 | Rank value of test |
+|Rank |&lt;nodes&gt; x 1 | Rank value result |
 
 
 ## Citing MTESS and GSDGM toolbox
