@@ -48,7 +48,7 @@ Finally, mtess command saves calculation result with .mat or .csv ("--format 0" 
 
 ##
 <b>Demo2</b><br>
-Second demo shows calculation of surrogate data, then calculation of MTESS between original time-series vs. surrogate data.
+Second demo shows calculation of surrogate data, then calculation of MTESS between original time-series data vs. surrogate data.
 ~~~
 >> surrogate -f -a -v data/demo-original-8x500.csv
 surrogate sample : 1
@@ -64,7 +64,7 @@ Then, "mtess" command reads original time-series .csv and surrogate time-series 
 
 ##
 <b>Demo3</b><br>
-Third demo shows calculation of GSDGM with real fMRI 132 ROI time-series signals. Then calculation of MTESS among group of original time-series and group surrogate data.<br>
+Third demo shows calculation of GSDGM with real fMRI 132 ROI time-series data. Then calculation of MTESS among group of original time-series data and group surrogate data.<br>
 (Caution: MTESS calculation will take a time.)
 ~~~
 >> gsdgm -v --lag 1 --surrnum 2 --showsig data/demo-fmri-132x1190s.mat
@@ -78,6 +78,12 @@ save cache of demo-fmri-132x1190s-gsd-var-1
 save cache of demo-fmri-132x1190s-gsd-var-2
 output mat file : results/demo-fmri-132x1190s_mtess.mat
 ~~~
+
+<div align="center">
+<img src="data/gsdgm1.jpg">
+</div>
+As you see in this result, VAR group surrogate data (cell number 7,8) shows higher MTESS than original data (cell number 2-6).
+This means group surrogate data will be the representative and centroid of the group of original time-series data.
 
 ##
 <b>Demo4</b><br>
