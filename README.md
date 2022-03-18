@@ -150,6 +150,8 @@ usage: mtess [options] file1.mat file2.mat ...
   --showsig           show 1 vs. others node signals
   --showprop          show result polar chart of 1 vs. others MTESS statistical properties
   --shownode          show result line plot of 1 vs. others node MTESS
+  --showdend algo     show dendrogram of <algo> hierarchical clustering based on MTESS matrix. see MATLAB linkage method option.
+  --showforce         show force weight effect graph based on MTESS matrix
   --nocache           do not use cache file for MTESS calculation
   -v, --version       show version number
   -h, --help          show command line help
