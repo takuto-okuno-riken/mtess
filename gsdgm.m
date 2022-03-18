@@ -130,7 +130,7 @@ function showUsage()
     disp('  -d, --vardnn        output VAR Deep Neural Network (VARDNN) group surrogate model (<filename>_gsm_vardnn.mat)');
     disp('  --lag num           time lag <num> for VAR, PCVAR, VARDNN surrogate model (default:3)');
     disp('  --noise type        noise type for VAR, PCVAR, VARDNN surrogate model (default:"gaussian" or "residuals")');
-    disp('  --outpath           output files path (default:"results")');
+    disp('  --outpath path      output files <path> (default:"results")');
     disp('  --transform type    input training signal transform <type> 0:raw, 1:sigmoid (default:0)');
     disp('  --transopt num      signal transform option <num> (for type 1:centroid value)');
     disp('  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:1)');

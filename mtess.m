@@ -138,7 +138,7 @@ function showUsage()
     disp('  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC (dafault:0)');
     disp('  --cclag num         time lag <num> for Cross Correlation (default:8)');
     disp('  --pcclag num        time lag <num> for Partial Cross Correlation (default:8)');
-    disp('  --outpath           output files path (default:"results")');
+    disp('  --outpath path      output files <path> (default:"results")');
     disp('  --format type       save file format <type> 0:csv, 1:mat (default:1)');
     disp('  --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)');
     disp('  --transopt num      signal transform option <num> (for type 1:centroid value)');
