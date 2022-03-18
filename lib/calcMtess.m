@@ -62,6 +62,7 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
             cachef = ['results/cache/mtess-' CXNames{nn} '-' num2str(size(X,1)) 'x' num2str(size(X,2)) '.mat'];
         end
         if ~isempty(CXNames) && exist(cachef,'file')
+            disp(['load cache of ' CXNames{nn}]);
             load(cachef);
         else
             xm = single(mean(X,2));
@@ -74,6 +75,7 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
                 xpcc = single(pccFunc(X,[],[],[],pccLags));
             end
             if ~isempty(CXNames)
+                disp(['save cache of ' CXNames{nn}]);
                 save(cachef, 'xm', 'xsd', 'xamp', 'xcc', 'xpcc');
             end
         end        
