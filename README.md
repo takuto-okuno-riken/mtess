@@ -43,7 +43,7 @@ This demo calculates MTESS and shows following figures:
 "--showprop" option shows MTESS Polar chart result of first data vs. others.<br>
 "--shownode" option shows Node MTESS result of first data vs. others.<br>
 <br>
-Finally, mtess command saves calculation result with .csv or .mat ("--format 1" option).
+Finally, mtess command saves calculation result with .mat or .csv ("--format 0" option).
 
 ##
 <b>Demo2</b><br>
