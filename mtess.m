@@ -39,6 +39,8 @@ function mtess(varargin)
     handles.showSig = 0;
     handles.showProp = 0;
     handles.showNode = 0;
+    handles.showDend = '';
+    handles.showForce = 0;
     handles.noCache = 0;
 
     % load command line input
@@ -86,6 +88,11 @@ function mtess(varargin)
                 handles.showProp = 1;
             case {'--shownode'}
                 handles.showNode = 1;
+            case {'--showforce'}
+                handles.showForce = 1;
+            case {'--showdend'}
+                handles.showDend = varargin{i+1};
+                i = i + 1;
             case {'--nocache'}
                 handles.noCache = 1;
             case {'-h','--help'}
@@ -140,6 +147,8 @@ function showUsage()
     disp('  --showsig           show 1 vs. others node signals');
     disp('  --showprop          show result polar chart of 1 vs. others MTESS statistical properties');
     disp('  --shownode          show result line plot of 1 vs. others node MTESS');
+    disp('  --showdend algo     show dendrogram of <algo> hierarchical clustering based on MTESS matrix. see MATLAB linkage method option.');
+    disp('  --showforce         show force weight effect graph based on MTESS matrix');
     disp('  --nocache           do not use cache file for MTESS calculation');
     disp('  -v, --version       show version number');
     disp('  -h, --help          show command line help');
@@ -310,6 +319,30 @@ function processInputFiles(handles)
         legend(names(2:length(CX))); ylim([0,5]);
         xlabel('Node number');
         ylabel('MTESS');
+    end
+    
+    % show dendrogram
+    if ~isempty(handles.showDend)
+        X = 5 - MTS;
+        X(isnan(X))=0; X = X + X.';
+        y = squareform(X);
+        Z = linkage(y,'ward');
+        figure; dendrogram(Z);
+        title('Hierarchical clustering based on MTESS');
+        ylabel('MTESS distance');
+        xlabel('Cell number');
+    end
+    
+    % show force weight effect graph
+    if handles.showForce > 0
+        X = 5 - MTS;
+        dn = cell(1,length(CX));
+        for i=1:length(dn), dn{i}=[num2str(i)]; end
+        G = graph(X, dn, 'omitselfloops','upper');
+        figure; gp=plot(G,'Layout','force','WeightEffect','direct');%'force','UseGravity',true);
+        gp.EdgeColor = [0.7, 0.7, 0.7];
+        gp.LineStyle = ':';
+        title('Force weight effect graph based on MTESS');
     end
 end
 
