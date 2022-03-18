@@ -49,6 +49,8 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
     if ~isempty(CXNames) && ~exist('results/cache','dir')
         mkdir('results/cache');
     end
+    if isequal(pccFunc,@calcSvPartialCrossCorrelation), palgo='svp'; else palgo='p'; end
+
     Means = single(nan(cLen,nodeNum));
     Stds = single(nan(cLen,nodeNum));
     Amps = single(nan(cLen,nodeNum,nDft/2-1));
@@ -59,7 +61,7 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
     for nn=1:cLen
         X = CX{nn};
         if ~isempty(CXNames)
-            cachef = ['results/cache/mtess-' CXNames{nn} '-' num2str(size(X,1)) 'x' num2str(size(X,2)) '.mat'];
+            cachef = ['results/cache/mtess-' CXNames{nn} '-' num2str(size(X,1)) 'x' num2str(size(X,2)) 'd' num2str(nDft) 'c' num2str(ccLags) palgo num2str(pccLags) '.mat'];
         end
         if ~isempty(CXNames) && exist(cachef,'file')
             disp(['load cache of ' CXNames{nn}]);

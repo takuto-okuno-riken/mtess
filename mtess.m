@@ -28,8 +28,8 @@ function mtess(varargin)
     handles.range = NaN;
     handles.nDft = 100;
     handles.pcc = 0;
-    handles.cclag = 8;
-    handles.pcclag = 8;
+    handles.cclag = NaN;
+    handles.pcclag = NaN;
     handles.outpath = 'results';
     handles.format = 1;
     handles.transform = 0;
@@ -245,23 +245,30 @@ function processInputFiles(handles)
     end
     
     % calc MTESS
-    if handles.pcc == 1
-        pccFunc = @calcPartialCrossCorrelation;
-    elseif handles.pcc == 2
+    pcName = 'PC';
+    pccFunc = @calcPartialCrossCorrelation;
+    cclag = 8;
+    pcclag = 8;
+    if handles.pcc == 2
         pccFunc = @calcSvPartialCrossCorrelation;
+        pcName = 'SVgPC';
+        pcclag = 2;
     else
-        if nodeNum < 48
-            pccFunc = @calcPartialCrossCorrelation;
-        else
+        if nodeNum >= 48
             pccFunc = @calcSvPartialCrossCorrelation;
+            pcName = 'SVgPC';
+            pcclag = 2;
         end
     end
+    if ~isnan(handles.cclag), cclag = handles.cclag; end
+    if ~isnan(handles.pcclag), pcclag = handles.pcclag; end
+
     if handles.noCache > 0
         cache = {};
     else
         cache = names;
     end
-    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, handles.range, handles.nDft, pccFunc, handles.cclag, handles.pcclag, cache);
+    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, handles.range, handles.nDft, pccFunc, cclag, pcclag, cache);
 
     % output result matrix files
     saveResultFiles(handles, MTS, MTSp, nMTS, nMTSp, savename);
@@ -289,7 +296,7 @@ function processInputFiles(handles)
     % show 1 vs. others MTESS statistical properties
     if handles.showProp > 0
         P=squeeze(MTSp(1,2:length(CX),:));
-        figure; plotMtessSpiderPlot(P);
+        figure; plotMtessSpiderPlot(P, cclag, pcclag, pcName);
         legend(names(2:length(CX)));
         title('MTESS polar chart : 1 vs. others');
     end
