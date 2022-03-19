@@ -73,7 +73,7 @@ As you see in this result, VAR, FT and AAFT surrogate data (cell number 3-5) vs.
 Third demo shows calculation of GSDGM with real fMRI 132 ROI time-series data. Then calculation of MTESS among group of original time-series data and group surrogate data.<br>
 (Caution: MTESS calculation will take a time.)
 ~~~
->> gsdgm -v --lag 1 --surrnum 2 --showsig data/demo-fmri-132x1190s.mat
+>> gsdgm -v --lag 1 --surrnum 2 --showsig --showras data/demo-fmri-132x1190s.mat
 output group surrogate model file : results/demo-fmri-132x1190s_gsm_var.mat
 surrogate sample : 1
 surrogate sample : 2
