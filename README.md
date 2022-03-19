@@ -47,6 +47,7 @@ This demo calculates MTESS and shows following figures:
 <br>
 Finally, mtess command saves calculation result with .mat or .csv ("--format 0" option).
 
+
 ##
 <b>Demo2</b><br>
 Second demo shows calculation of surrogate data, then calculation of MTESS between original time-series data vs. surrogate data.
@@ -68,9 +69,34 @@ Then, "mtess" command reads original time-series .csv and surrogate time-series 
 </div>
 As you see in this result, VAR, FT and AAFT surrogate data (cell number 3-5) vs. original time-series data (cell number 1) shows higher MTESS (similarity) than RS surrogate data (cell number 2) vs. original data.
 
+
 ##
 <b>Demo3</b><br>
-Third demo shows calculation of GSDGM with real fMRI 132 ROI time-series data. Then calculation of MTESS among group of original time-series data and group surrogate data.<br>
+Third demo shows calculation of (PCVAR) group surrogate data based on the Human Connectome Project S500 male rs-fMRI data (N=410). Then calculation of MTESS among some samples of rs-fMRI time-series data and group surrogate data.<br>
+(Caution: Downloading and MTESS calculation will take a time.)
+~~~
+>> gsdgm --surrnum 2 --showsig http://fmridata.s223.xrea.com/hcp-s500m-pcvar3.mat
+downloading http://fmridata.s223.xrea.com/hcp-s500m-pcvar3.mat ...
+save cache file : data/cache/fmridata_s223_xrea_com-hcp-s500m-pcvar3.mat
+surrogate sample : 1
+surrogate sample : 2
+output mat file : results/hcp-s500m-pcvar3_gsd_pcvar.mat
+>> mtess --showmat --showforce --showdend ward --showprop demo-fmri-132x1190s.mat results/hcp-s500m-pcvar3_gsd_pcvar.mat
+...
+output mat file : results/demo-fmri-132x1190s_mtess.mat
+~~~
+
+<div align="center">
+<img src="data/demo3.jpg">
+</div>
+As you see in this result, PCVAR group surrogate data (cell number 7,8) shows higher MTESS than sample rs-fMRI data (cell number 1-6).
+Because downloaded data generating model is created by large HCP data and so it can generate group representative (standard) human brain dynamics.
+Generated group surrogate data will be the representative and centroid of the group of original rs-fMRI time-series data.
+
+
+##
+<b>Demo4</b><br>
+This demo shows calculation of GSDGM with real fMRI 132 ROI time-series data. Then calculation of MTESS among group of original time-series data and group surrogate data.<br>
 (Caution: MTESS calculation will take a time.)
 ~~~
 >> gsdgm -v --lag 1 --surrnum 2 --showsig --showras data/demo-fmri-132x1190s.mat
@@ -92,7 +118,7 @@ As you see in this result, VAR group surrogate data (cell number 7,8) shows high
 Based on hierarchical clustering and force weight effect graph, group surrogate data will be the representative and centroid of the group of original time-series data.
 
 ##
-<b>Demo4</b><br>
+<b>Demo5</b><br>
 
 Linearity test<br>
 1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 of surrogate data from original signal file.
@@ -132,7 +158,7 @@ output mat file : results/demo-original-8x500_iid_test.mat
 ~~~
 
 ##
-<b>Demo5</b><br>
+<b>Demo6</b><br>
 This demo shows extraction of real fMRI 132 ROI time-series data. Then calculation of MTESS among group of fMRI ROI time-series data.<br>
 (Caution: Data is not included in toolbox. This demo is just sample use.)
 ~~~
