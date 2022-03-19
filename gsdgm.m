@@ -40,8 +40,9 @@ function gsdgm(varargin)
 
     handles.lag = 3;
     handles.noiseType = 'gaussian';
-    handles.pcRate = 0.99;
     handles.surrNum = 1;
+    handles.sigLen = 0;
+    handles.pcRate = 0.99;
     handles.maxEpochs = 1000;
 
     % load command line input
@@ -62,6 +63,9 @@ function gsdgm(varargin)
                 i = i + 1;
             case {'--surrnum'}
                 handles.surrNum = str2num(varargin{i+1});
+                i = i + 1;
+            case {'--siglen'}
+                handles.sigLen = str2num(varargin{i+1});
                 i = i + 1;
             case {'--lag'}
                 handles.lag = str2num(varargin{i+1});
@@ -141,6 +145,7 @@ function showUsage()
     disp('  --transopt num      signal transform option <num> (for type 1:centroid value)');
     disp('  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:1)');
     disp('  --surrnum num       output surrogate sample number <num> (default:1)');
+    disp('  --siglen num        output time-series length <num> (default:same as input time-series)');
     disp('  --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)');
     disp('  --epoch num         VARDNN surrogate training epoch number <num> (default:1000)');
     disp('  --showinsig         show input time-series data of <filename>.csv');
@@ -300,8 +305,10 @@ function processInputFiles(handles)
     
     % surrogate data mode
     if ~isempty(net)
+        if handles.sigLen > 0, sigLen = handles.sigLen; else sigLen = net.sigLen; end
+
         % dummy signal for nodeNum, sigLen and surrogate initial value (also affect surrogate value range)
-        X = (mvnrnd(net.cxM, net.cxCov, net.sigLen))';
+        X = (mvnrnd(net.cxM, net.cxCov, sigLen))';
 
         % generate surrogate data
         if isfield(net,'nodeNetwork')
