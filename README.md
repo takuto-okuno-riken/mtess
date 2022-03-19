@@ -90,13 +90,13 @@ output mat file : results/demo-fmri-132x1190s_mtess.mat
 <img src="data/demo3.jpg">
 </div>
 As you see in this result, PCVAR group surrogate data (cell number 7,8) shows higher MTESS than sample rs-fMRI data (cell number 1-6).
-Because downloaded data generating model is created by large HCP data (N=410) and so it can generate group representative (standard) human brain dynamics.
+Because downloaded data generating model (GSDGM) is created by large HCP data (N=410) and so it can generate group representative (standard) human brain dynamics.
 Generated group surrogate data will be the representative and centroid of the group of original rs-fMRI time-series data.
 
 
 ##
 <b>Demo4</b><br>
-This demo shows calculation of GSDGM with rs-fMRI 132 ROI time-series data. Then calculation of MTESS among group of original time-series data and group surrogate data.<br>
+This demo shows creation of data generating model (GSDGM) from sample rs-fMRI time-series data (132 ROIs). Then calculation of MTESS among group of original time-series data and group surrogate data.<br>
 (Caution: MTESS calculation will take a time.)
 ~~~
 >> gsdgm -v --lag 1 --surrnum 2 --showsig --showras data/demo-fmri-132x1190s.mat
