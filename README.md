@@ -259,6 +259,7 @@ Output (group surrogate model) .mat file includes following matrix data.
 | name | type | description |
 |:---|:---|:---|
 |net | struct |struct of group surrogate model|
+|name | string |name of group surrogate model|
 
 Output (group surrogate data) .mat file includes following matrix data.
 
