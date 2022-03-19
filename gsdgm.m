@@ -30,7 +30,9 @@ function gsdgm(varargin)
     handles.transform = 0;
     handles.transopt = NaN;
     handles.showInput = 0;
+    handles.showInputRas = 0;
     handles.showSig = 0;
+    handles.showRas = 0;
     
     handles.var = 0;
     handles.pcvar = 0;
@@ -84,8 +86,12 @@ function gsdgm(varargin)
                 i = i + 1;
             case {'--showinsig'}
                 handles.showInput = 1;
+            case {'--showinras'}
+                handles.showInputRas = 1;
             case {'--showsig'}
                 handles.showSig = 1;
+            case {'--showras'}
+                handles.showRas = 1;
             case {'-h','--help'}
                 showUsage();
                 return;
@@ -137,8 +143,10 @@ function showUsage()
     disp('  --surrnum num       output surrogate sample number <num> (default:1)');
     disp('  --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)');
     disp('  --epoch num         VARDNN surrogate training epoch number <num> (default:1000)');
-    disp('  --showinsig         show each time-series data of <filename>.csv');
+    disp('  --showinsig         show input time-series data of <filename>.csv');
+    disp('  --showinras         show raster plot of input time-series data of <filename>.csv');
     disp('  --showsig           show output surrogate time-series data');
+    disp('  --showras           show raster plot of output surrogate time-series data');
     disp('  --version           show version number');
     disp('  -h, --help          show command line help');
 end
@@ -233,6 +241,14 @@ function processInputFiles(handles)
             xlabel('Time Series');
             ylabel('Signal Value');
         end
+        % show input signals
+        if handles.showInputRas > 0
+            figure; imagesc(X);
+            title(['Raster plot of Input signals : ' names{i}]);
+            xlabel('Time Series');
+            ylabel('Node number');
+            colorbar;
+        end
     end
     
     % training mode
@@ -285,13 +301,22 @@ function processInputFiles(handles)
         for i=1:length(CX)
             CX{i} = squeeze(Y(:,:,i));
             names{i} = [savename '-gsd-' nettype '-' num2str(i)];
-        
-            % show input signals
+
+            % show output signals
             if handles.showSig > 0
                 figure; plot(CX{i}.');
                 title(['Group Surrogate Data : ' names{i}]);
                 xlabel('Time Series');
                 ylabel('Signal Value');
+            end
+
+            % show output signals
+            if handles.showRas > 0
+                figure; imagesc(CX{i});
+                title(['Raster plot of Group Surrogate Data : ' names{i}]);
+                xlabel('Time Series');
+                ylabel('Node number');
+                colorbar;
             end
         end
 

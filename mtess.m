@@ -35,6 +35,7 @@ function mtess(varargin)
     handles.transform = 0;
     handles.transopt = NaN;
     handles.showInput = 0;
+    handles.showInputRas = 0;
     handles.showMat = 0;
     handles.showSig = 0;
     handles.showProp = 0;
@@ -80,6 +81,8 @@ function mtess(varargin)
                 i = i + 1;
             case {'--showinsig'}
                 handles.showInput = 1;
+            case {'--showinras'}
+                handles.showInputRas = 1;
             case {'--showsig'}
                 handles.showSig = 1;
             case {'--showmat'}
@@ -142,7 +145,8 @@ function showUsage()
     disp('  --format type       save file format <type> 0:csv, 1:mat (default:1)');
     disp('  --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)');
     disp('  --transopt num      signal transform option <num> (for type 1:centroid value)');
-    disp('  --showinsig         show input signals of <filename>.csv');
+    disp('  --showinsig         show input time-series data of <filename>.csv');
+    disp('  --showinras         show raster plot of input time-series data of <filename>.csv');
     disp('  --showmat           show result MTESS matrix');
     disp('  --showsig           show 1 vs. others node signals');
     disp('  --showprop          show result polar chart of 1 vs. others MTESS statistical properties');
@@ -247,6 +251,14 @@ function processInputFiles(handles)
             title(['File Signals : ' names{i}]);
             xlabel('Time Series');
             ylabel('Signal Value');
+        end
+        % show input signals
+        if handles.showInputRas > 0
+            figure; imagesc(X);
+            title(['Raster plot of Signals : ' names{i}]);
+            xlabel('Time Series');
+            ylabel('Node number');
+            colorbar;
         end
     end
     if isnan(handles.range)

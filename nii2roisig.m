@@ -32,6 +32,7 @@ function nii2roisig(varargin)
     handles.transopt = NaN;
 
     handles.showSig = 0;
+    handles.showRas = 0;
     handles.noCache = 0;
 
     % load command line input
@@ -58,6 +59,8 @@ function nii2roisig(varargin)
                 i = i + 1;
             case {'--showsig'}
                 handles.showSig = 1;
+            case {'--showras'}
+                handles.showRas = 1;
             case {'--nocache'}
                 handles.noCache = 1;
             case {'-h','--help'}
@@ -104,7 +107,8 @@ function showUsage()
     disp('  --format type       save file format <type> 0:csv, 1:mat(each), 2:mat(all) (default:2)');
     disp('  --transform type    output signal transform <type> 0:raw, 1:sigmoid (default:0)');
     disp('  --transopt num      signal transform option <num> (for type 1:centroid value)');
-    disp('  --showsig           show node status signals of <original>.csv');
+    disp('  --showsig           show output time-series data of <original>.csv');
+    disp('  --showras           show raster plot of output time-series data of <original>.csv');
     disp('  --nocache           do not use cache file for conversion');
     disp('  -v, --version       show version number');
     disp('  -h, --help          show command line help');
@@ -237,6 +241,15 @@ function processInputFiles(handles)
             title(['ROI Signals : ' strrep(name,'_','-')]);
             xlabel('Time Series');
             ylabel('Signal Value');
+        end
+
+        % show output signals
+        if handles.showRas > 0
+            figure; imagesc(X);
+            title(['Raster plot of ROI Signals : ' strrep(name,'_','-')]);
+            xlabel('Time Series');
+            ylabel('Node number');
+            colorbar;
         end
         
         CX{end+1} = X;

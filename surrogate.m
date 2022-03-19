@@ -174,7 +174,7 @@ function showUsage()
     disp('  --epoch num         VARDNN training epoch number <num> (default:1000)');
     disp('  --l2 num            VARDNN training L2Regularization <num> (default:0.05)');
     disp('  --nn num            <num>-nearest neighbor for Lazy Learning (default:2)');
-    disp('  --showsig           show node status signals of <filename>.csv');
+    disp('  --showsig           show input time-series data of <filename>.csv');
     disp('  --nocache           do not use cache file for VARDNN training');
     disp('  --version           show version number');
     disp('  -h, --help          show command line help');

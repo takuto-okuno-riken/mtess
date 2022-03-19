@@ -106,7 +106,7 @@ function showUsage()
     disp('  --side num          bottom-side(1), both-side(2), top-side(3) (default:2)');
     disp('  --outpath path      output files <path> (default:"results")');
     disp('  --format type       save file format <type> 0:csv, 1:mat (default:1)');
-    disp('  --showsig           show node status signals of <original>.csv');
+    disp('  --showsig           show input time-series data of <original>.csv');
     disp('  --showrank          show rank result of <original>.csv');
     disp('  -v, --version       show version number');
     disp('  -h, --help          show command line help');
