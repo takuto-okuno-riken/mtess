@@ -72,7 +72,7 @@ As you see in this result, VAR, FT and AAFT surrogate data (cell number 3-5) vs.
 
 ##
 <b>Demo3</b><br>
-Third demo shows calculation of (PCVAR) group surrogate data based on the Human Connectome Project S500 male rs-fMRI data (N=410). Then calculation of MTESS among some samples of rs-fMRI time-series data and group surrogate data.<br>
+Third demo shows calculation of (PCVAR) group surrogate data based on the Human Connectome Project S500 male rs-fMRI data (132 ROIs). Then calculation of MTESS among some samples of rs-fMRI time-series data and group surrogate data.<br>
 (Caution: Downloading and MTESS calculation will take a time.)
 ~~~
 >> gsdgm --surrnum 2 --showsig http://fmridata.s223.xrea.com/hcp-s500m-pcvar3.mat
@@ -90,7 +90,7 @@ output mat file : results/demo-fmri-132x1190s_mtess.mat
 <img src="data/demo3.jpg">
 </div>
 As you see in this result, PCVAR group surrogate data (cell number 7,8) shows higher MTESS than sample rs-fMRI data (cell number 1-6).
-Because downloaded data generating model is created by large HCP data and so it can generate group representative (standard) human brain dynamics.
+Because downloaded data generating model is created by large HCP data (N=410) and so it can generate group representative (standard) human brain dynamics.
 Generated group surrogate data will be the representative and centroid of the group of original rs-fMRI time-series data.
 
 
