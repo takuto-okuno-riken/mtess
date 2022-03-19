@@ -238,6 +238,7 @@ surrogate data : gsdgm [options] file_gsm_<type>.mat
   --transopt num      signal transform option <num> (for type 1:centroid value)
   --format type       output surrogate data file format <type> 0:csv, 1:mat (default:1)
   --surrnum num       output surrogate sample number <num> (default:1)
+  --siglen num        output time-series length <num> (default:same as input time-series)
   --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)
   --epoch num         VARDNN surrogate training epoch number <num> (default:1000)
   --showinsig         show input time-series data of <filename>.csv
