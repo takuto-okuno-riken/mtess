@@ -12,6 +12,7 @@ Multivariate Time-series Ensemble Similarity Score (MTESS) and Group Surrogate D
 | gsdgm | Generating group surrogate model (Vector Auto-Regression (VAR), Principal Component VAR (PCVAR), Vector Auto-Regressive Deep Neural Network (VARDNN)[(T.Okuno and A.Woodward, 2021)](https://www.frontiersin.org/articles/10.3389/fnins.2021.764796/full) surrogate) and (multivariate time-series) group surrogate data.|
 | surrogate | Generating univariate and multivariate time-series surrogate data by Random Gaussian (RG), Random shuffling (RS), Fourier Transfor (FT), Amplitude Adjusted FT (AAFT)[(J.Theilear et al., 1992)](https://www.sciencedirect.com/science/article/abs/pii/016727899290102S), Iterated AAFT (IAAFT)[(T.Schreiber and A.Schmitz, 1996)](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.77.635), VAR, PCVAR, VARDNN surrogate.|
 | surrotest | Hypothesis testing based on monte-carlo method (Linearity test, Gaussian distribution test, Independent and Identically Distributed (I.I.D) test)  [(J.Theilear and D.Prichard, 1996)](https://www.sciencedirect.com/science/article/abs/pii/0167278996000504).|
+| nii2roisig | Extract fMRI ROI time-series data from nifti files (.nii, .nii.gz) with the ROI atlas file (.nii, .nii.gz). |
 
 
 ## Requirements: software
@@ -138,7 +139,7 @@ output mat file : results/demo-original-8x500_iid_test.mat
 usage: mtess [options] file1.mat file2.mat ...
   --range n1:n2       value range [n1, n2] for normalized mean and std dev (default:min and max of input data)
   --ndft num          DFT sampling <number> (even number) (default: 100)
-  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC (dafault:0)
+  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC, 3:PC-PCC (dafault:0)
   --cclag num         time lag <num> for Cross Correlation (default:8)
   --pcclag num        time lag <num> for Partial Cross Correlation (default:8)
   --outpath path      output files <path> (default:"results")
@@ -286,6 +287,30 @@ Output .mat file includes following matrix data.
 |:---|:---|:---|
 |P |&lt;nodes&gt; x 1 | P-value result|
 |Rank |&lt;nodes&gt; x 1 | Rank value result |
+
+##
+<b>nii2roisig command</b><br>
+~~~
+>> nii2roisig -h
+usage: nii2roisig [options] -a atlas.nii file1.nii ...
+  -a, --atlas file    ROI atlas nifti <file>
+  --outpath path      output files <path> (default:"results")
+  --format type       save file format <type> 0:csv, 1:mat(each), 2:mat(all) (default:2)
+  --transform type    output signal transform <type> 0:raw, 1:sigmoid (default:0)
+  --transopt num      signal transform option <num> (for type 1:centroid value)
+  --showsig           show node status signals of <original>.csv
+  --nocache           do not use cache file for conversion
+  -v, --version       show version number
+  -h, --help          show command line help
+~~~
+Inputs are ROI atlas .nii (.nii.gz) and fMRI .nii (.nii.gz) files. Both file should have same space (i.e. MNI space).
+
+Output (surrogate data) .mat file includes following matrix data.
+
+| name | cell | description |
+|:---|:---|:---|
+|CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
+|names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
 
 
 ## Citing MTESS and GSDGM toolbox
