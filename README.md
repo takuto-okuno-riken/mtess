@@ -96,7 +96,7 @@ Generated group surrogate data will be the representative and centroid of the gr
 
 ##
 <b>Demo4</b><br>
-This demo shows calculation of GSDGM with real fMRI 132 ROI time-series data. Then calculation of MTESS among group of original time-series data and group surrogate data.<br>
+This demo shows calculation of GSDGM with rs-fMRI 132 ROI time-series data. Then calculation of MTESS among group of original time-series data and group surrogate data.<br>
 (Caution: MTESS calculation will take a time.)
 ~~~
 >> gsdgm -v --lag 1 --surrnum 2 --showsig --showras data/demo-fmri-132x1190s.mat
@@ -116,6 +116,7 @@ output mat file : results/demo-fmri-132x1190s_mtess.mat
 </div>
 As you see in this result, VAR group surrogate data (cell number 7,8) shows higher MTESS than original data (cell number 1-6).
 Based on hierarchical clustering and force weight effect graph, group surrogate data will be the representative and centroid of the group of original time-series data.
+
 
 ##
 <b>Demo5</b><br>
