@@ -169,6 +169,22 @@ function processInputFiles(handles)
 
         % load node status signals csv or mat file
         fname = handles.csvFiles{i};
+        % check url or file
+        if contains(fname, 'http://') || contains(fname, 'https://')
+            % make download cache directory
+            if ~exist('data/cache','dir')
+                mkdir('data/cache');
+            end
+            % make cache file string
+            url = fname;
+            fname = ['data/cache/' url2cacheString(fname)];
+            if ~exist(fname,'file')
+                disp(['downloading ' url ' ...']);
+                websave(fname, url);
+                disp(['save cache file : ' fname]);
+            end
+        end
+
         if ~exist(fname,'file')
             disp(['file is not found. ignoring : ' fname]);
             continue;
@@ -203,10 +219,12 @@ function processInputFiles(handles)
                 end
             elseif isfield(f,'X')
                 % training mode
+                if isfield(f,'name'), name = f.name; end
                 names = [names, strrep(name,'_','-')];
                 CX = [CX, f.X];
             elseif isfield(f,'net')
                 % surrogate data mode
+                if isfield(f,'name'), name = f.name; end
                 net = f.net;
             else
                 disp(['file does not contain "X" matrix or "CX" cell. ignoring : ' fname]);
@@ -305,7 +323,7 @@ function processInputFiles(handles)
             % show output signals
             if handles.showSig > 0
                 figure; plot(CX{i}.');
-                title(['Group Surrogate Data : ' names{i}]);
+                title(['Group Surrogate Data : ' strrep(names{i},'_','-')]);
                 xlabel('Time Series');
                 ylabel('Signal Value');
             end
@@ -313,7 +331,7 @@ function processInputFiles(handles)
             % show output signals
             if handles.showRas > 0
                 figure; imagesc(CX{i});
-                title(['Raster plot of Group Surrogate Data : ' names{i}]);
+                title(['Raster plot of Group Surrogate Data : ' strrep(names{i},'_','-')]);
                 xlabel('Time Series');
                 ylabel('Node number');
                 colorbar;
