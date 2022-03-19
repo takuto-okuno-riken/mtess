@@ -49,7 +49,9 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
     if ~isempty(CXNames) && ~exist('results/cache','dir')
         mkdir('results/cache');
     end
-    if isequal(pccFunc,@calcSvPartialCrossCorrelation), palgo='svp'; else palgo='p'; end
+    if isequal(pccFunc,@calcSvPartialCrossCorrelation) palgo='svp';
+    elseif isequal(pccFunc,@calcPcPartialCrossCorrelation) palgo='pcp';
+    else palgo='p'; end
 
     Means = single(nan(cLen,nodeNum));
     Stds = single(nan(cLen,nodeNum));

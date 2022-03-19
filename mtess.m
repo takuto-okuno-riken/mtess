@@ -135,7 +135,7 @@ function showUsage()
     disp(['usage: ' exeName ' [options] file1.mat file2.mat ...']);
     disp('  --range n1:n2       value range [n1, n2] for normalized mean and std dev (default:min and max of input data)');
     disp('  --ndft num          DFT sampling <number> (even number) (default: 100)');
-    disp('  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC (dafault:0)');
+    disp('  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC, 3:PC-PCC (dafault:0)');
     disp('  --cclag num         time lag <num> for Cross Correlation (default:8)');
     disp('  --pcclag num        time lag <num> for Partial Cross Correlation (default:8)');
     disp('  --outpath path      output files <path> (default:"results")');
@@ -258,11 +258,17 @@ function processInputFiles(handles)
     pccFunc = @calcPartialCrossCorrelation;
     cclag = 8;
     pcclag = 8;
-    if handles.pcc == 2
+    if handles.pcc == 1
+        % same as default
+    elseif handles.pcc == 2
         pccFunc = @calcSvPartialCrossCorrelation;
         pcName = 'SVgPC';
         pcclag = 2;
+    elseif handles.pcc == 3
+        pccFunc = @calcPcPartialCrossCorrelation;
+        pcName = 'PCPC';
     else
+        % auto
         if nodeNum >= 48
             pccFunc = @calcSvPartialCrossCorrelation;
             pcName = 'SVgPC';
