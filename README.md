@@ -96,7 +96,7 @@ Generated group surrogate data will be the representative and centroid of the gr
 
 ##
 <b>Demo4</b><br>
-This demo shows creation of data generating model (GSDGM) from sample rs-fMRI time-series data (132 ROIs). Then calculation of MTESS among group of original time-series data and group surrogate data.<br>
+This demo shows creation of the data generating model (GSDGM) from sample rs-fMRI time-series data (132 ROIs). Then calculation of MTESS among group of original time-series data and group surrogate data.<br>
 (Caution: MTESS calculation will take a time.)
 ~~~
 >> gsdgm -v --lag 1 --surrnum 2 --showsig --showras data/demo-fmri-132x1190s.mat
