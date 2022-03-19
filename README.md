@@ -72,7 +72,7 @@ As you see in this result, VAR, FT and AAFT surrogate data (cell number 3-5) vs.
 
 ##
 <b>Demo3</b><br>
-Third demo shows calculation of (PCVAR) group surrogate data based on the Human Connectome Project S500 male rs-fMRI data (132 ROIs). Then calculation of MTESS among some samples of rs-fMRI time-series data and group surrogate data.<br>
+Third demo shows calculation of (PCVAR) group surrogate data based on [the Human Connectome Project](https://www.humanconnectome.org/) S500 male rs-fMRI data (132 ROIs). Then calculation of MTESS among some samples of rs-fMRI time-series data and group surrogate data.<br>
 (Caution: Downloading and MTESS calculation will take a time.)
 ~~~
 >> gsdgm --surrnum 2 --showsig http://fmridata.s223.xrea.com/hcp-s500m-pcvar3.mat
