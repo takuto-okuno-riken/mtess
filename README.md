@@ -166,7 +166,8 @@ usage: mtess [options] file1.mat file2.mat ...
   --format type       save file format <type> 0:csv, 1:mat (default:1)
   --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)
   --transopt num      signal transform option <num> (for type 1:centroid value)
-  --showinsig         show input signals of <filename>.csv
+  --showinsig         show input time-series data of <filename>.csv
+  --showinras         show raster plot of input time-series data of <filename>.csv
   --showmat           show result MTESS matrix
   --showsig           show 1 vs. others node signals
   --showprop          show result polar chart of 1 vs. others MTESS statistical properties
@@ -212,8 +213,10 @@ surrogate data : gsdgm [options] file_gsm_<type>.mat
   --surrnum num       output surrogate sample number <num> (default:1)
   --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)
   --epoch num         VARDNN surrogate training epoch number <num> (default:1000)
-  --showinsig         show each time-series data of <filename>.csv
+  --showinsig         show input time-series data of <filename>.csv
+  --showinras         show raster plot of input time-series data of <filename>.csv
   --showsig           show output surrogate time-series data
+  --showras           show raster plot of output surrogate time-series data
   --version           show version number
   -h, --help          show command line help
 ~~~
@@ -262,9 +265,9 @@ usage: surrogate [options] filename.csv ...
   --epoch num         VARDNN training epoch number <num> (default:1000)
   --l2 num            VARDNN training L2Regularization <num> (default:0.05)
   --nn num            <num>-nearest neighbor for Lazy Learning (default:2)
-  --showsig           show node status signals of <filename>.csv
+  --showsig           show input time-series data of <filename>.csv
   --nocache           do not use cache file for VARDNN training
-  -v, --version       show version number
+  --version           show version number
   -h, --help          show command line help
 ~~~
 Input .csv or .mat file should include input time-series matrix data.
@@ -290,7 +293,7 @@ usage: surrotest [options] <original>.csv surrogate.mat ...
   --side num          bottom-side(1), both-side(2), top-side(3) (default:2)
   --outpath path      output files <path> (default:"results")
   --format type       save file format <type> 0:csv, 1:mat (default:1)
-  --showsig           show node status signals of <original>.csv
+  --showsig           show input time-series data of <original>.csv
   --showrank          show rank result of <original>.csv
   -v, --version       show version number
   -h, --help          show command line help
@@ -318,7 +321,8 @@ usage: nii2roisig [options] -a atlas.nii file1.nii ...
   --format type       save file format <type> 0:csv, 1:mat(each), 2:mat(all) (default:2)
   --transform type    output signal transform <type> 0:raw, 1:sigmoid (default:0)
   --transopt num      signal transform option <num> (for type 1:centroid value)
-  --showsig           show node status signals of <original>.csv
+  --showsig           show output time-series data of <original>.csv
+  --showras           show raster plot of output time-series data of <original>.csv
   --nocache           do not use cache file for conversion
   -v, --version       show version number
   -h, --help          show command line help
