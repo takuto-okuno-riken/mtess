@@ -163,7 +163,7 @@ output mat file : results/demo-original-8x500_iid_test.mat
 This demo shows extraction of real fMRI 132 ROI time-series data. Then calculation of MTESS among group of fMRI ROI time-series data.<br>
 (Caution: Data is not included in toolbox. This demo is just sample use.)
 ~~~
->> nii2roisig -a D:/work/conn/rois/atlas.nii --showsig --transform 1 100307_rfMRI_REST1_LR.nii.gz 100408_rfMRI_REST1_LR.nii.gz 101006_rfMRI_REST1_LR.nii.gz 101107_rfMRI_REST1_LR.nii.gz 101309_rfMRI_REST1_LR.nii.gz
+>> nii2roisig -a D:/work/conn/rois/atlas.nii --showsig --transform 1 *_rfMRI_REST1_LR.nii.gz
 checking atlas space size ...
 ...
 processing : 101309_rfMRI_REST1_LR
