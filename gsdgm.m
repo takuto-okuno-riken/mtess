@@ -167,83 +167,87 @@ function processInputFiles(handles)
     N = length(handles.csvFiles);
 
     % load each file
-    CX = {}; names = {}; net = [];
+    CX = {}; names = {}; net = []; savename = '';
     for i = 1:N
-        % init data
-        X = [];
-
-        % load node status signals csv or mat file
-        fname = handles.csvFiles{i};
+        argv = handles.csvFiles{i};
         % check url or file
-        if contains(fname, 'http://') || contains(fname, 'https://')
+        if contains(argv, 'http://') || contains(argv, 'https://')
             % make download cache directory
             if ~exist('data/cache','dir')
                 mkdir('data/cache');
             end
             % make cache file string
-            url = fname;
-            fname = ['data/cache/' url2cacheString(fname)];
-            if ~exist(fname,'file')
+            url = argv;
+            argv = ['data/cache/' url2cacheString(argv)];
+            if ~exist(argv,'file')
                 disp(['downloading ' url ' ...']);
-                websave(fname, url);
-                disp(['save cache file : ' fname]);
+                websave(argv, url);
+                disp(['save cache file : ' argv]);
             end
-        end
-
-        if ~exist(fname,'file')
-            disp(['file is not found. ignoring : ' fname]);
-            continue;
-        end
-        [path,name,ext] = fileparts(fname);
-        if strcmp(ext,'.mat')
-            f = load(fname);
-            if isfield(f,'CX')
-                % training mode
-                if isfield(f,'multiple') && isa(f.CX{1},'uint16')
-                    % uint16 for demo
-                    tn = cell(1,length(f.CX));
-                    for j=1:length(f.CX)
-                        tn{j} = single(f.CX{j}) / f.multiple;
-                    end
-                    CX = [CX, tn];
-                else
-                    CX = [CX, f.CX]; % single
-                end
-                if isfield(f,'names')
-                    tn = cell(1,length(f.CX));
-                    for j=1:length(f.CX)
-                        tn{j} = strrep(f.names{j},'_','-');
-                    end
-                    names = [names, tn];
-                else
-                    tn = {};
-                    for j=1:length(f.CX)
-                        tn{j} = [strrep(name,'_','-') '-' num2str(j)];
-                    end
-                    names = [names, tn];
-                end
-            elseif isfield(f,'X')
-                % training mode
-                if isfield(f,'name'), name = f.name; end
-                names = [names, strrep(name,'_','-')];
-                CX = [CX, f.X];
-            elseif isfield(f,'net')
-                % surrogate data mode
-                if isfield(f,'name'), name = f.name; end
-                net = f.net;
-            else
-                disp(['file does not contain "X" matrix or "CX" cell. ignoring : ' fname]);
-            end
-        else
-            % training mode
-            T = readtable(fname);
-            X = table2array(T);
-            names = [names, strrep(name,'_','-')];
-            CX = [CX, X];
         end
         
-        if i==1
-            savename = name;
+        % load multivariate time-series csv or mat file
+        flist = dir(argv);
+        if isempty(flist)
+            disp(['file is not found. ignoring : ' argv]);
+            continue;
+        end
+        for k=1:length(flist)
+            % init data
+            X = [];
+
+            fname = [flist(k).folder '/' flist(k).name];
+            [path,name,ext] = fileparts(fname);
+            if strcmp(ext,'.mat')
+                f = load(fname);
+                if isfield(f,'CX')
+                    % training mode
+                    if isfield(f,'multiple') && isa(f.CX{1},'uint16')
+                        % uint16 for demo
+                        tn = cell(1,length(f.CX));
+                        for j=1:length(f.CX)
+                            tn{j} = single(f.CX{j}) / f.multiple;
+                        end
+                        CX = [CX, tn];
+                    else
+                        CX = [CX, f.CX]; % single
+                    end
+                    if isfield(f,'names')
+                        tn = cell(1,length(f.CX));
+                        for j=1:length(f.CX)
+                            tn{j} = strrep(f.names{j},'_','-');
+                        end
+                        names = [names, tn];
+                    else
+                        tn = {};
+                        for j=1:length(f.CX)
+                            tn{j} = [strrep(name,'_','-') '-' num2str(j)];
+                        end
+                        names = [names, tn];
+                    end
+                elseif isfield(f,'X')
+                    % training mode
+                    if isfield(f,'name'), name = f.name; end
+                    names = [names, strrep(name,'_','-')];
+                    CX = [CX, f.X];
+                elseif isfield(f,'net')
+                    % surrogate data mode
+                    if isfield(f,'name'), name = f.name; end
+                    net = f.net;
+                else
+                    disp(['file does not contain "X" matrix or "CX" cell. ignoring : ' fname]);
+                end
+            else
+                % training mode
+                T = readtable(fname);
+                X = table2array(T);
+                names = [names, strrep(name,'_','-')];
+                CX = [CX, X];
+            end
+
+            if isempty(savename)
+                savename = name;
+            end
         end
     end
     

@@ -123,8 +123,6 @@ function processInputFiles(handles)
 
     % init
     N = length(handles.niiFiles);
-    CX = {};
-    names = {};
     
     % load ROI atlas file
     if ~exist(handles.atlasFile,'file')
@@ -147,13 +145,24 @@ function processInputFiles(handles)
 
     % atlas resampling
     disp(['checking atlas space size ...']);
+    name = '';
     for i = 1:N
-        fname = handles.niiFiles{i};
-        if exist(fname,'file')
-            [~,name,~] = fileparts(fname);
-            name = strrep(name,'.nii','');
-            break;
+        argv = handles.niiFiles{i};
+        flist = dir(argv);
+        for k=1:length(flist)
+            % load multivariate time-series csv or mat file
+            fname = [flist(k).folder '/' flist(k).name];
+            if exist(fname,'file')
+                [~,name,~] = fileparts(fname);
+                name = strrep(name,'.nii','');
+                break;
+            end
         end
+        if ~isempty(name), break; end
+    end
+    if isempty(name)
+        disp(['input file is not found : ' argv]);
+        return;
     end
     cachename = ['results/cache/n2r-info-' name '.mat'];
     if handles.noCache > 0 || ~exist(cachename,'file')
@@ -190,70 +199,78 @@ function processInputFiles(handles)
     end
 
     % process each file
+    CX = {}; names = {}; savename = '';
     for i = 1:N
-        % load node status signals csv or mat file
-        fname = handles.niiFiles{i};
-        if ~exist(fname,'file')
-            disp(['file is not found. ignoring : ' fname]);
+        % load multivariate time-series csv or mat file
+        argv = handles.niiFiles{i};
+        flist = dir(argv);
+        if isempty(flist)
+            disp(['file is not found. ignoring : ' argv]);
             continue;
         end
-        [path,name,ext] = fileparts(fname);
-        name = strrep(name,'.nii','');
-        if i==1
-            savename = name;
-        end
+        for k=1:length(flist)
+            % init data
+            X = [];
 
-        % read nifti file
-        disp(['processing : ' name]);
-        cachename = ['results/cache/n2r-' atlasName num2str(nodeNum) '-' name '.mat'];
-        if handles.noCache > 0 || ~exist(cachename,'file')
-            info = niftiinfo(fname);
-            V = niftiread(info);
-
-            if size(V,1) ~= size(atlasV,1) || size(V,2) ~= size(atlasV,2) || size(V,3) ~= size(atlasV,3)
-                disp(['atlas space and fMRI space does not match. ignoring : ' fname]);
-                continue;
+            fname = [flist(k).folder '/' flist(k).name];
+            [path,name,ext] = fileparts(fname);
+            name = strrep(name,'.nii','');
+            if isempty(savename)
+                savename = name;
             end
 
-            X = single(zeros(nodeNum, size(V,4)));
-            for t=1:size(V,4)
-                V2=squeeze(V(:,:,:,t));
-                for k=1:nodeNum
-                    X(k,t) = nanmean(V2(idxs{k}));
+            % read nifti file
+            disp(['processing : ' name]);
+            cachename = ['results/cache/n2r-' atlasName num2str(nodeNum) '-' name '.mat'];
+            if handles.noCache > 0 || ~exist(cachename,'file')
+                info = niftiinfo(fname);
+                V = niftiread(info);
+
+                if size(V,1) ~= size(atlasV,1) || size(V,2) ~= size(atlasV,2) || size(V,3) ~= size(atlasV,3)
+                    disp(['atlas space and fMRI space does not match. ignoring : ' fname]);
+                    continue;
                 end
-            end
-            if handles.noCache == 0
-                save(cachename,'X');
-            end
-        else
-            load(cachename)
-        end
-        X = X - mean(X,2);
 
-        % signal transform raw or not
-        if handles.transform == 1
-            [X, sig, c, maxsi, minsi] = convert2SigmoidSignal(X, handles.transopt);
-        end
-        
-        % show output signals
-        if handles.showSig > 0
-            figure; plot(X.');
-            title(['ROI Signals : ' strrep(name,'_','-')]);
-            xlabel('Time Series');
-            ylabel('Signal Value');
-        end
+                X = single(zeros(nodeNum, size(V,4)));
+                for t=1:size(V,4)
+                    V2=squeeze(V(:,:,:,t));
+                    for k=1:nodeNum
+                        X(k,t) = nanmean(V2(idxs{k}));
+                    end
+                end
+                if handles.noCache == 0
+                    save(cachename,'X');
+                end
+            else
+                load(cachename)
+            end
+            X = X - mean(X,2);
 
-        % show output signals
-        if handles.showRas > 0
-            figure; imagesc(X);
-            title(['Raster plot of ROI Signals : ' strrep(name,'_','-')]);
-            xlabel('Time Series');
-            ylabel('Node number');
-            colorbar;
+            % signal transform raw or not
+            if handles.transform == 1
+                [X, sig, c, maxsi, minsi] = convert2SigmoidSignal(X, handles.transopt);
+            end
+
+            % show output signals
+            if handles.showSig > 0
+                figure; plot(X.');
+                title(['ROI Signals : ' strrep(name,'_','-')]);
+                xlabel('Time Series');
+                ylabel('Signal Value');
+            end
+
+            % show output signals
+            if handles.showRas > 0
+                figure; imagesc(X);
+                title(['Raster plot of ROI Signals : ' strrep(name,'_','-')]);
+                xlabel('Time Series');
+                ylabel('Node number');
+                colorbar;
+            end
+
+            CX{end+1} = X;
+            names{end+1} = name;
         end
-        
-        CX{end+1} = X;
-        names{end+1} = name;
     end
     
     if ~isempty(CX)

@@ -169,59 +169,63 @@ function processInputFiles(handles)
     N = length(handles.csvFiles);
 
     % load each file
-    CX = {}; names = {};
+    CX = {}; names = {}; savename = '';
     for i = 1:N
-        % init data
-        X = [];
-
-        % load node status signals csv or mat file
-        fname = handles.csvFiles{i};
-        if ~exist(fname,'file')
-            disp(['file is not found. ignoring : ' fname]);
+        % load multivariate time-series csv or mat file
+        argv = handles.csvFiles{i};
+        flist = dir(argv);
+        if isempty(flist)
+            disp(['file is not found. ignoring : ' argv]);
             continue;
         end
-        [path,name,ext] = fileparts(fname);
-        if strcmp(ext,'.mat')
-            f = load(fname);
-            if isfield(f,'CX')
-                if isfield(f,'multiple') && isa(f.CX{1},'uint16')
-                    % uint16 for demo
-                    tn = cell(1,length(f.CX));
-                    for j=1:length(f.CX)
-                        tn{j} = single(f.CX{j}) / f.multiple;
+        for k=1:length(flist)
+            % init data
+            X = [];
+
+            fname = [flist(k).folder '/' flist(k).name];
+            [path,name,ext] = fileparts(fname);
+            if strcmp(ext,'.mat')
+                f = load(fname);
+                if isfield(f,'CX')
+                    if isfield(f,'multiple') && isa(f.CX{1},'uint16')
+                        % uint16 for demo
+                        tn = cell(1,length(f.CX));
+                        for j=1:length(f.CX)
+                            tn{j} = single(f.CX{j}) / f.multiple;
+                        end
+                        CX = [CX, tn];
+                    else
+                        CX = [CX, f.CX]; % single
                     end
-                    CX = [CX, tn];
+                    if isfield(f,'names')
+                        tn = cell(1,length(f.CX));
+                        for j=1:length(f.CX)
+                            tn{j} = strrep(f.names{j},'_','-');
+                        end
+                        names = [names, tn];
+                    else
+                        tn = cell(1,length(f.CX));
+                        for j=1:length(f.CX)
+                            tn{j} = [strrep(name,'_','-') '-' num2str(j)];
+                        end
+                        names = [names, tn];
+                    end
+                elseif isfield(f,'X')
+                    names = [names, strrep(name,'_','-')];
+                    CX = [CX, f.X];
                 else
-                    CX = [CX, f.CX]; % single
+                    disp(['file does not contain "X" matrix or "CX" cell. ignoring : ' fname]);
                 end
-                if isfield(f,'names')
-                    tn = cell(1,length(f.CX));
-                    for j=1:length(f.CX)
-                        tn{j} = strrep(f.names{j},'_','-');
-                    end
-                    names = [names, tn];
-                else
-                    tn = cell(1,length(f.CX));
-                    for j=1:length(f.CX)
-                        tn{j} = [strrep(name,'_','-') '-' num2str(j)];
-                    end
-                    names = [names, tn];
-                end
-            elseif isfield(f,'X')
-                names = [names, strrep(name,'_','-')];
-                CX = [CX, f.X];
             else
-                disp(['file does not contain "X" matrix or "CX" cell. ignoring : ' fname]);
+                T = readtable(fname);
+                X = table2array(T);
+                names = [names, strrep(name,'_','-')];
+                CX = [CX, X];
             end
-        else
-            T = readtable(fname);
-            X = table2array(T);
-            names = [names, strrep(name,'_','-')];
-            CX = [CX, X];
-        end
-        
-        if i==1
-            savename = name;
+
+            if isempty(savename)
+                savename = name;
+            end
         end
     end
     
