@@ -81,7 +81,7 @@ save cache file : data/cache/fmridata_s223_xrea_com-hcp-s500m-pcvar3.mat
 surrogate sample : 1
 surrogate sample : 2
 output mat file : results/hcp-s500m-pcvar3_gsd_pcvar.mat
->> mtess --showmat --showforce --showdend ward --showprop demo-fmri-132x1190s.mat results/hcp-s500m-pcvar3_gsd_pcvar.mat
+>> mtess --showmat --showforce --showdend ward --showprop data/demo-fmri-132x1190s.mat results/hcp-s500m-pcvar3_gsd_pcvar.mat
 ...
 output mat file : results/demo-fmri-132x1190s_mtess.mat
 ~~~
