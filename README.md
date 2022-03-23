@@ -356,9 +356,9 @@ usage: nii2roisig [options] -a atlas.nii file1.nii ...
   -v, --version       show version number
   -h, --help          show command line help
 ~~~
-Inputs are ROI atlas .nii (.nii.gz) and fMRI .nii (.nii.gz) files. Both file should have same space (i.e. MNI space).
+Inputs are ROI atlas .nii (.nii.gz) and rs-fMRI .nii (.nii.gz) files. Both file should have same space (i.e. MNI space).
 
-Output (surrogate data) .mat file includes following matrix data.
+Output .mat file includes following cell data.
 
 | name | cell | description |
 |:---|:---|:---|
@@ -370,5 +370,5 @@ Output (surrogate data) .mat file includes following matrix data.
 If you find MTESS and GSDGM toolbox useful in your research, please consider citing: 
 
 Takuto Okuno, Junichi Hata, Hiromichi Tsukada, Ken Nakae, Hideyuki Okano, Alexander Woodward,
-["Similarity quantification and group surrogate data generating models of multivariate time-series: a resting-state fMRI study"](https://www.yahoo.com/), work in progress
+["Similarity quantification and group surrogate data generating models of multivariate time-series: a resting-state fMRI study"](https://www.yahoo.com/), work in progress.
 
