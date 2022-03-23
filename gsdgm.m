@@ -119,7 +119,7 @@ function gsdgm(varargin)
         showUsage();
         return;
     elseif isempty(handles.csvFiles)
-        disp('no input files. please specify node status signal files.');
+        disp('no input files. please specify time-series files.');
         showUsage();
         return;
     end

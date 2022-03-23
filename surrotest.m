@@ -84,7 +84,7 @@ function surrotest(varargin)
         showUsage();
         return;
     elseif isempty(handles.csvFiles)
-        disp('original and surrogate files are required. please specify node status signal files.');
+        disp('original and surrogate files are required. please specify time-series files.');
         showUsage();
         return;
     end
@@ -126,7 +126,7 @@ function processInputFiles(handles)
     
     % process each file
     for i = 1:N
-        % load node status signals csv or mat file
+        % load time-series csv or mat file
         fname = handles.csvFiles{i};
         if ~exist(fname,'file')
             disp(['file is not found. ignoring : ' fname]);

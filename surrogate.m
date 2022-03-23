@@ -137,7 +137,7 @@ function surrogate(varargin)
         showUsage();
         return;
     elseif isempty(handles.csvFiles)
-        disp('no input files. please specify node status signal files.');
+        disp('no input files. please specify time-series files.');
         showUsage();
         return;
     end
@@ -198,7 +198,7 @@ function processInputFiles(handles)
         nodeControl = [];
         exControl = [];
         
-        % load node status signals csv or mat file
+        % load time-series csv or mat file
         fname = handles.csvFiles{i};
         if ~exist(fname,'file')
             disp(['file is not found. ignoring : ' fname]);
@@ -232,7 +232,7 @@ function processInputFiles(handles)
             [X, sig, c, maxsi, minsi] = convert2SigmoidSignal(X, handles.transopt);
         end
 
-        % show node status signals
+        % show input time-series
         if handles.showSig > 0
             figure; plot(X.');
             title(['Input Signals : ' strrep(name,'_','-')]);
