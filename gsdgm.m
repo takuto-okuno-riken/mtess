@@ -264,7 +264,7 @@ function processInputFiles(handles)
         % show input signals
         if handles.showInput > 0
             figure; plot(X.');
-            title(['Input signals : ' names{i}]);
+            title(['Input Signals : ' names{i}]);
             xlabel('Time Series');
             ylabel('Signal Value');
         end
