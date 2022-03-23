@@ -160,7 +160,7 @@ output mat file : results/demo-original-8x500_iid_test.mat
 
 ##
 <b>Demo6</b><br>
-This demo shows extraction of real fMRI 132 ROI time-series data. Then calculation of MTESS among group of fMRI ROI time-series data.<br>
+This demo shows extraction of rs-fMRI time-series data (132 ROIs). Then calculation of MTESS among group of rs-fMRI ROI time-series data.<br>
 (Caution: Data is not included in toolbox. This demo is just sample use.)
 ~~~
 >> nii2roisig -a D:/work/conn/rois/atlas.nii --showsig --transform 1 *_rfMRI_REST1_LR.nii.gz
@@ -175,7 +175,7 @@ output mat file : results/100307_rfMRI_REST1_LR_all_mtess.mat
 <div align="center">
 <img src="data/nii2roisig1.jpg">
 </div>
-As you see in this result, real fMRI ROI time-series data are extracted from pre-processed nifti file (MNI space) with CONN atlas data.
+As you see in this result, rs-fMRI ROI time-series data are extracted from pre-processed nifti file (MNI space) with CONN atlas data.
 Then, multivariate time-series similarity among subjects are calculated and analysed by mtess command.
 
 
