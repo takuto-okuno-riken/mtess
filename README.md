@@ -122,8 +122,8 @@ Based on hierarchical clustering and force weight effect graph, group surrogate 
 <b>Demo5</b><br>
 
 Linearity test<br>
-1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 of surrogate data from original signal file.
-2. Use "-l" option of "surrotest" command for linearity test. Original signal file and surrogate data file are specified this command.
+1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 of surrogate data from original time-series file.
+2. Use "-l" option of "surrotest" command for linearity test. Original time-series file and surrogate data file are specified this command.
 ~~~
 >> surrogate -f --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_ft_multi_all.mat
@@ -137,8 +137,8 @@ This plot design is inspired by [J.Theilear and D.Prichard (1996)](https://www.s
 </div>
 
 Gaussian distribution test
-1. Use RG surrogate ("surrogate -g" command) to generate 399 of surrogate data from original signal file.
-2. Use "-g" option of "surrotest" command for Gaussian distribution test. Original signal file and surrogate data file are specified this command.
+1. Use RG surrogate ("surrogate -g" command) to generate 399 of surrogate data from original time-series file.
+2. Use "-g" option of "surrotest" command for Gaussian distribution test. Original time-series file and surrogate data file are specified this command.
 ~~~
 >> surrogate -g --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_rg_multi_all.mat
@@ -148,8 +148,8 @@ output mat file : results/demo-original-8x500_gaussian_test.mat
 ~~~
 
 Independent and Identically Distributed (I.I.D) test
-1. Use RS surrogate ("surrogate -s" command) to generate 399 of surrogate data from original signal file.
-2. Use "-i" option of "surrotest" command for I.I.D test. Original signal file and surrogate data file are specified this command.
+1. Use RS surrogate ("surrogate -s" command) to generate 399 of surrogate data from original time-series file.
+2. Use "-i" option of "surrotest" command for I.I.D test. Original time-series file and surrogate data file are specified this command.
 ~~~
 >> surrogate -s --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_rs_multi_all.mat
