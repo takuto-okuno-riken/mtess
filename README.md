@@ -96,6 +96,7 @@ As you see in this result, PCVAR group surrogate data (cell number 7,8) shows hi
 Because downloaded data generating model (GSDGM) is created by large HCP data (N=410) and so it can generate group representative (standard) human brain dynamics.
 Generated group surrogate data will be the representative and centroid of the group of original rs-fMRI time-series data.
 
+Other GSDGM .mat files (male, female, algorithms) can be found in [Zenodo](https://sandbox.zenodo.org/record/1040399).
 
 ##
 <b>Demo4</b><br>
