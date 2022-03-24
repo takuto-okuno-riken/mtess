@@ -1,3 +1,6 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/DOI/10.xxx/zenodo.xxx.svg)](https://doi.org/10.xxx/zenodo.xxx)
+
 # MTESS and GSDGM toolbox
 Multivariate Time-series Ensemble Similarity Score (MTESS) and Group Surrogate Data Generating Model (GSDGM) toolbox
 
