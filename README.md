@@ -1,11 +1,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://sandbox.zenodo.org/badge/DOI/10.5072/zenodo.1040399.svg)](https://doi.org/10.5072/zenodo.1040399)
 
-# MTESS and GSDGM toolbox
-Multivariate Time-series Ensemble Similarity Score (MTESS) and Group Surrogate Data Generating Model (GSDGM) toolbox
+# GSDGM and MTESS toolbox
+Group Surrogate Data Generating Model (GSDGM) and Multivariate Time-series Ensemble Similarity Score (MTESS) toolbox
 
 ## Introduction
-"MTESS and GSDGM toolbox" is a powerful tool for multivariate time-series similarity analysis and surrogate data generation.
+"GSDGM and MTESS toolbox" is a powerful tool for multivariate time-series similarity analysis and surrogate data generation.
 <div align="center">
 <img src="data/fig1a.jpg" width="70%">
 </div>
@@ -28,13 +28,13 @@ Multivariate Time-series Ensemble Similarity Score (MTESS) and Group Surrogate D
 * Parallel Computing Toolbox ver7.1 or later
 * [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn)
 
-Please download [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using MTESS and GSDGM toolbox.
+Please download [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using GSDGM and MTESS toolbox.
 
 
 ## Command line tools Demo
 <b>Demo1</b><br>
 First demo shows calculation of MTESS among time-series data and figure output.<br>
-(Copy and paste this command line. Demo data is included in MTESS and GSDGM toolbox.)
+(Copy and paste this command line. Demo data is included in GSDGM and MTESS toolbox.)
 ~~~
 >> mtess --showinsig --showmat --showsig --showprop --shownode data/cx-8x500-demo-surrogate.mat 
 ...
@@ -373,8 +373,8 @@ Output .mat file includes following cell data.
 |names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
 
 
-## Citing MTESS and GSDGM toolbox
-If you find MTESS and GSDGM toolbox useful in your research, please consider citing: 
+## Citing GSDGM and MTESS toolbox
+If you find GSDGM and MTESS toolbox useful in your research, please consider citing: 
 
 Takuto Okuno, Junichi Hata, Hiromichi Tsukada, Ken Nakae, Hideyuki Okano, Alexander Woodward,
 ["Similarity quantification and group surrogate data generating models of multivariate time-series: a resting-state fMRI study"](https://www.yahoo.com/), work in progress.
