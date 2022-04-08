@@ -6,7 +6,7 @@ Group Surrogate Data Generating Model (GSDGM) and Multivariate Time-series Ensem
 
 ## Introduction
 "GSDGM and MTESS toolbox" is a powerful tool for surrogate data generation and multivariate time-series similarity analysis.
-Three GSDGM algorithms, such as Vector Auto-Regression (VAR) surrogate, Principal Component VAR (PCVAR) surrogate and Vector Auto-Regressive Deep Neural Network (VARDNN)[(T.Okuno and A.Woodward, 2021)](https://www.frontiersin.org/articles/10.3389/fnins.2021.764796/full) surrogate are implemented in this toolbox to generate group surrogate data.
+Three GSDGM algorithms, such as Vector Auto-Regression (VAR) surrogate, Principal Component VAR (PCVAR) surrogate [(R. Liégeois, et al., 2017)](https://www.sciencedirect.com/science/article/abs/pii/S1053811917307516) and Vector Auto-Regressive Deep Neural Network (VARDNN)[(T.Okuno and A.Woodward, 2021)](https://www.frontiersin.org/articles/10.3389/fnins.2021.764796/full) surrogate are implemented in this toolbox to generate group surrogate data.
 VAR surrogate obediently tried to fit the whole group data, Otherwise PCVAR and VARDNN surrogate tried to fit the common ingredients of the whole group data. 
 Thus, PCVAR and VARDNN surrogate shows very unique tendency to generate group centroid multivariate time-series.
 This allows us to have the most biologically plausible standardized human brain dynamics model based on a large human rs-fMRI dataset of [the Human Connectome Project](https://www.humanconnectome.org/).
