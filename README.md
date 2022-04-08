@@ -18,7 +18,7 @@ This allows us to have the most biologically plausible standardized human brain 
 MTESS can quantify similarity between two multivariate time-series.
 It is consisted by normalized distance and cos-similarity of seven basic statistical properties, such as mean, standard deviation, auto-covariance, covariance matrix, partial covariance matrix, cross-covariance matrix and partial cross-covariance matrix.
 Therefore, you can identify which statistical property is different between two multivariate time-series by MTESS radar chart.
-Total difference between two multivariate time-series is expressed by single value (MTESS), and each node difference is also expressed (Node MTESS).
+Total difference between two multivariate time-series is expressed by single value [0, 5] (0: not similar to 5: similar)(MTESS), and each node difference is also expressed (Node MTESS).
 
 Combination of GSDGM and MTESS can perform individuality analysis of the group of multivariate time-series.
 The GSDGM can generate the group centroid time-series and MTESS can quantify normality and abnormality of individual among the group of multivariate time-series.
