@@ -5,17 +5,27 @@
 Group Surrogate Data Generating Model (GSDGM) and Multivariate Time-series Ensemble Similarity Score (MTESS) toolbox
 
 ## Introduction
-"GSDGM and MTESS toolbox" is a powerful tool for multivariate time-series similarity analysis and surrogate data generation.
+"GSDGM and MTESS toolbox" is a powerful tool for surrogate data generation and multivariate time-series similarity analysis.
+Three GSDGM algorithms, such as Vector Auto-Regression (VAR) surrogate, Principal Component VAR (PCVAR) and Vector Auto-Regressive Deep Neural Network (VARDNN)[(T.Okuno and A.Woodward, 2021)](https://www.frontiersin.org/articles/10.3389/fnins.2021.764796/full) are implemented in this toolbox to generate group surrogate data.
+VAR surrogate obediently tried to fit the whole data, Otherwise PCVAR and VARDNN surrogate tried to fit the common ingredients of the whole data. 
+Thus, PCVAR and VARDNN surrogate shows very unique tendency to generate group centroid multivariate time-series.
+This allows us to have the most biologically plausible standardized human brain dynamics model based on a large human rs-fMRI dataset of [the Human Connectome Project](https://www.humanconnectome.org/).
+
 <div align="center">
 <img src="data/fig1a.jpg" width="70%">
 </div>
+
+MTESS can quantify similarity between two multivariate time-series.
+It is consisted by normalized distance and cos-similarity of seven basic statistical properties, such as mean, standard deviation, auto-covariance, covariance matrix, partial covariance matrix, cross-covariance matrix and partial cross-covariance matrix.
+Therefore, you can identify which statistical property is different between two multivariate time-series by MTESS radar chart.
+Total difference between two multivariate time-series is expressed by single value (MTESS), and each node difference is also expressed (Node MTESS).
 
 <b>Command line tools</b>
 
 | name | description |
 |:---|:---|
 | mtess | Calculating and plotting MTESS from group of multivariate time-series data. |
-| gsdgm | Generating group surrogate model (Vector Auto-Regression (VAR), Principal Component VAR (PCVAR), Vector Auto-Regressive Deep Neural Network (VARDNN)[(T.Okuno and A.Woodward, 2021)](https://www.frontiersin.org/articles/10.3389/fnins.2021.764796/full) surrogate) and (multivariate time-series) group surrogate data.|
+| gsdgm | Generating group surrogate model (VAR, PCVAR, VARDNN surrogate) and (multivariate time-series) group surrogate data.|
 | surrogate | Generating univariate and multivariate time-series surrogate data by Random Gaussian (RG), Random shuffling (RS), Fourier Transfor (FT), Amplitude Adjusted FT (AAFT)[(J.Theilear et al., 1992)](https://www.sciencedirect.com/science/article/abs/pii/016727899290102S), Iterated AAFT (IAAFT)[(T.Schreiber and A.Schmitz, 1996)](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.77.635), VAR, PCVAR, VARDNN surrogate.|
 | surrotest | Hypothesis testing based on monte-carlo method (Linearity test, Gaussian distribution test, Independent and Identically Distributed (I.I.D) test)  [(J.Theilear and D.Prichard, 1996)](https://www.sciencedirect.com/science/article/abs/pii/0167278996000504).|
 | nii2roisig | Extract fMRI ROI time-series data from nifti files (.nii, .nii.gz) with the ROI atlas file (.nii, .nii.gz). |
