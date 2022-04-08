@@ -20,6 +20,9 @@ It is consisted by normalized distance and cos-similarity of seven basic statist
 Therefore, you can identify which statistical property is different between two multivariate time-series by MTESS radar chart.
 Total difference between two multivariate time-series is expressed by single value (MTESS), and each node difference is also expressed (Node MTESS).
 
+Combination of GSDGM and MTESS can perform individuality analysis of the group of multivariate time-series.
+The GSDGM can generate the group centroid time-series and MTESS can quantify normality and abnormality of individual among the group of multivariate time-series.
+
 <b>Command line tools</b>
 
 | name | description |
