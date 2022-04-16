@@ -9,10 +9,10 @@
 %  net          mVARDNN network
 %  dist         distribution of noise to yield surrogates ('gaussian'(default), 'residuals')
 %  surrNum      output number of surrogate samples (default:1)
-%  yRange       range of Y value (default:auto)
+%  yRange       range of Y value (default:[Xmin-Xrange/5, Xmax+Xrange/5])
 
 function Y = surrogateMvarDnn(X, exSignal, nodeControl, exControl, net, dist, surrNum, yRange)
-    if nargin < 8, yRange = []; end
+    if nargin < 8, yRange = NaN; end
     if nargin < 7, surrNum = 1; end
     if nargin < 6, dist = 'gaussian'; end
 
@@ -28,9 +28,11 @@ function Y = surrogateMvarDnn(X, exSignal, nodeControl, exControl, net, dist, su
     % set control 3D matrix (node x node x lags)
     [~,~,control] = getControl3DMatrix(nodeControl, exControl, nodeNum, exNum, lags);
 
-    % set surrogate value range
-    if isempty(yRange)
-        yRange = getAutoRange(X);
+    % calc Y range
+    if isnan(yRange)
+        t = max(X(:)); d = min(X(:));
+        r = t - d;
+        yRange = [d-r/5, t+r/5];
     end
 
     % calculate error residuals
@@ -107,8 +109,10 @@ function Y = surrogateMvarDnn(X, exSignal, nodeControl, exControl, net, dist, su
                 A(i) = predict(nodeNetwork{i}, S2, 'ExecutionEnvironment', 'cpu') + noise2(i);
             end
             % fixed over shoot values
-            A(A < yRange(1)) = yRange(1);
-            A(A > yRange(2)) = yRange(2);
+            if ~isempty(yRange)
+                A(A < yRange(1)) = yRange(1);
+                A(A > yRange(2)) = yRange(2);
+            end
             S(:,t) = A;
         end
         Y(:,:,k) = S(1:nodeNum,:);
