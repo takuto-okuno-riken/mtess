@@ -343,7 +343,7 @@ function processInputFiles(handles)
                 if ~isempty(gRange)
                     n = (str2num(str{2}) - 1) / 2;
                     r = gRange.max - gRange.min;
-                    range = [-gRange.min - r*n, gRange.max + r*n];
+                    range = [gRange.min - r*n, gRange.max + r*n];
                 end
             else
                 % force [<num>, <num>] range
