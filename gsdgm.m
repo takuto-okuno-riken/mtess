@@ -150,7 +150,7 @@ function showUsage()
     disp('  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:1)');
     disp('  --surrnum num       output surrogate sample number <num> (default:1)');
     disp('  --siglen num        output time-series length <num> (default:same as input time-series)');
-    disp('  --range type        output surrogate value range (default:"auto", sigma:<num>, full:<num>, <min>:<max>, or "none")');
+    disp('  --range type        output surrogate value range (default:"auto", sigma:<num>, full:<num>, <min>:<max> or "none")');
     disp('  --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)');
     disp('  --epoch num         VARDNN surrogate training epoch number <num> (default:1000)');
     disp('  --showinsig         show input time-series data of <filename>.csv');
