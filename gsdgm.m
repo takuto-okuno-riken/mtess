@@ -29,6 +29,7 @@ function gsdgm(varargin)
     handles.format = 1;
     handles.transform = 0;
     handles.transopt = NaN;
+    handles.range = 'auto';
     handles.showInput = 0;
     handles.showInputRas = 0;
     handles.showSig = 0;
@@ -81,6 +82,9 @@ function gsdgm(varargin)
                 i = i + 1;
             case {'--format'}
                 handles.format = str2num(varargin{i+1});
+                i = i + 1;
+            case {'--range'}
+                handles.range = varargin{i+1};
                 i = i + 1;
             case {'--transform'}
                 handles.transform = str2num(varargin{i+1});
@@ -146,6 +150,7 @@ function showUsage()
     disp('  --format type       output surrogate data file format <type> 0:csv, 1:mat (default:1)');
     disp('  --surrnum num       output surrogate sample number <num> (default:1)');
     disp('  --siglen num        output time-series length <num> (default:same as input time-series)');
+    disp('  --range type        output surrogate value range (default:"auto", sigma:<num>, full:<num>, <min>:<max>, or "none")');
     disp('  --pcrate num        principal component variance rate <num> for PCVAR surrogate (default:0.99)');
     disp('  --epoch num         VARDNN surrogate training epoch number <num> (default:1000)');
     disp('  --showinsig         show input time-series data of <filename>.csv');
@@ -167,7 +172,7 @@ function processInputFiles(handles)
     N = length(handles.csvFiles);
 
     % load each file
-    CX = {}; names = {}; net = []; savename = '';
+    CX = {}; names = {}; net = []; gRange = []; savename = '';
     for i = 1:N
         argv = handles.csvFiles{i};
         % check url or file
@@ -233,6 +238,7 @@ function processInputFiles(handles)
                 elseif isfield(f,'net')
                     % surrogate data mode
                     if isfield(f,'name'), name = f.name; end
+                    if isfield(f,'gRange'), gRange = f.gRange; end
                     net = f.net;
                 else
                     disp(['file does not contain "X" matrix or "CX" cell. ignoring : ' fname]);
@@ -280,13 +286,16 @@ function processInputFiles(handles)
     
     % training mode
     if ~isempty(CX)
+        % get group range
+        gRange = getGroupRange(CX);
+
         if handles.var > 0
             net = initMvarNetworkWithCell(CX, [], [], [], handles.lag);
-            saveModelFile(handles, net, [savename '_gsm_var']);
+            saveModelFile(handles, net, gRange, [savename '_gsm_var']);
         end
         if handles.pcvar > 0
             net = initMpcvarNetworkWithCell(CX, [], [], [], handles.lag, handles.pcRate);    
-            saveModelFile(handles, net, [savename '_gsm_pcvar']);
+            saveModelFile(handles, net, gRange, [savename '_gsm_pcvar']);
         end
         if handles.vardnn > 0
             % set training options
@@ -303,7 +312,7 @@ function processInputFiles(handles)
 
             net = initMvarDnnNetworkWithCell(CX, [], [], [], handles.lag, 60);
             net = trainMvarDnnNetworkWithCell(CX, [], [], [], net, options);
-            saveModelFile(handles, net, [savename '_gsm_vardnn']);
+            saveModelFile(handles, net, gRange, [savename '_gsm_vardnn']);
         end
     end
     
@@ -313,17 +322,45 @@ function processInputFiles(handles)
 
         % dummy signal for nodeNum, sigLen and surrogate initial value (also affect surrogate value range)
         X = (mvnrnd(net.cxM, net.cxCov, sigLen))';
-
+        
+        % set output value range
+        range = NaN; % unknown. calc range based on X.
+        if strcmp(handles.range,'auto')
+            % 3.6 sigma of the whole group
+            if ~isempty(gRange)
+                range = [gRange.m - gRange.s * 3.6, gRange.m + gRange.s * 3.6];
+            end
+        elseif strcmp(handles.range,'none')
+            range = []; % empty. no range limit
+        elseif contains(handles.range,':')
+            str = split(handles.range,':');
+            if strcmp(str{1},'sigma') % <num> sigma of the whole group
+                if ~isempty(gRange)
+                    n = str2num(str{2});
+                    range = [gRange.m - gRange.s * n, gRange.m + gRange.s * n];
+                end
+            elseif strcmp(str{1},'full') % <num> * full min & max range of the whole group
+                if ~isempty(gRange)
+                    n = (str2num(str{2}) - 1) / 2;
+                    r = gRange.max - gRange.min;
+                    range = [-gRange.min - r*n, gRange.max + r*n];
+                end
+            else
+                % force [<num>, <num>] range
+                range = [str2num(str{1}),str2num(str{2})];
+            end
+        end
+        
         % generate surrogate data
         if isfield(net,'nodeNetwork')
             nettype = 'vardnn';
-            Y = surrogateMvarDnn(X, [], [], [], net, handles.noiseType, handles.surrNum);
+            Y = surrogateMvarDnn(X, [], [], [], net, handles.noiseType, handles.surrNum, range);
         elseif isfield(net,'mu')
             nettype = 'pcvar';
-            Y = surrogateMpcvar(X, [], [], [], net, handles.noiseType, handles.surrNum);
+            Y = surrogateMpcvar(X, [], [], [], net, handles.noiseType, handles.surrNum, range);
         else
             nettype = 'var';
-            Y = surrogateMVAR(X, [], [], [], net, handles.noiseType, handles.surrNum);
+            Y = surrogateMVAR(X, [], [], [], net, handles.noiseType, handles.surrNum, range);
         end
 
         CX = cell(1,size(Y,3)); names = cell(1,size(Y,3));
@@ -360,9 +397,9 @@ end
 %%
 % output result files
 %
-function saveModelFile(handles, net, outname)
+function saveModelFile(handles, net, gRange, outname)
     outfname = [handles.outpath '/' outname '.mat'];
-    save(outfname, 'net', '-v7.3');
+    save(outfname, 'net', 'gRange', '-v7.3');
     disp(['output group surrogate model file : ' outfname]);
 end
 
