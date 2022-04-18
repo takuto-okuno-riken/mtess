@@ -326,9 +326,9 @@ function processInputFiles(handles)
         % set output value range
         range = NaN; % unknown. calc range based on X.
         if strcmp(handles.range,'auto')
-            % 3.6 sigma of the whole group
+            % 4.2 sigma of the whole group
             if ~isempty(gRange)
-                range = [gRange.m - gRange.s * 3.6, gRange.m + gRange.s * 3.6];
+                range = [gRange.m - gRange.s * 4.2, gRange.m + gRange.s * 4.2];
             end
         elseif strcmp(handles.range,'none')
             range = []; % empty. no range limit

@@ -25,7 +25,7 @@ function mtess(varargin)
     % init command line input
     handles.commandError = 0;
     handles.csvFiles = {};
-    handles.range = NaN;
+    handles.range = 'auto';
     handles.nDft = 100;
     handles.pcc = 0;
     handles.cclag = NaN;
@@ -52,8 +52,7 @@ function mtess(varargin)
         end
         switch varargin{i}
             case {'--range'}
-                str = strsplit(varargin{i+1},':');
-                handles.range = [str2num(str{1}) str2num(str{2})];
+                handles.range = varargin{i+1};
                 i = i + 1;
             case {'--ndft'}
                 handles.nDft = str2num(varargin{i+1});
@@ -136,7 +135,7 @@ function showUsage()
     global exePath;
     global exeName;
     disp(['usage: ' exeName ' [options] file1.mat file2.mat ...']);
-    disp('  --range n1:n2       value range [n1, n2] for normalized mean and std dev (default:min and max of input data)');
+    disp('  --range type        input group value range (default:"auto", sigma:<num>, full:<num> or <min>:<max>)');
     disp('  --ndft num          DFT sampling <number> (even number) (default: 100)');
     disp('  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC, 3:PC-PCC (dafault:0)');
     disp('  --cclag num         time lag <num> for Cross Correlation (default:8)');
@@ -231,8 +230,6 @@ function processInputFiles(handles)
     
     % check each multivariate time-series
     nodeNum = size(CX{1},1);
-    xmax = NaN;
-    xmin = NaN;
     for i = 1:length(CX)
         X = CX{i};
         
@@ -242,13 +239,6 @@ function processInputFiles(handles)
             CX{i} = X;
         end
 
-        if isnan(xmax) || xmax < max(X,[],'all')
-            xmax = max(X,[],'all');
-        end
-        if isnan(xmin) || xmin > min(X,[],'all')
-            xmin = min(X,[],'all');
-        end
-        
         % show input signals
         if handles.showInput > 0
             figure; plot(X.');
@@ -265,8 +255,36 @@ function processInputFiles(handles)
             colorbar;
         end
     end
-    if isnan(handles.range)
-        handles.range = [xmin, xmax];
+
+    % get group range
+    gRange = getGroupRange(CX);
+
+    % set group value range
+    range = NaN; % unknown. calc range based on X.
+    if strcmp(handles.range,'auto')
+        % 3 sigma of the whole group
+        range = [gRange.m - gRange.s * 3, gRange.m + gRange.s * 3];
+    elseif contains(handles.range,':')
+        str = split(handles.range,':');
+        if strcmp(str{1},'sigma') % <num> sigma of the whole group
+            if ~isempty(gRange)
+                n = str2num(str{2});
+                range = [gRange.m - gRange.s * n, gRange.m + gRange.s * n];
+            end
+        elseif strcmp(str{1},'full') % <num> * full min & max range of the whole group
+            if ~isempty(gRange)
+                n = (str2num(str{2}) - 1) / 2;
+                r = gRange.max - gRange.min;
+                range = [gRange.min - r*n, gRange.max + r*n];
+            end
+        else
+            % force [<num>, <num>] range
+            range = [str2num(str{1}),str2num(str{2})];
+        end
+    else
+        disp('bad range option. stop operation.');
+        showUsage();
+        return;
     end
     
     % calc MTESS
@@ -299,7 +317,7 @@ function processInputFiles(handles)
     else
         cache = names;
     end
-    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, handles.range, handles.nDft, pccFunc, cclag, pcclag, cache);
+    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, handles.nDft, pccFunc, cclag, pcclag, cache);
 
     % output result matrix files
     saveResultFiles(handles, MTS, MTSp, nMTS, nMTSp, savename);
