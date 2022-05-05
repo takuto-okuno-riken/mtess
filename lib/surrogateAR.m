@@ -28,14 +28,15 @@ function [Y, b, r] = surrogateAR(X, lags, dist, surrNum)
         xt = y(1:sigLen-lags);
         xti = [yj, ones(sigLen-lags,1)];
         % apply the regress function
-        [b{i},bint{i},r{i},rint{i},stats{i}] = regress(xt,xti);
+        [b,r,~] = regressLinear(xt,xti); % 1.5 faster than regress
+
 
         if strcmp(dist,'gaussian')
-            m  = mean(r{i});
-            sig = std(r{i},1);
-            noise = normrnd(m,sig,length(r{i}),1);
+            m  = mean(r);
+            sig = std(r,1);
+            noise = normrnd(m,sig,length(r),1);
         else
-            noise = r{i};
+            noise = r;
         end
 
         for k=1:surrNum
@@ -48,7 +49,7 @@ function [Y, b, r] = surrogateAR(X, lags, dist, surrNum)
                 S2 = [S(t-1:-1:t-lags), 1]; % might not be good to add bias
 
                 % yield next time step
-                S(t) = S2 * b{i} + noise(perm2(t-lags));
+                S(t) = S2 * b + noise(perm2(t-lags));
             end
             Y(i,:,k) = S;
         end
