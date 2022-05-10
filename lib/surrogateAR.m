@@ -28,7 +28,7 @@ function [Y, b, r] = surrogateAR(X, lags, dist, surrNum)
         xt = y(1:sigLen-lags);
         xti = [yj, ones(sigLen-lags,1)];
         % apply the regress function
-        [b,r,~] = regressLinear(xt,xti); % 1.5 faster than regress
+        [b,r,~] = regressLinear(xt,xti);
 
 
         if strcmp(dist,'gaussian')
