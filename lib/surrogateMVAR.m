@@ -67,9 +67,11 @@ function [Y, C] = surrogateMVAR(X, exSignal, nodeControl, exControl, net, dist, 
     S2 = ones(inputNum*lags+1,1);
     % use gpu array
     if usegpu
-        C = gpuArray(C);
+        % check max grid size
+        maxGridSize = gpuDevice().MaxGridSize(1);
+        if size(C,1)*size(C,2) < maxGridSize, C = gpuArray(C); end
+        if size(noise,1)*size(noise,2) < maxGridSize, noise = gpuArray(noise); end
         S2 = gpuArray(S2);
-        noise = gpuArray(noise);
     end
 
     Y = nan(nodeNum,sigLen,surrNum);
