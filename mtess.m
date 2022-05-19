@@ -303,7 +303,10 @@ function processInputFiles(handles)
         pcName = 'PCPC';
     else
         % auto
-        if nodeNum >= 48
+        if nodeNum > 400
+            % too big. use normal PCC
+            pcclag = 2;
+        elseif nodeNum >= 48
             pccFunc = @calcSvPartialCrossCorrelation;
             pcName = 'SVgPC';
             pcclag = 2;
@@ -399,13 +402,12 @@ function saveResultFiles(handles, MTS, MTSp, nMTS, nMTSp, outname)
         outputCsvFile(MTS, [handles.outpath '/' outname '_mtess.csv']);
 
         % output result MTESS statistical property matrix csv file
-        props = {'M','SD','Amp','FC','PC','CC','PCC'};
+        props = {'M','SD','AC','CM','PCM','CCM','PCCM'};
         for i=1:length(props)
             outputCsvFile(MTSp(:,:,i), [handles.outpath '/' outname '_mtess_' props{i} '.csv']);
         end
 
         % output result node MTESS matrix csv file
-        props = {'M','SD','Amp','FC','PC','CC','PCC'};
         for i=1:size(nMTS,3)
             outputCsvFile(nMTS(:,:,i), [handles.outpath '/' outname '_mtess_node' num2str(i) '.csv']);
         end

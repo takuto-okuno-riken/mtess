@@ -10,5 +10,5 @@ function plotMtessSpiderPlot(P, ccLags, pccLags, pcName)
     if nargin < 3, pccLags = 8; end
     if nargin < 2, ccLags = 8; end
     spider_plot(P,'AxesLimits',[0,0,0,0,0,0,0;5,5,5,5,5,5,5],'AxesPrecision',[0], 'AxesDisplay', 'one', ...
-        'AxesLabels', {'mean','SD','Amp','FC',pcName,['CC' num2str(ccLags)],[pcName 'C' num2str(pccLags)]});
+        'AxesLabels', {'mean','SD','AC','CM','PCM','CCM','PCCM'});
 end
