@@ -12,9 +12,11 @@
 %  ccLags           time lags for Cross-Correlation function (default: 8)
 %  pccLags          time lags for Partial Cross-Correlation function (default: 8)
 %  CXNames          CX signals names used for cache filename (default: {})
+%  memClass         memory class type (default: same class of CX{1})
 
-function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags, CXNames)
-    if nargin < 7, CXNames = {}; end
+function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags, CXNames, memClass)
+    if nargin < 8, memClass = class(CX{1}); end 
+    if nargin < 7, CXNames = {}; end 
     if nargin < 6, pccLags = 8; end
     if nargin < 5, ccLags = 8; end
     if nargin < 4, pccFunc = @calcPartialCrossCorrelation; end
@@ -53,13 +55,13 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
     elseif isequal(pccFunc,@calcPcPartialCrossCorrelation) palgo='pcp';
     else palgo='p'; end
 
-    Means = single(nan(cLen,nodeNum));
-    Stds = single(nan(cLen,nodeNum));
-    Amps = single(nan(cLen,nodeNum,nDft/2-1));
-    FCs = single(nan(cLen,nodeNum,nodeNum));
-    PCs = single(nan(cLen,nodeNum,nodeNum));
-    CCs = single(nan(cLen,nodeNum,nodeNum,2*ccLags+1));
-    PCCs = single(nan(cLen,nodeNum,nodeNum,2*pccLags+1));
+    Means = nan(cLen,nodeNum,memClass);
+    Stds = nan(cLen,nodeNum,memClass);
+    Amps = nan(cLen,nodeNum,nDft/2-1,'single'); % half might take 'Inf'
+    FCs = nan(cLen,nodeNum,nodeNum,memClass);
+    PCs = nan(cLen,nodeNum,nodeNum,memClass);
+    CCs = nan(cLen,nodeNum,nodeNum,2*ccLags+1,memClass);
+    PCCs = nan(cLen,nodeNum,nodeNum,2*pccLags+1,memClass);
     for nn=1:cLen
         X = CX{nn};
         if ~isempty(CXNames)
@@ -69,14 +71,14 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
             disp(['load cache of ' CXNames{nn}]);
             load(cachef);
         else
-            xm = single(mean(X,2));
-            xsd = single(std(X,1,2));
-            xamp = single(calcDft(X,nDft));
-            xcc = single(calcCrossCorrelation(X,[],[],[],ccLags));
+            xm = mean(X,2);
+            xsd = std(X,1,2);
+            xamp = calcDft(single(X),nDft); % half might take 'Inf'
+            xcc = calcCrossCorrelation(X,[],[],[],ccLags);
             if isequal(pccFunc,@calcSvPartialCrossCorrelation)
-                xpcc = single(pccFunc(X,[],[],[],pccLags,'gaussian'));
+                xpcc = pccFunc(X,[],[],[],pccLags,'gaussian');
             else
-                xpcc = single(pccFunc(X,[],[],[],pccLags));
+                xpcc = pccFunc(X,[],[],[],pccLags);
             end
             if ~isempty(CXNames)
                 disp(['save cache of ' CXNames{nn}]);
@@ -95,9 +97,9 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
     Amps = Amps * (nDft/2) / (tRange/2); % normalize
 
     % calc MTESS
-    A = single(nan(nodeNum)); A= tril(A,0);
-    MTSp = single(nan(cLen,cLen,7));
-    nMTSp = single(nan(cLen,cLen,nodeNum,7));
+    A = single(nan(nodeNum)); A= tril(A,0); % half does not support
+    MTSp = nan(cLen,cLen,7,memClass);
+    nMTSp = nan(cLen,cLen,nodeNum,7,memClass);
     for i=1:cLen
         for j=i+1:cLen
             % calc mean distance (normalized)

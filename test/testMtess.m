@@ -21,7 +21,15 @@ function testMtess
     figure; plotMtessSpiderPlot(P);
     title('cx-8x500-idx6 : MTESS polar chart');
 
+    % check 'half' data input
+    for i=1:length(CX), CX{i}=half(CX{i}); end
+    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags);
+    P=squeeze(MTSp(1,2:8,:));
+    figure; plotMtessSpiderPlot(P);
+    title('cx-8x500-idx6(half) : MTESS polar chart');
+
     % test surrogate algorithms
+    for i=1:length(CX), CX{i}=single(CX{i}); end
     algoNum = 7;
     names = {'original', 'mRG', 'mRS', 'mFT', 'mAAFT', 'VAR4', 'FT'};
     CX2{1} = CX{1};
