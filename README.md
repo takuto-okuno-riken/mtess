@@ -1,11 +1,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-success.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://sandbox.zenodo.org/badge/DOI/10.5072/zenodo.1040399.svg)](https://doi.org/10.5072/zenodo.1040399)
 
-# GSDGM and MTESS toolbox
-Group Surrogate Data Generating Model (GSDGM) and Multivariate Time-series Ensemble Similarity Score (MTESS) toolbox
+# GSDGM and MTESS Toolbox
+Group Surrogate Data Generating Model (GSDGM) and Multivariate Time-series Ensemble Similarity Score (MTESS) Toolbox
 
 ## Introduction
-"GSDGM and MTESS toolbox" is a powerful tool for surrogate data generation and multivariate time-series similarity analysis.
+"GSDGM and MTESS Toolbox" is a powerful tool for surrogate data generation and multivariate time-series similarity analysis.
 Three GSDGM algorithms, such as Vector Auto-Regression (VAR) surrogate [(R. Liégeois, et al., 2017)](https://www.sciencedirect.com/science/article/abs/pii/S1053811917307516), Principal Component VAR (PCVAR) surrogate and Vector Auto-Regressive Deep Neural Network (VARDNN)[(T.Okuno and A.Woodward, 2021)](https://www.frontiersin.org/articles/10.3389/fnins.2021.764796/full) surrogate are implemented in this toolbox to generate group surrogate data.
 VAR, PCVAR and VARDNN surrogate tried to fit the common ingredients of the whole group data. 
 Thus, GSDGM shows very unique tendency to generate group centroid multivariate time-series.
@@ -36,18 +36,18 @@ The GSDGM can generate the group centroid time-series and MTESS can quantify nor
 
 ## Requirements: software
 * MATLAB R2019b or later
-* Deep Learning toolbox ver12.1 or later
-* Fuzzy Logic toolbox ver2.6 or later
-* Parallel Computing toolbox ver7.1 or later
-* [VARDNN toolbox](https://github.com/takuto-okuno-riken/vardnn)
+* Deep Learning Toolbox ver12.1 or later
+* Fuzzy Logic Toolbox ver2.6 or later
+* Parallel Computing Toolbox ver7.1 or later
+* [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn)
 
-Please download [VARDNN toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using GSDGM and MTESS toolbox.
+Please download [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using GSDGM and MTESS Toolbox.
 
 
 ## Command line tools Demo
 <b>Demo1</b><br>
 First demo shows calculation of MTESS among time-series data and figure output.<br>
-(Copy and paste this command line. Demo data is included in GSDGM and MTESS toolbox.)
+(Copy and paste this command line. Demo data is included in GSDGM and MTESS Toolbox.)
 ~~~
 >> mtess --showinsig --showmat --showsig --showprop --shownode data/cx-8x500-demo-surrogate.mat 
 ...
@@ -388,8 +388,8 @@ Output .mat file includes following cell data.
 |names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
 
 
-## Citing GSDGM and MTESS toolbox
-If you find GSDGM and MTESS toolbox useful in your research, please consider citing: 
+## Citing GSDGM and MTESS Toolbox
+If you find GSDGM and MTESS Toolbox useful in your research, please consider citing: 
 
 Takuto Okuno, Junichi Hata, Hiromichi Tsukada, Ken Nakae, Hideyuki Okano, Alexander Woodward,
 ["Group Surrogate Data Generating Models and Similarity Quantifiation of Multivariate Time-Series: A Resting-State fMRI Study"](https://www.yahoo.com/), work in progress.
