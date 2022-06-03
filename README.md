@@ -94,13 +94,13 @@ As you see in this result, VAR, FT and AAFT surrogate data (cell number 3-5) vs.
 Third demo shows calculation of (PCVAR) group surrogate data based on [the Human Connectome Project](https://www.humanconnectome.org/) S500 male rs-fMRI data (132 ROIs). Then calculation of MTESS among some samples of rs-fMRI time-series data and group surrogate data.<br>
 (Caution: Downloading and MTESS calculation will take a time.)
 ~~~
->> gsdgm --surrnum 2 --showsig http://fmridata.s223.xrea.com/hcp-s500m-pcvar3.mat
-downloading http://fmridata.s223.xrea.com/hcp-s500m-pcvar3.mat ...
-save cache file : data/cache/fmridata_s223_xrea_com-hcp-s500m-pcvar3.mat
+>> gsdgm --surrnum 2 --showsig http://fmridata.s223.xrea.com/hcp-s500m-var1.mat
+downloading http://fmridata.s223.xrea.com/hcp-s500m-var1.mat ...
+save cache file : data/cache/fmridata_s223_xrea_com-hcp-s500m-var1.mat
 surrogate sample : 1
 surrogate sample : 2
-output mat file : results/hcp-s500m-pcvar3_gsd_pcvar.mat
->> mtess --showmat --showforce --showdend ward --showprop data/demo-fmri-132x1190s.mat results/hcp-s500m-pcvar3_gsd_pcvar.mat
+output mat file : results/fmridata_s223_xrea_com-hcp-s500m-var1_gsd_var.mat
+>> mtess --showmat --showforce --showdend ward --showprop data/demo-fmri-132x1190s.mat results/fmridata_s223_xrea_com-hcp-s500m-var1_gsd_var.mat
 ...
 output mat file : results/demo-fmri-132x1190s_mtess.mat
 ~~~
@@ -108,7 +108,7 @@ output mat file : results/demo-fmri-132x1190s_mtess.mat
 <div align="center">
 <img src="data/demo3.jpg">
 </div>
-As you see in this result, PCVAR group surrogate data (cell number 7,8) shows higher MTESS than sample rs-fMRI data (cell number 1-6).
+As you see in this result, VAR group surrogate data (cell number 7,8) shows higher MTESS than sample rs-fMRI data (cell number 1-6).
 Because downloaded data generating model (GSDGM) is created by large HCP data (N=410) and so it can generate group representative (standard) human brain dynamics.
 Generated group surrogate data will be the representative and centroid of the group of original rs-fMRI time-series data.
 
