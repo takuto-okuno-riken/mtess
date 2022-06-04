@@ -101,59 +101,67 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
     MTSp = nan(cLen,cLen,7,memClass);
     nMTSp = nan(cLen,cLen,nodeNum,7,memClass);
     for i=1:cLen
-        for j=i+1:cLen
+        B = nan(cLen,7,memClass);
+        nB = nan(cLen,nodeNum,7,memClass);
+        parfor j=i+1:cLen
+            C = nan(7,1,memClass);
+            nC = nan(nodeNum,7,memClass);
             % calc mean distance (normalized)
             dm = Means(i,:)-Means(j,:);
-            nMTSp(i,j,:,1) = abs(dm) / (tRange/2); % normalize
+            nC(:,1) = abs(dm) / (tRange/2); % normalize
 
             % calc std deviation distance (normalized)
             ds = Stds(i,:)-Stds(j,:);
-            nMTSp(i,j,:,2) = abs(ds) / (tRange/4); % normalize
+            nC(:,2) = abs(ds) / (tRange/4); % normalize
 
             % calc amplitude similarity
-            MTSp(i,j,3) = 5 * getCosSimilarity(Amps(i,:,:),Amps(j,:,:));
+            C(3) = 5 * getCosSimilarity(Amps(i,:,:),Amps(j,:,:));
             A1 = squeeze(Amps(i,:,:));
             A2 = squeeze(Amps(j,:,:));
-            parfor k=1:nodeNum
-                nMTSp(i,j,k,3) = 5 * getCosSimilarity(A1(k,:),A2(k,:));
+            for k=1:nodeNum
+                nC(k,3) = 5 * getCosSimilarity(A1(k,:),A2(k,:));
             end
             
             % calc zero-lag covariance similarity
             FC1 = squeeze(FCs(i,:,:));
             FC2 = squeeze(FCs(j,:,:));
-            MTSp(i,j,4) = 5 * getCosSimilarity(FC1+A, FC2+A);
-            parfor k=1:nodeNum
-                nMTSp(i,j,k,4) = 5 * getCosSimilarity([FC1(k,:)+A(k,:), (FC1(:,k)+A(:,k)).'], [FC2(k,:)+A(k,:), (FC2(:,k)+A(:,k)).']);
+            C(4) = 5 * getCosSimilarity(FC1+A, FC2+A);
+            for k=1:nodeNum
+                nC(k,4) = 5 * getCosSimilarity([FC1(k,:)+A(k,:), (FC1(:,k)+A(:,k)).'], [FC2(k,:)+A(k,:), (FC2(:,k)+A(:,k)).']);
             end
             
             % calc zero-lag partial covariance similarity
             PC1 = squeeze(PCs(i,:,:));
             PC2 = squeeze(PCs(j,:,:));
-            MTSp(i,j,5) = 5 * getCosSimilarity(PC1+A, PC2+A);
-            parfor k=1:nodeNum
-                nMTSp(i,j,k,5) = 5 * getCosSimilarity([PC1(k,:)+A(k,:), (PC1(:,k)+A(:,k)).'], [PC2(k,:)+A(k,:), (PC2(:,k)+A(:,k)).']);
+            C(5) = 5 * getCosSimilarity(PC1+A, PC2+A);
+            for k=1:nodeNum
+                nC(k,5) = 5 * getCosSimilarity([PC1(k,:)+A(k,:), (PC1(:,k)+A(:,k)).'], [PC2(k,:)+A(k,:), (PC2(:,k)+A(:,k)).']);
             end
             
             % calc cross-covariance simirality
             CC1 = squeeze(CCs(i,:,:,[1:ccLags,ccLags+2:end]));
             CC2 = squeeze(CCs(j,:,:,[1:ccLags,ccLags+2:end]));
-            MTSp(i,j,6) = 5 * getCosSimilarity(CC1+A,CC2+A);
-            parfor k=1:nodeNum
+            C(6) = 5 * getCosSimilarity(CC1+A,CC2+A);
+            for k=1:nodeNum
                 R1 = [CC1(k,:,:)+A(k,:), permute(CC1(:,k,:)+A(:,k),[2 1 3])];
                 R2 = [CC2(k,:,:)+A(k,:), permute(CC2(:,k,:)+A(:,k),[2 1 3])];
-                nMTSp(i,j,k,6) = 5 * getCosSimilarity(R1, R2);
+                nC(k,6) = 5 * getCosSimilarity(R1, R2);
             end
 
             % calc partial cross-covariance simirality
             PCC1 = squeeze(PCCs(i,:,:,[1:pccLags,pccLags+2:end]));
             PCC2 = squeeze(PCCs(j,:,:,[1:pccLags,pccLags+2:end]));
-            MTSp(i,j,7) = 5 * getCosSimilarity(PCC1+A,PCC2+A);
-            parfor k=1:nodeNum
+            C(7) = 5 * getCosSimilarity(PCC1+A,PCC2+A);
+            for k=1:nodeNum
                 R1 = [PCC1(k,:,:)+A(k,:), permute(PCC1(:,k,:)+A(:,k),[2 1 3])];
                 R2 = [PCC2(k,:,:)+A(k,:), permute(PCC2(:,k,:)+A(:,k),[2 1 3])];
-                nMTSp(i,j,k,7) = 5 * getCosSimilarity(R1, R2);
+                nC(k,7) = 5 * getCosSimilarity(R1, R2);
             end
+            B(j,:) = C;
+            nB(j,:,:) = nC;
         end
+        MTSp(i,:,:) = B;
+        nMTSp(i,:,:,:) = nB;
     end
 
     % calc mean and std dev similarity
