@@ -79,7 +79,7 @@ function Y = surrogateMvarDnn(X, exSignal, nodeControl, exControl, net, dist, su
 
     if strcmp(dist,'gaussian')
         P  = mean(Err.');
-        EC = cov(Err.');
+        EC = cov(Err.',1);
         noise = (mvnrnd(P,EC,size(Err,2)))';
     else
         noise = Err;

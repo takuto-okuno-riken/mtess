@@ -47,7 +47,7 @@ function Y = surrogateMpcvar(X, exSignal, nodeControl, exControl, net, dist, sur
     
     if strcmp(dist,'gaussian')
         P  = mean(Err.');
-        EC = cov(Err.');
+        EC = cov(Err.',1);
         noise = (mvnrnd(P,EC,size(Err,2)))';
     else
         noise = Err;
