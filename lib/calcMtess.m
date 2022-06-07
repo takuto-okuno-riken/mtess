@@ -74,7 +74,7 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
             xm = mean(X,2);
             xsd = std(X,1,2);
             xamp = calcDft(single(X),nDft); % half might take 'Inf'
-            xcc = calcCrossCorrelation(X,[],[],[],ccLags);
+            xcc = calcCrossCorrelation_(X,[],[],[],ccLags); % faster version
             if isequal(pccFunc,@calcSvPartialCrossCorrelation)
                 xpcc = pccFunc(X,[],[],[],pccLags,'gaussian');
             else
