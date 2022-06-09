@@ -309,12 +309,7 @@ function processInputFiles(handles)
         pcName = 'PCPC';
     else
         % auto
-        if nodeNum > 400
-            % too big. use normal PCC
-            pcclag = 2;
-        elseif nodeNum >= 48
-            pccFunc = @calcSvPartialCrossCorrelation;
-            pcName = 'SVgPC';
+        if nodeNum >= 48
             pcclag = 2;
         end
     end
