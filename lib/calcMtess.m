@@ -12,11 +12,11 @@
 %  ccLags           time lags for Cross-Correlation function (default: 8)
 %  pccLags          time lags for Partial Cross-Correlation function (default: 8)
 %  CXNames          CX signals names used for cache filename (default: {})
-%  memClass         memory class type (default: same class of CX{1})
+%  cachePath        cache file path (default: 'results/cache')
 
-function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags, CXNames, memClass)
-    if nargin < 8, memClass = class(CX{1}); end 
-    if nargin < 7, CXNames = {}; end 
+function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags, CXNames, cachePath)
+    if nargin < 8, cachePath = 'results/cache'; end 
+    if nargin < 7, CXNames = {}; end
     if nargin < 6, pccLags = 8; end
     if nargin < 5, ccLags = 8; end
     if nargin < 4, pccFunc = @calcPartialCrossCorrelation; end
@@ -25,6 +25,7 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
 
     cLen = length(CX);
     nodeNum = size(CX{1},1);
+    memClass = class(CX{1});
     % check data file. node num should be same.
     for i=2:cLen
         if size(CX{i},1) ~= nodeNum
@@ -48,8 +49,8 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
     tRange = range(2) - range(1); % should be positive
 
     % calc statistical properties
-    if ~isempty(CXNames) && ~exist('results/cache','dir')
-        mkdir('results/cache');
+    if ~isempty(CXNames) && ~exist(cachePath,'dir')
+        mkdir(cachePath);
     end
     if isequal(pccFunc,@calcSvPartialCrossCorrelation) palgo='svp';
     elseif isequal(pccFunc,@calcPcPartialCrossCorrelation) palgo='pcp';
@@ -65,7 +66,7 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
     for nn=1:cLen
         X = CX{nn};
         if ~isempty(CXNames)
-            cachef = ['results/cache/mtess-' CXNames{nn} '-' num2str(size(X,1)) 'x' num2str(size(X,2)) 'd' num2str(nDft) 'c' num2str(ccLags) palgo num2str(pccLags) '.mat'];
+            cachef = [cachePath '/mtess-' CXNames{nn} '-' num2str(size(X,1)) 'x' num2str(size(X,2)) 'd' num2str(nDft) 'c' num2str(ccLags) palgo num2str(pccLags) '.mat'];
         end
         if ~isempty(CXNames) && exist(cachef,'file')
             disp(['load cache of ' CXNames{nn}]);
