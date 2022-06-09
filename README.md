@@ -100,7 +100,7 @@ save cache file : data/cache/fmridata_s223_xrea_com-hcp-s500m-var1.mat
 surrogate sample : 1
 surrogate sample : 2
 output mat file : results/fmridata_s223_xrea_com-hcp-s500m-var1_gsd_var.mat
->> mtess --showmat --showforce --showdend ward --showprop data/demo-fmri-132x1190s.mat results/fmridata_s223_xrea_com-hcp-s500m-var1_gsd_var.mat
+>> mtess --showmat --showforce --showdend ward --showprop --cache data/demo-fmri-132x1190s.mat results/fmridata_s223_xrea_com-hcp-s500m-var1_gsd_var.mat
 ...
 output mat file : results/demo-fmri-132x1190s_mtess.mat
 ~~~
@@ -124,7 +124,7 @@ output group surrogate model file : results/demo-fmri-132x1190s_gsm_var.mat
 surrogate sample : 1
 surrogate sample : 2
 output mat file : results/demo-fmri-132x1190s_gsd_var.mat
->> mtess --showmat --showprop --showdend ward --showforce data/demo-fmri-132x1190s.mat results/demo-fmri-132x1190s_gsd_var.mat
+>> mtess --showmat --showprop --showdend ward --cache --showforce data/demo-fmri-132x1190s.mat results/demo-fmri-132x1190s_gsd_var.mat
 ...
 save cache of demo-fmri-132x1190s-gsd-var-1
 save cache of demo-fmri-132x1190s-gsd-var-2
@@ -221,7 +221,8 @@ usage: mtess [options] file1.mat file2.mat ...
   --shownode          show result line plot of 1 vs. others node MTESS
   --showdend algo     show dendrogram of <algo> hierarchical clustering based on MTESS matrix. see MATLAB linkage method option.
   --showforce         show force weight effect graph based on MTESS matrix
-  --nocache           do not use cache file for MTESS calculation
+  --cache             use cache file for MTESS calculation (low memory mode)
+  --cachepath path    cache files <path> (default:"results/cache")
   -v, --version       show version number
   -h, --help          show command line help
 ~~~
