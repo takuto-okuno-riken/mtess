@@ -31,6 +31,7 @@ function mtess(varargin)
     handles.cclag = NaN;
     handles.pcclag = NaN;
     handles.outpath = 'results';
+    handles.cachepath = 'results/cache';
     handles.format = 1;
     handles.transform = 0;
     handles.transopt = NaN;
@@ -42,7 +43,7 @@ function mtess(varargin)
     handles.showNode = 0;
     handles.showDend = '';
     handles.showForce = 0;
-    handles.noCache = 0;
+    handles.cache = 0;
 
     % load command line input
     i = 1;
@@ -95,8 +96,12 @@ function mtess(varargin)
             case {'--showdend'}
                 handles.showDend = varargin{i+1};
                 i = i + 1;
-            case {'--nocache'}
-                handles.noCache = 1;
+            case {'--cache'}
+                handles.cache = 1;
+            case {'--cachepath'}
+                handles.cachepath = varargin{i+1};
+                i = i + 1;
+                handles.cache = 1;
             case {'-h','--help'}
                 showUsage();
                 return;
@@ -152,7 +157,8 @@ function showUsage()
     disp('  --shownode          show result line plot of 1 vs. others node MTESS');
     disp('  --showdend algo     show dendrogram of <algo> hierarchical clustering based on MTESS matrix. see MATLAB linkage method option.');
     disp('  --showforce         show force weight effect graph based on MTESS matrix');
-    disp('  --nocache           do not use cache file for MTESS calculation');
+    disp('  --cache             use cache file for MTESS calculation (low memory mode)');
+    disp('  --cachepath path    cache files <path> (default:"results/cache")');
     disp('  -v, --version       show version number');
     disp('  -h, --help          show command line help');
 end
@@ -315,12 +321,11 @@ function processInputFiles(handles)
     if ~isnan(handles.cclag), cclag = handles.cclag; end
     if ~isnan(handles.pcclag), pcclag = handles.pcclag; end
 
-    if handles.noCache > 0
-        cache = {};
+    if handles.cache > 0
+        [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, handles.nDft, pccFunc, cclag, pcclag, names, handles.cachepath);
     else
-        cache = names;
+        [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, handles.nDft, pccFunc, cclag, pcclag, {});
     end
-    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, handles.nDft, pccFunc, cclag, pcclag, cache);
 
     % output result matrix files
     saveResultFiles(handles, MTS, MTSp, nMTS, nMTSp, savename);
