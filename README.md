@@ -221,7 +221,7 @@ usage: mtess [options] file1.mat file2.mat ...
   -v, --version       show version number
   -h, --help          show command line help
 ~~~
-Input .mat file should include input cell data. Node size must be the same within the group. Time-series length does not have to be the same.
+The input .mat file should include input cell data. The node count must be the same within the group, whereas time-series length does not have to be the same.
 | name | cell | description |
 |:---|:---|:---|
 |CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
@@ -265,13 +265,13 @@ surrogate data : gsdgm [options] file_gsm_<type>.mat
   --version           show version number
   -h, --help          show command line help
 ~~~
-Input .mat file should include input cell data. Node size must be the same within the group. Time-series length does not have to be the same.
+The input .mat file should include input cell data described as follows. The node count must be the same within the group, whereas the time-series length does not have to be the same.
 | name | cell | description |
 |:---|:---|:---|
 |CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
 |names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
 
-Output (group surrogate model) .mat file includes following struct data.
+The output (group surrogate model) .mat file includes the following struct data:
 
 | name | type | description |
 |:---|:---|:---|
@@ -279,7 +279,7 @@ Output (group surrogate model) .mat file includes following struct data.
 |gRange | struct |struct of group range information|
 |name | string |name of group surrogate model|
 
-Output (group surrogate data) .mat file includes following cell data.
+The output (group surrogate data) .mat file includes the following cell data:
 
 | name | cell | description |
 |:---|:---|:---|
@@ -317,12 +317,12 @@ usage: surrogate [options] filename.csv ...
   --version           show version number
   -h, --help          show command line help
 ~~~
-Input .csv or .mat file should include time-series matrix data.
+The input .csv or .mat file should include time-series matrix data in the following format:
 | name | matrix | description |
 |:---|:---|:---|
 |X |&lt;nodes&gt; x &lt;length&gt; | multivariate time-series|
 
-Output (surrogate data) .mat file includes following cell data.
+The output (surrogate data) .mat file includes the following cell data:
 
 | name | cell | description |
 |:---|:---|:---|
@@ -345,13 +345,13 @@ usage: surrotest [options] <original>.csv surrogate.mat ...
   -v, --version       show version number
   -h, --help          show command line help
 ~~~
-Input .mat file should include input cell data. Node size must be the same within the group.
+The input .mat file should include input cell data described as follows. The node count must be the same within the group.
 | name | cell | description |
 |:---|:---|:---|
 |CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
 |names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
 
-Output .mat file includes following matrix data.
+The output .mat file includes the following matrix data:
 
 | name | matrix | description |
 |:---|:---|:---|
@@ -374,9 +374,9 @@ usage: nii2roisig [options] -a atlas.nii file1.nii ...
   -v, --version       show version number
   -h, --help          show command line help
 ~~~
-Inputs are ROI atlas .nii (.nii.gz) and rs-fMRI .nii (.nii.gz) files. Both file should have same space (i.e. MNI space).
+Inputs are a ROI atlas .nii (.nii.gz) and rs-fMRI .nii (.nii.gz) files. Both files should have data in the same physical space (i.e. MNI space).
 
-Output .mat file includes following cell data.
+The output .mat file includes the following cell data:
 
 | name | cell | description |
 |:---|:---|:---|
@@ -385,7 +385,7 @@ Output .mat file includes following cell data.
 
 
 ## Citing GSDGM and MTESS Toolbox
-If you find GSDGM and MTESS Toolbox useful in your research, please consider citing: 
+If you find GSDGM and MTESS Toolbox useful in your research, please cite it as follows: 
 
 Takuto Okuno, Junichi Hata, Yawara Haga, Kanako Muta, Hiromichi Tsukada, Ken Nakae, Hideyuki Okano, Alexander Woodward,
 ["Group Surrogate Data Generating Models and Similarity Quantifiation of Multivariate Time-Series: A Resting-State fMRI Study"](https://www.yahoo.com/), work in progress.
