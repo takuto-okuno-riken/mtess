@@ -392,6 +392,6 @@ Output .mat file includes following cell data.
 ## Citing GSDGM and MTESS Toolbox
 If you find GSDGM and MTESS Toolbox useful in your research, please consider citing: 
 
-Takuto Okuno, Junichi Hata, Hiromichi Tsukada, Ken Nakae, Hideyuki Okano, Alexander Woodward,
+Takuto Okuno, Junichi Hata, Yawara Haga, Kanako Muta, Hiromichi Tsukada, Ken Nakae, Hideyuki Okano, Alexander Woodward,
 ["Group Surrogate Data Generating Models and Similarity Quantifiation of Multivariate Time-Series: A Resting-State fMRI Study"](https://www.yahoo.com/), work in progress.
 
