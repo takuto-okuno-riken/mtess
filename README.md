@@ -87,7 +87,7 @@ As can be seen in this result, VAR, FT and AAFT surrogate data (cell number 3-5)
 
 ##
 <b>Demo 3</b><br>
-The third demo shows the calculation of (PCVAR) group surrogate data based on [the Human Connectome Project](https://www.humanconnectome.org/) S500 male rs-fMRI data (132 ROIs). Then MTESS is calculated among some samples of rs-fMRI time-series data and group surrogate data.<br>
+The third demo shows the calculation of (PCVAR) group surrogate data based on [the Human Connectome Project](https://www.humanconnectome.org/) S500 male rs-fMRI data (132 ROIs). Then MTESS is calculated amongst some samples of rs-fMRI time-series data and group surrogate data.<br>
 (Caution: Downloading and MTESS calculation will take some time.)
 ~~~
 >> gsdgm --surrnum 2 --showsig http://fmridata.s223.xrea.com/hcp-s500m-var1.mat
@@ -111,7 +111,7 @@ Other GSDGM .mat files (male, female, algorithms) can be found in [Zenodo](https
 
 ##
 <b>Demo 4</b><br>
-This demo shows creation of a data generating model (GSDGM) from sample rs-fMRI time-series data (132 ROIs). Then MTESS is calculated among the group of original time-series data and group surrogate data.<br>
+This demo shows creation of a data generating model (GSDGM) from sample rs-fMRI time-series data (132 ROIs). Then MTESS is calculated amongst the group of original time-series data and group surrogate data.<br>
 (Caution: MTESS calculation will take a time.)
 ~~~
 >> gsdgm -v --lag 1 --surrnum 2 --showsig --showras data/demo-fmri-132x1190s.mat
@@ -136,8 +136,8 @@ From hierarchical clustering and force weight effect graph visualization it can 
 ##
 <b>Demo 5</b><br>
 
-Linearity testing<br>
-1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 surrogate data from original time-series file.
+Linearity test:<br>
+1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 surrogate data samples from the original time-series file.
 2. Use the "-l" option of the "surrotest" command for carrying out a linearity test. The original time-series and surrogate data files must be specified for this command.
 ~~~
 >> surrogate -f --surrnum 399 data/demo-original-8x500.csv
@@ -146,14 +146,14 @@ output mat file : results/demo-original-8x500_ft_multi_all.mat
 significantly not linear (1 / 8)
 output mat file : results/demo-original-8x500_linear_test.mat
 ~~~
-This plot design is inspired by [J.Theilear and D.Prichard (1996)](https://www.sciencedirect.com/science/article/abs/pii/0167278996000504).
+The plot design for the linearity test was inspired by [J.Theilear and D.Prichard (1996)](https://www.sciencedirect.com/science/article/abs/pii/0167278996000504).
 <div align="center">
 <img src="data/surrotest1.jpg">
 </div>
 
-Gaussian distribution test
-1. Use RG surrogate ("surrogate -g" command) to generate 399 of surrogate data from original time-series file.
-2. Use "-g" option of "surrotest" command for Gaussian distribution test. Original time-series file and surrogate data file are specified this command.
+Gaussian distribution test:<br>
+1. Use RG surrogate ("surrogate -g" command) to generate 399 of surrogate data samples from the original time-series file.
+2. Use the "-g" option of the "surrotest" command for Gaussian distribution test. The original time-series and surrogate data files must be specified for this command.
 ~~~
 >> surrogate -g --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_rg_multi_all.mat
@@ -162,9 +162,9 @@ significantly not gaussian (5 / 8)
 output mat file : results/demo-original-8x500_gaussian_test.mat
 ~~~
 
-Independent and Identically Distributed (I.I.D) test
-1. Use RS surrogate ("surrogate -s" command) to generate 399 of surrogate data from original time-series file.
-2. Use "-i" option of "surrotest" command for I.I.D test. Original time-series file and surrogate data file are specified this command.
+Independent and Identically Distributed (I.I.D) test:<br>
+1. Use RS surrogate ("surrogate -s" command) to generate 399 of surrogate data samples from the original time-series file.
+2. Use the "-i" option of the "surrotest" command for I.I.D test. The original time-series and surrogate data files must be specified for this command.
 ~~~
 >> surrogate -s --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_rs_multi_all.mat
@@ -174,9 +174,9 @@ output mat file : results/demo-original-8x500_iid_test.mat
 ~~~
 
 ##
-<b>Demo6</b><br>
-This demo shows extraction of rs-fMRI time-series data (132 ROIs). Then calculation of MTESS among group of rs-fMRI ROI time-series data.<br>
-(Caution: Data is not included in toolbox. This demo shows just sample use.)
+<b>Demo 6</b><br>
+This demo shows the extraction of rs-fMRI time-series data (132 ROIs). Then MTESS is calculated amongst the group of rs-fMRI ROI time-series data.<br>
+(Caution: Data for this demo is not included in the toolbox.)
 ~~~
 >> nii2roisig -a D:/work/conn/rois/atlas.nii --showsig --transform 1 *_rfMRI_REST1_LR.nii.gz
 checking atlas space size ...
@@ -190,11 +190,11 @@ output mat file : results/100307_rfMRI_REST1_LR_all_mtess.mat
 <div align="center">
 <img src="data/nii2roisig1.jpg">
 </div>
-As you see in this result, rs-fMRI ROI time-series data are extracted from pre-processed nifti file (MNI space) with CONN atlas data.
-Then, multivariate time-series similarity among subjects are calculated and analysed by mtess command.
+As can be seen in this result, rs-fMRI ROI time-series data are extracted from a pre-processed nifti file (MNI space) with CONN atlas data.
+Then, the multivariate time-series similarity among subjects are calculated and analysed by the "mtess" command.
 
 
-## Command line tools Reference
+## Command Line Tools Reference
 <b>mtess command</b><br>
 ~~~
 >> mtess -h
@@ -227,7 +227,7 @@ Input .mat file should include input cell data. Node size must be the same withi
 |CX |{&lt;nodes&gt; x &lt;length&gt;} x &lt;cell number&gt; |group of multivariate time-series|
 |names |{'data name string'} x &lt;cell number&gt; |names of each time-series data|
 
-Output .mat file includes following matrix data.
+The output .mat file includes the following matrix data:
 
 | name | matrix | description |
 |:---|:---|:---|
@@ -236,7 +236,7 @@ Output .mat file includes following matrix data.
 |nMTS |&lt;cell number&gt; x &lt;cell number&gt; x &lt;nodes&gt;| Node MTESS matrix (3D)|
 |nMTSp |&lt;cell number&gt; x &lt;cell number&gt; x &lt;nodes&gt; x 7| Node MTESS statistical property matrix (4D)|
 
-Similarities of 7 statistical properties are mean, standard deviation, DFT amplitude, correlation, partial correlation, cross-correlation and partial cross-correlation.
+Similarities are generated for the following 7 statistical properties: mean, standard deviation, DFT amplitude, correlation, partial correlation, cross-correlation and partial cross-correlation.
 
 ##
 <b>gsdgm command</b><br>
