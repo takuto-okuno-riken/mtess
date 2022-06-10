@@ -8,7 +8,7 @@ Group Surrogate Data Generating Model (GSDGM) and Multivariate Time-series Ensem
 The GSDGM and MTESS Toolbox is a powerful tool for surrogate data generation and multivariate time-series similarity analysis.
 Three GSDGM algorithms have been implemented to generate group surrogate data: 1) Vector Auto-Regression (VAR) surrogate [(R. Liégeois, et al., 2017)](https://www.sciencedirect.com/science/article/abs/pii/S1053811917307516), 2) Principal Component VAR (PCVAR) surrogate, and 3) Vector Auto-Regressive Deep Neural Network (VARDNN) surrogate [(T.Okuno and A.Woodward, 2021)](https://www.frontiersin.org/articles/10.3389/fnins.2021.764796/full).
 The VAR, PCVAR and VARDNN surrogates all try to fit the common features of the whole data. Thus, the GSDGM approach has the very unique ability to generate group centroid multivariate time-series.
-This allows us to achieve the most biologically plausible standardized human brain dynamics model based on a large human rs-fMRI dataset from the [the Human Connectome Project](https://www.humanconnectome.org/).
+This allows us to achieve the most biologically plausible standardized human brain dynamics model based on a large human rs-fMRI dataset from [the Human Connectome Project](https://www.humanconnectome.org/).
 
 <div align="center">
 <img src="data/fig1a.jpg" width="70%">
@@ -27,7 +27,7 @@ The GSDGM can generate the group centroid time-series and MTESS can quantify nor
 | gsdgm | Generate a group surrogate model (VAR, PCVAR, VARDNN surrogate) and (multivariate time-series) group surrogate data.|
 | surrogate | Generate univariate and multivariate time-series surrogate data by Random Gaussian (RG), Random shuffling (RS), Fourier Transfor (FT), Amplitude Adjusted FT (AAFT)[(J.Theilear et al., 1992)](https://www.sciencedirect.com/science/article/abs/pii/016727899290102S), Iterated AAFT (IAAFT)[(T.Schreiber and A.Schmitz, 1996)](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.77.635), VAR, PCVAR, VARDNN surrogate.|
 | surrotest | Hypothesis testing based on the monte-carlo method (Linearity test, Gaussian distribution test, Independent and Identically Distributed (I.I.D) test)  [(J.Theilear and D.Prichard, 1996)](https://www.sciencedirect.com/science/article/abs/pii/0167278996000504).|
-| nii2roisig | Extract fMRI ROI time-series data from nifti files (.nii, .nii.gz) with the ROI atlas file (.nii, .nii.gz). |
+| nii2roisig | Extract fMRI ROI time-series data from NIfTI files (.nii, .nii.gz) with the ROI atlas file (.nii, .nii.gz). |
 
 
 ## Requirements: Software
@@ -87,7 +87,7 @@ As can be seen in this result, VAR, FT and AAFT surrogate data (cell number 3-5)
 
 ##
 <b>Demo 3</b><br>
-The third demo shows the calculation of (PCVAR) group surrogate data based on [the Human Connectome Project](https://www.humanconnectome.org/) S500 male rs-fMRI data (132 ROIs). Then MTESS is calculated amongst some samples of rs-fMRI time-series data and group surrogate data.<br>
+The third demo shows the calculation of (VAR) group surrogate data based on [the Human Connectome Project](https://www.humanconnectome.org/) S500 male rs-fMRI data (132 ROIs). Then MTESS is calculated amongst some samples of rs-fMRI time-series data and group surrogate data.<br>
 (Caution: Downloading and MTESS calculation will take some time.)
 ~~~
 >> gsdgm --surrnum 2 --showsig http://fmridata.s223.xrea.com/hcp-s500m-var1.mat
@@ -107,7 +107,7 @@ output mat file : results/demo-fmri-132x1190s_mtess.mat
 As can be seen in this result, the VAR group surrogate data (cell number 7,8) shows a higher MTESS than the sample rs-fMRI data (cell number 1-6).
 This is because the downloaded data generating model (GSDGM) was created using a large set of HCP data (N=410) and can thus generate group representative (standard) human brain dynamics. This generated group surrogate data can be considered as the centroid of the group of original rs-fMRI time-series data.
 
-Other GSDGM .mat files (male, female, algorithms) can be found in [Zenodo](https://sandbox.zenodo.org/record/1040399).
+Other GSDGM .mat files (male, female, algorithms) can be found in [Zenodo](https://zenodo.org/record/6381103).
 
 ##
 <b>Demo 4</b><br>
