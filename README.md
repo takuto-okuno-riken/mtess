@@ -60,7 +60,7 @@ This demo calculates MTESS and generates the following figures:
 "--showprop" option shows MTESS Polar chart result of first data vs. others.<br>
 "--shownode" option shows Node MTESS result of first data vs. others.<br>
 <br>
-Finally, the mtess command saves the calculation result in either .mat or .csv format ("--format 0" option).
+Finally, the "mtess" command saves the calculation result in either .mat or .csv format ("--format 0" option).
 
 
 ##
@@ -87,8 +87,8 @@ As can be seen in this result, VAR, FT and AAFT surrogate data (cell number 3-5)
 
 ##
 <b>Demo 3</b><br>
-The third demo shows calculation of (PCVAR) group surrogate data based on [the Human Connectome Project](https://www.humanconnectome.org/) S500 male rs-fMRI data (132 ROIs). Then calculation of MTESS among some samples of rs-fMRI time-series data and group surrogate data.<br>
-(Caution: Downloading and MTESS calculation will take a time.)
+The third demo shows the calculation of (PCVAR) group surrogate data based on [the Human Connectome Project](https://www.humanconnectome.org/) S500 male rs-fMRI data (132 ROIs). Then MTESS is calculated among some samples of rs-fMRI time-series data and group surrogate data.<br>
+(Caution: Downloading and MTESS calculation will take some time.)
 ~~~
 >> gsdgm --surrnum 2 --showsig http://fmridata.s223.xrea.com/hcp-s500m-var1.mat
 downloading http://fmridata.s223.xrea.com/hcp-s500m-var1.mat ...
@@ -104,15 +104,14 @@ output mat file : results/demo-fmri-132x1190s_mtess.mat
 <div align="center">
 <img src="data/demo3.jpg">
 </div>
-As you see in this result, VAR group surrogate data (cell number 7,8) shows higher MTESS than sample rs-fMRI data (cell number 1-6).
-Because downloaded data generating model (GSDGM) is created by large HCP data (N=410) and so it can generate group representative (standard) human brain dynamics.
-Generated group surrogate data will be the representative and centroid of the group of original rs-fMRI time-series data.
+As can be seen in this result, the VAR group surrogate data (cell number 7,8) shows a higher MTESS than the sample rs-fMRI data (cell number 1-6).
+This is because the downloaded data generating model (GSDGM) was created using a large set of HCP data (N=410) and can thus generate group representative (standard) human brain dynamics. This generated group surrogate data can be considered as the centroid of the group of original rs-fMRI time-series data.
 
 Other GSDGM .mat files (male, female, algorithms) can be found in [Zenodo](https://sandbox.zenodo.org/record/1040399).
 
 ##
-<b>Demo4</b><br>
-This demo shows creation of the data generating model (GSDGM) from sample rs-fMRI time-series data (132 ROIs). Then calculation of MTESS among group of original time-series data and group surrogate data.<br>
+<b>Demo 4</b><br>
+This demo shows creation of a data generating model (GSDGM) from sample rs-fMRI time-series data (132 ROIs). Then MTESS is calculated among the group of original time-series data and group surrogate data.<br>
 (Caution: MTESS calculation will take a time.)
 ~~~
 >> gsdgm -v --lag 1 --surrnum 2 --showsig --showras data/demo-fmri-132x1190s.mat
@@ -130,16 +129,16 @@ output mat file : results/demo-fmri-132x1190s_mtess.mat
 <div align="center">
 <img src="data/gsdgm1.jpg">
 </div>
-As you see in this result, VAR group surrogate data (cell number 7,8) shows higher MTESS than original data (cell number 1-6).
-Based on hierarchical clustering and force weight effect graph, group surrogate data will be the representative and centroid of the group of original time-series data.
+As can be seen in this result, VAR group surrogate data (cell number 7,8) shows a higher MTESS than the original data (cell number 1-6).
+From hierarchical clustering and force weight effect graph visualization it can be seen that the group surrogate data is the representative centroid of the group of original time-series data.
 
 
 ##
-<b>Demo5</b><br>
+<b>Demo 5</b><br>
 
-Linearity test<br>
-1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 of surrogate data from original time-series file.
-2. Use "-l" option of "surrotest" command for linearity test. Original time-series file and surrogate data file are specified this command.
+Linearity testing<br>
+1. Use FT or AAFT surrogate ("surrogate -f" or "-a" command) to generate 399 surrogate data from original time-series file.
+2. Use the "-l" option of the "surrotest" command for carrying out a linearity test. The original time-series and surrogate data files must be specified for this command.
 ~~~
 >> surrogate -f --surrnum 399 data/demo-original-8x500.csv
 output mat file : results/demo-original-8x500_ft_multi_all.mat
