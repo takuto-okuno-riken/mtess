@@ -5,11 +5,10 @@
 Group Surrogate Data Generating Model (GSDGM) and Multivariate Time-series Ensemble Similarity Score (MTESS) Toolbox
 
 ## Introduction
-"GSDGM and MTESS Toolbox" is a powerful tool for surrogate data generation and multivariate time-series similarity analysis.
-Three GSDGM algorithms, such as Vector Auto-Regression (VAR) surrogate [(R. Liégeois, et al., 2017)](https://www.sciencedirect.com/science/article/abs/pii/S1053811917307516), Principal Component VAR (PCVAR) surrogate and Vector Auto-Regressive Deep Neural Network (VARDNN)[(T.Okuno and A.Woodward, 2021)](https://www.frontiersin.org/articles/10.3389/fnins.2021.764796/full) surrogate are implemented in this toolbox to generate group surrogate data.
-VAR, PCVAR and VARDNN surrogate tried to fit the common ingredients of the whole group data. 
-Thus, GSDGM shows very unique tendency to generate group centroid multivariate time-series.
-This allows us to have the most biologically plausible standardized human brain dynamics model based on a large human rs-fMRI dataset of [the Human Connectome Project](https://www.humanconnectome.org/).
+The GSDGM and MTESS Toolbox is a powerful tool for surrogate data generation and multivariate time-series similarity analysis.
+Three GSDGM algorithms have been implemented to generate group surrogate data: 1) Vector Auto-Regression (VAR) surrogate [(R. Liégeois, et al., 2017)](https://www.sciencedirect.com/science/article/abs/pii/S1053811917307516), 2) Principal Component VAR (PCVAR) surrogate, and 3) Vector Auto-Regressive Deep Neural Network (VARDNN) surrogate [(T.Okuno and A.Woodward, 2021)](https://www.frontiersin.org/articles/10.3389/fnins.2021.764796/full).
+The VAR, PCVAR and VARDNN surrogates all try to fit the common features of the whole data. Thus, the GSDGM approach has the very unique ability to generate group centroid multivariate time-series.
+This allows us to achieve the most biologically plausible standardized human brain dynamics model based on a large human rs-fMRI dataset from the [the Human Connectome Project](https://www.humanconnectome.org/).
 
 <div align="center">
 <img src="data/fig1a.jpg" width="70%">
