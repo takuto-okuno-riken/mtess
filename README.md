@@ -14,7 +14,7 @@ This allows us to achieve the most biologically plausible standardized human bra
 <img src="data/fig1a.jpg" width="70%">
 </div>
 
-MTESS can quantify the similarity between two multivariate time-series. It is composed of the normalized distance or cos-similarity of seven basic statistical properties. These are the mean, standard deviation, auto-correlation, correlation matrix, partial correlation matrix, cross-correlation matrix, and partial cross-correlation matrix. By considering each of these statistical properties, it is possible to identify which of them differ between two multivariate time-series using a “MTESS radar chart.”  The total difference between two multivariate time-series is expressed by a single value [0, 5] (0: not similar to 5: similar)(MTESS), and the  difference in each univariate time-series, which we consider as nodes of a network, is expressed as the Node MTESS value.
+MTESS can quantify the similarity between two multivariate time-series. It is composed of the normalized distance or cos-similarity of seven basic statistical properties. These are the mean, standard deviation, auto-correlation, correlation matrix, partial correlation matrix, cross-correlation matrix, and partial cross-correlation matrix. By considering each of these statistical properties, it is possible to identify which of them differ between two multivariate time-series using a “MTESS radar chart.”  The total difference between two multivariate time-series is expressed by a single value [0, 5] (0: not similar to 5: similar)(MTESS), and the  difference in each univariate time-series, which we consider as nodes of a network, is expressed as a Node MTESS value.
 
 The combination of GSDGM and MTESS allows us to perform individuality analysis of a group of multivariate time-series.
 The GSDGM can generate the group centroid time-series and MTESS can quantify normality and abnormality based on a comparison between the group centroid and each individual multivariate time-series.
@@ -23,26 +23,26 @@ The GSDGM can generate the group centroid time-series and MTESS can quantify nor
 
 | name | description |
 |:---|:---|
-| mtess | Calculating and plotting MTESS from group of multivariate time-series data. |
-| gsdgm | Generating group surrogate model (VAR, PCVAR, VARDNN surrogate) and (multivariate time-series) group surrogate data.|
-| surrogate | Generating univariate and multivariate time-series surrogate data by Random Gaussian (RG), Random shuffling (RS), Fourier Transfor (FT), Amplitude Adjusted FT (AAFT)[(J.Theilear et al., 1992)](https://www.sciencedirect.com/science/article/abs/pii/016727899290102S), Iterated AAFT (IAAFT)[(T.Schreiber and A.Schmitz, 1996)](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.77.635), VAR, PCVAR, VARDNN surrogate.|
-| surrotest | Hypothesis testing based on monte-carlo method (Linearity test, Gaussian distribution test, Independent and Identically Distributed (I.I.D) test)  [(J.Theilear and D.Prichard, 1996)](https://www.sciencedirect.com/science/article/abs/pii/0167278996000504).|
+| mtess | Calculate and plot MTESS for a group of multivariate time-series data. |
+| gsdgm | Generate a group surrogate model (VAR, PCVAR, VARDNN surrogate) and (multivariate time-series) group surrogate data.|
+| surrogate | Generate univariate and multivariate time-series surrogate data by Random Gaussian (RG), Random shuffling (RS), Fourier Transfor (FT), Amplitude Adjusted FT (AAFT)[(J.Theilear et al., 1992)](https://www.sciencedirect.com/science/article/abs/pii/016727899290102S), Iterated AAFT (IAAFT)[(T.Schreiber and A.Schmitz, 1996)](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.77.635), VAR, PCVAR, VARDNN surrogate.|
+| surrotest | Hypothesis testing based on the monte-carlo method (Linearity test, Gaussian distribution test, Independent and Identically Distributed (I.I.D) test)  [(J.Theilear and D.Prichard, 1996)](https://www.sciencedirect.com/science/article/abs/pii/0167278996000504).|
 | nii2roisig | Extract fMRI ROI time-series data from nifti files (.nii, .nii.gz) with the ROI atlas file (.nii, .nii.gz). |
 
 
-## Requirements: software
+## Requirements: Software
 * MATLAB R2019b or later
 * Deep Learning Toolbox ver12.1 or later
 * Fuzzy Logic Toolbox ver2.6 or later
 * Parallel Computing Toolbox ver7.1 or later
 * [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn)
 
-Please download [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using GSDGM and MTESS Toolbox.
+Please download the [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using GSDGM and MTESS Toolbox.
 
 
-## Command line tools Demo
-<b>Demo1</b><br>
-First demo shows calculation of MTESS among time-series data and figure output.<br>
+## Command Line Tools Demos
+<b>Demo 1</b><br>
+The first demo shows the calculation of MTESS among time-series data and figure output.<br>
 (Copy and paste this command line. Demo data is included in GSDGM and MTESS Toolbox.)
 ~~~
 >> mtess --showinsig --showmat --showsig --showprop --shownode data/cx-8x500-demo-surrogate.mat 
@@ -50,7 +50,7 @@ First demo shows calculation of MTESS among time-series data and figure output.<
 output mat file : results/cx-8x500-demo-surrogate_mtess.mat
 ~~~
 
-This demo calculates MTESS and shows following figures:
+This demo calculates MTESS and generates the following figures:
 <div align="center">
 <img src="data/demo1.jpg">
 </div>
@@ -60,12 +60,12 @@ This demo calculates MTESS and shows following figures:
 "--showprop" option shows MTESS Polar chart result of first data vs. others.<br>
 "--shownode" option shows Node MTESS result of first data vs. others.<br>
 <br>
-Finally, mtess command saves calculation result with .mat or .csv ("--format 0" option).
+Finally, the mtess command saves the calculation result in either .mat or .csv format ("--format 0" option).
 
 
 ##
-<b>Demo2</b><br>
-Second demo shows calculation of surrogate data, then calculation of MTESS between original time-series data vs. surrogate data.
+<b>Demo 2</b><br>
+The second demo shows the calculation of surrogate data, then the calculation of MTESS between original time-series data vs. surrogate data.
 ~~~
 >> surrogate -s -f -a -v data/demo-original-8x500.csv
 surrogate sample : 1
@@ -77,17 +77,17 @@ output mat file : results/demo-original-8x500_aaft_multi_all.mat
 ...
 output mat file : results/demo-original-8x500_mtess.mat
 ~~~
-"surrogate" command reads single multivariate time-series (8x500) file and generates surrogate data (8x500) by (multivariate) RS surrogate, VAR surrogate, FT surrogate and AAFT surrogate.
-Then, "mtess" command reads original time-series .csv and surrogate time-series data .mat files, and calculates multivariate time-series similarity.
+the "surrogate" command reads a single multivariate time-series (8x500) file and generates surrogate data (8x500) by (multivariate) RS surrogate, VAR surrogate, FT surrogate, and AAFT surrogate.
+Then, the "mtess" command reads the original time-series .csv and surrogate time-series data .mat files, and calculates multivariate time-series similarity.
 <div align="center">
 <img src="data/demo2.jpg">
 </div>
-As you see in this result, VAR, FT and AAFT surrogate data (cell number 3-5) vs. original time-series data (cell number 1) shows higher MTESS (similarity) than RS surrogate data (cell number 2) vs. original data.
+As can be seen in this result, VAR, FT and AAFT surrogate data (cell number 3-5) vs. original time-series data (cell number 1) shows a higher MTESS (similarity) than RS surrogate data (cell number 2) vs. original data.
 
 
 ##
-<b>Demo3</b><br>
-Third demo shows calculation of (PCVAR) group surrogate data based on [the Human Connectome Project](https://www.humanconnectome.org/) S500 male rs-fMRI data (132 ROIs). Then calculation of MTESS among some samples of rs-fMRI time-series data and group surrogate data.<br>
+<b>Demo 3</b><br>
+The third demo shows calculation of (PCVAR) group surrogate data based on [the Human Connectome Project](https://www.humanconnectome.org/) S500 male rs-fMRI data (132 ROIs). Then calculation of MTESS among some samples of rs-fMRI time-series data and group surrogate data.<br>
 (Caution: Downloading and MTESS calculation will take a time.)
 ~~~
 >> gsdgm --surrnum 2 --showsig http://fmridata.s223.xrea.com/hcp-s500m-var1.mat
