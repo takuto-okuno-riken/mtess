@@ -14,13 +14,10 @@ This allows us to achieve the most biologically plausible standardized human bra
 <img src="data/fig1a.jpg" width="70%">
 </div>
 
-MTESS can quantify similarity between two multivariate time-series.
-It is consisted by normalized distance and cos-similarity of seven basic statistical properties, such as mean, standard deviation, auto-correlation, correlation matrix, partial correlation matrix, cross-correlation matrix and partial cross-correlation matrix.
-Therefore, you can identify which statistical property is different between two multivariate time-series by MTESS radar chart.
-Total difference between two multivariate time-series is expressed by single value [0, 5] (0: not similar to 5: similar)(MTESS), and each node difference is also expressed (Node MTESS).
+MTESS can quantify the similarity between two multivariate time-series. It is composed out of the normalized distance or cos-similarity of seven basic statistical properties. These are the mean, standard deviation, auto-correlation, correlation matrix, partial correlation matrix, cross-correlation matrix, and partial cross-correlation matrix. By considering each of these statistical properties, it is possible to identify which of them differ between two multivariate time-series using a “MTESS radar chart.”  The total difference between two multivariate time-series is expressed by a single value [0, 5] (0: not similar to 5: similar)(MTESS), and the  difference in each univariate time-series, which we consider as nodes of a network, is expressed as the Node MTESS value.
 
-Combination of GSDGM and MTESS can perform individuality analysis of the group of multivariate time-series.
-The GSDGM can generate the group centroid time-series and MTESS can quantify normality and abnormality from the group centroid to each individual multivariate time-series.
+The combination of GSDGM and MTESS allows us to perform individuality analysis of a group of multivariate time-series.
+The GSDGM can generate the group centroid time-series and MTESS can quantify normality and abnormality based on a comparison between the group centroid and each individual multivariate time-series.
 
 <b>Command line tools</b>
 
