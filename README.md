@@ -40,6 +40,12 @@ The GSDGM can generate the group centroid time-series and MTESS can quantify nor
 Please download the [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) and "Add Path" in the MATLAB before using GSDGM and MTESS Toolbox.
 
 
+## Installation
+1. Download this Toolbox and [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) zip files.
+2. Extract zip files under your working directory <work_path>.
+3. Run the MATLAB software, and "Add Path" extracted directories (i.e. <work_path/vardnn-master> and <work_path/mtess-master>).
+4. Run the following demos.
+
 ## Command Line Tools Demos
 <b>Demo 1</b><br>
 The first demo shows the calculation of MTESS among time-series data and figure output.<br>
