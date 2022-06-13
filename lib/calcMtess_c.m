@@ -75,8 +75,9 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, nDft, pccFunc, ccLags
             pc = [];
             tc = tic;
             if isempty(pccFunc)
-                pc = calcPartialCorrelation_(X,[],[],[],0,false); % use gpu
                 xpcc = [];
+            elseif isequal(pccFunc,@calcPartialCorrelation) || isequal(pccFunc,@calcPartialCorrelation_) || isequal(pccFunc,@calcPartialCorrelation__)
+                pc = pccFunc(X,[],[],[],0);
             elseif isequal(pccFunc,@calcSvPartialCrossCorrelation)
                 xpcc = pccFunc(X,[],[],[],pccLags,'gaussian');
             else
@@ -92,9 +93,19 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, nDft, pccFunc, ccLags
 
     % calc MTESS
     A = single(nan(nodeNum)); A= tril(A,0); % half does not support
-    MTSp = nan(cLen,cLen,7,memClass);
-    nMTSp = nan(cLen,cLen,nodeNum,7,memClass);
+    [sz1, sz2] = size(CX{1});
+    procf = [cachePath '/mtess-' CXNames{1} '-' num2str(sz1) 'x' num2str(sz2) 'd' num2str(nDft) 'c' num2str(ccLags) palgo num2str(pccLags) '-proc.mat'];
+    if ~isempty(CXNames) && exist(procf,'file')
+        load(procf);
+    else
+        MTSp = nan(cLen,cLen,7,memClass);
+        nMTSp = nan(cLen,cLen,nodeNum,7,memClass);
+    end
     for i=1:cLen
+        if ~isnan(MTSp(i,cLen,3))
+            disp(['skip : ' CXNames{i}]);
+            continue;
+        end
         disp(['load cache of ' CXNames{i}]);
         [sz1, sz2] = size(CX{i});
         cachef = [cachePath '/mtess-' CXNames{i} '-' num2str(sz1) 'x' num2str(sz2) 'd' num2str(nDft) 'c' num2str(ccLags) palgo num2str(pccLags) '.mat'];
@@ -135,18 +146,27 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, nDft, pccFunc, ccLags
             end
             
             % calc zero-lag partial covariance similarity
-            if ~isempty(fi.xpcc) && ~isempty(fj.xpcc)
+            if ~isempty(fi.xpcc)
                 PC1 = single(squeeze(fi.xpcc(:,:,pccLags+1)));
-                PC2 = single(squeeze(fj.xpcc(:,:,pccLags+1)));
-            else
+            elseif ~isempty(fi.pc)
                 PC1 = single(fi.pc);
+            else
+                PC1 = [];
+            end
+            if ~isempty(fj.xpcc)
+                PC2 = single(squeeze(fj.xpcc(:,:,pccLags+1)));
+            elseif ~isempty(fj.pc)
                 PC2 = single(fj.pc);
+            else
+                PC2 = [];
             end
-            C(5) = 5 * getCosSimilarity(PC1+A, PC2+A); % half does not work
-            for k=1:nodeNum
-                nC(k,5) = 5 * getCosSimilarity([PC1(k,:)+A(k,:), (PC1(:,k)+A(:,k)).'], [PC2(k,:)+A(k,:), (PC2(:,k)+A(:,k)).']);
+            if ~isempty(PC1) && ~isempty(PC2)
+                C(5) = 5 * getCosSimilarity(PC1+A, PC2+A); % half does not work
+                for k=1:nodeNum
+                    nC(k,5) = 5 * getCosSimilarity([PC1(k,:)+A(k,:), (PC1(:,k)+A(:,k)).'], [PC2(k,:)+A(k,:), (PC2(:,k)+A(:,k)).']);
+                end
             end
-            
+
             % calc cross-covariance simirality
             CC1 = single(squeeze(fi.xcc(:,:,[1:ccLags,ccLags+2:end])));
             CC2 = single(squeeze(fj.xcc(:,:,[1:ccLags,ccLags+2:end])));
@@ -176,6 +196,9 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, nDft, pccFunc, ccLags
         MTSp(i,:,:) = B;
         nMTSp(i,:,:,:) = nB;
         clear fi;
+        if ~isempty(CXNames) && (sz1 > 1500 || cLen > 100)   % if node number is large
+            save(procf,'MTSp','nMTSp')
+        end
         % memory leak in working pool?? shutdown it
 %        poolobj = gcp('nocreate');
 %        delete(poolobj);
