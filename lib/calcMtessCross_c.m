@@ -177,7 +177,7 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, nDft, pccFun
         nMTSp(i,:,:,:) = nB;
         clear fi;
         if ~isempty(CXNames) && (sz1 > 1500 || cxLen > 100 || cyLen > 100)   % if node number is large
-            save(procf,'MTSp','nMTSp')
+            save(procf,'MTSp','nMTSp','-v7.3');
         end
         % memory leak in working pool?? shutdown it
 %        poolobj = gcp('nocreate');

@@ -197,7 +197,7 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, nDft, pccFunc, ccLags
         nMTSp(i,:,:,:) = nB;
         clear fi;
         if ~isempty(CXNames) && (sz1 > 1500 || cLen > 100)   % if node number is large
-            save(procf,'MTSp','nMTSp')
+            save(procf,'MTSp','nMTSp','-v7.3');
         end
         % memory leak in working pool?? shutdown it
 %        poolobj = gcp('nocreate');
