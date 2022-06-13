@@ -44,7 +44,7 @@ Please download the [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardn
 1. Download this Toolbox and [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn) zip files.
 2. Extract zip files under your working directory <work_path>.
 3. Run the MATLAB software, and "Add Path" extracted directories (i.e. <work_path/vardnn-master> and <work_path/mtess-master>).
-4. Run the following demos.
+4. Move to <work_path/mtess-master> directory and run the following demos.
 
 ## Command Line Tools Demos
 <b>Demo 1</b><br>
