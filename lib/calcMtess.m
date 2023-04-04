@@ -124,38 +124,38 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
             end
             
             % calc zero-lag covariance similarity
-            FC1 = squeeze(FCs(i,:,:));
-            FC2 = squeeze(FCs(j,:,:));
-            C(4) = 5 * getCosSimilarity(FC1+A, FC2+A);
+            FC1 = squeeze(FCs(i,:,:)) + A;
+            FC2 = squeeze(FCs(j,:,:)) + A;
+            C(4) = 5 * getCosSimilarity(FC1, FC2);
             for k=1:nodeNum
-                nC(k,4) = 5 * getCosSimilarity([FC1(k,:)+A(k,:), (FC1(:,k)+A(:,k)).'], [FC2(k,:)+A(k,:), (FC2(:,k)+A(:,k)).']);
+                nC(k,4) = 5 * getCosSimilarity([FC1(k,:), FC1(:,k).'], [FC2(k,:), FC2(:,k).']);
             end
             
             % calc zero-lag partial covariance similarity
-            PC1 = squeeze(PCs(i,:,:));
-            PC2 = squeeze(PCs(j,:,:));
-            C(5) = 5 * getCosSimilarity(PC1+A, PC2+A);
+            PC1 = squeeze(PCs(i,:,:)) + A;
+            PC2 = squeeze(PCs(j,:,:)) + A;
+            C(5) = 5 * getCosSimilarity(PC1, PC2);
             for k=1:nodeNum
-                nC(k,5) = 5 * getCosSimilarity([PC1(k,:)+A(k,:), (PC1(:,k)+A(:,k)).'], [PC2(k,:)+A(k,:), (PC2(:,k)+A(:,k)).']);
+                nC(k,5) = 5 * getCosSimilarity([PC1(k,:), PC1(:,k).'], [PC2(k,:), PC2(:,k).']);
             end
             
             % calc cross-covariance simirality
-            CC1 = squeeze(CCs(i,:,:,[1:ccLags,ccLags+2:end]));
-            CC2 = squeeze(CCs(j,:,:,[1:ccLags,ccLags+2:end]));
-            C(6) = 5 * getCosSimilarity(CC1+A,CC2+A);
+            CC1 = squeeze(CCs(i,:,:,[1:ccLags,ccLags+2:end])) + A;
+            CC2 = squeeze(CCs(j,:,:,[1:ccLags,ccLags+2:end])) + A;
+            C(6) = 5 * getCosSimilarity(CC1,CC2);
             for k=1:nodeNum
-                R1 = [CC1(k,:,:)+A(k,:), permute(CC1(:,k,:)+A(:,k),[2 1 3])];
-                R2 = [CC2(k,:,:)+A(k,:), permute(CC2(:,k,:)+A(:,k),[2 1 3])];
+                R1 = [CC1(k,:,:), permute(CC1(:,k,:),[2 1 3])];
+                R2 = [CC2(k,:,:), permute(CC2(:,k,:),[2 1 3])];
                 nC(k,6) = 5 * getCosSimilarity(R1, R2);
             end
 
             % calc partial cross-covariance simirality
-            PCC1 = squeeze(PCCs(i,:,:,[1:pccLags,pccLags+2:end]));
-            PCC2 = squeeze(PCCs(j,:,:,[1:pccLags,pccLags+2:end]));
-            C(7) = 5 * getCosSimilarity(PCC1+A,PCC2+A);
+            PCC1 = squeeze(PCCs(i,:,:,[1:pccLags,pccLags+2:end])) + A;
+            PCC2 = squeeze(PCCs(j,:,:,[1:pccLags,pccLags+2:end])) + A;
+            C(7) = 5 * getCosSimilarity(PCC1,PCC2);
             for k=1:nodeNum
-                R1 = [PCC1(k,:,:)+A(k,:), permute(PCC1(:,k,:)+A(:,k),[2 1 3])];
-                R2 = [PCC2(k,:,:)+A(k,:), permute(PCC2(:,k,:)+A(:,k),[2 1 3])];
+                R1 = [PCC1(k,:,:), permute(PCC1(:,k,:),[2 1 3])];
+                R2 = [PCC2(k,:,:), permute(PCC2(:,k,:),[2 1 3])];
                 nC(k,7) = 5 * getCosSimilarity(R1, R2);
             end
             B(j,:) = C;

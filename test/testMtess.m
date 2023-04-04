@@ -15,6 +15,11 @@ function testMtess
     pccFunc = @calcPartialCrossCorrelation;
     [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags);
     plotMtessAllMatrix(MTS, MTSp, 'cx-8x500-idx6');
+    % cache version
+    CXNames = {};
+    for i=1:length(CX), CXNames{i} = ['dmy' num2str(i)]; end
+    [MTS2, MTSp2, nMTS2, nMTSp2] = calcMtess_c(CX, range, nDft, pccFunc, ccLags, pccLags, CXNames);
+    [MTS3, MTSp3, nMTS3, nMTSp3] = calcMtessCross_c(CX, CX, range, nDft, pccFunc, ccLags, pccLags, CXNames, CXNames);
 
 %    figure; plotMtessPolarplot(MTSp, 1);
     P=squeeze(MTSp(1,2:8,:));

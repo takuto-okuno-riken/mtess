@@ -132,23 +132,23 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, nDft, pccFun
             end            
             % calc zero-lag covariance similarity
             if isnMTS
-                FC1 = single(squeeze(fi.xcc(:,:,ccLags+1)));
-                FC2 = single(squeeze(fj.xcc(:,:,ccLags+1)));
-                C(4) = 5 * getCosSimilarity(FC1+A, FC2+A); % half does not work
+                FC1 = single(squeeze(fi.xcc(:,:,ccLags+1)) + A);
+                FC2 = single(squeeze(fj.xcc(:,:,ccLags+1)) + A);
+                C(4) = 5 * getCosSimilarity(FC1, FC2); % half does not work
                 for k=1:nodeNum
-                    nC(k,4) = 5 * getCosSimilarity([FC1(k,:)+A(k,:), (FC1(:,k)+A(:,k)).'], [FC2(k,:)+A(k,:), (FC2(:,k)+A(:,k)).']);
+                    nC(k,4) = 5 * getCosSimilarity([FC1(k,:), FC1(:,k).'], [FC2(k,:), FC2(:,k).']);
                 end
             else
-                FC1 = single(squeeze(fi.xcc(:,ccLags+1)));
-                FC2 = single(squeeze(fj.xcc(:,ccLags+1)));
+                FC1 = single(squeeze(fi.xcc(:,ccLags+1)) + A);
+                FC2 = single(squeeze(fj.xcc(:,ccLags+1)) + A);
                 C(4) = 5 * getCosSimilarity(FC1, FC2); % half does not work
             end
             % calc zero-lag partial covariance similarity
             if ~isempty(fi.xpcc)
                 if isnMTS
-                    PC1 = single(squeeze(fi.xpcc(:,:,pccLags+1)));
+                    PC1 = single(squeeze(fi.xpcc(:,:,pccLags+1)) + A);
                 else
-                    PC1 = single(squeeze(fi.xpcc(:,pccLags+1)));
+                    PC1 = single(squeeze(fi.xpcc(:,pccLags+1)) + A);
                 end
             elseif ~isempty(fi.pc)
                 PC1 = single(fi.pc);
@@ -157,9 +157,9 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, nDft, pccFun
             end
             if ~isempty(fj.xpcc)
                 if isnMTS
-                    PC2 = single(squeeze(fj.xpcc(:,:,pccLags+1)));
+                    PC2 = single(squeeze(fj.xpcc(:,:,pccLags+1)) + A);
                 else
-                    PC2 = single(squeeze(fj.xpcc(:,pccLags+1)));
+                    PC2 = single(squeeze(fj.xpcc(:,pccLags+1)) + A);
                 end
             elseif ~isempty(fj.pc)
                 PC2 = single(fj.pc);
@@ -168,9 +168,9 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, nDft, pccFun
             end
             if ~isempty(PC1) && ~isempty(PC2)
                 if isnMTS
-                    C(5) = 5 * getCosSimilarity(PC1+A, PC2+A); % half does not work
+                    C(5) = 5 * getCosSimilarity(PC1, PC2); % half does not work
                     for k=1:nodeNum
-                        nC(k,5) = 5 * getCosSimilarity([PC1(k,:)+A(k,:), (PC1(:,k)+A(:,k)).'], [PC2(k,:)+A(k,:), (PC2(:,k)+A(:,k)).']);
+                        nC(k,5) = 5 * getCosSimilarity([PC1(k,:), PC1(:,k).'], [PC2(k,:), PC2(:,k).']);
                     end
                 else
                     C(5) = 5 * getCosSimilarity(PC1, PC2); % half does not work
@@ -179,34 +179,34 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, nDft, pccFun
 
             % calc cross-covariance simirality
             if isnMTS
-                CC1 = single(squeeze(fi.xcc(:,:,[1:ccLags,ccLags+2:end])));
-                CC2 = single(squeeze(fj.xcc(:,:,[1:ccLags,ccLags+2:end])));
+                CC1 = single(squeeze(fi.xcc(:,:,[1:ccLags,ccLags+2:end])) + A);
+                CC2 = single(squeeze(fj.xcc(:,:,[1:ccLags,ccLags+2:end])) + A);
                 C(6) = 5 * getCosSimilarity(CC1+A,CC2+A); % half does not work
                 for k=1:nodeNum
-                    R1 = [CC1(k,:,:)+A(k,:), permute(CC1(:,k,:)+A(:,k),[2 1 3])];
-                    R2 = [CC2(k,:,:)+A(k,:), permute(CC2(:,k,:)+A(:,k),[2 1 3])];
+                    R1 = [CC1(k,:,:), permute(CC1(:,k,:),[2 1 3])];
+                    R2 = [CC2(k,:,:), permute(CC2(:,k,:),[2 1 3])];
                     nC(k,6) = 5 * getCosSimilarity(R1, R2);
                 end
             else
-                CC1 = single(squeeze(fi.xcc(:,[1:ccLags,ccLags+2:end])));
-                CC2 = single(squeeze(fj.xcc(:,[1:ccLags,ccLags+2:end])));
+                CC1 = single(squeeze(fi.xcc(:,[1:ccLags,ccLags+2:end])) + A);
+                CC2 = single(squeeze(fj.xcc(:,[1:ccLags,ccLags+2:end])) + A);
                 C(6) = 5 * getCosSimilarity(CC1,CC2); % half does not work
             end
 
             % calc partial cross-covariance simirality
             if ~isempty(fi.xpcc) && ~isempty(fj.xpcc)
                 if isnMTS
-                    PCC1 = single(squeeze(fi.xpcc(:,:,[1:pccLags,pccLags+2:end])));
-                    PCC2 = single(squeeze(fj.xpcc(:,:,[1:pccLags,pccLags+2:end])));
-                    C(7) = 5 * getCosSimilarity(PCC1+A,PCC2+A); % half does not work
+                    PCC1 = single(squeeze(fi.xpcc(:,:,[1:pccLags,pccLags+2:end])) + A);
+                    PCC2 = single(squeeze(fj.xpcc(:,:,[1:pccLags,pccLags+2:end])) + A);
+                    C(7) = 5 * getCosSimilarity(PCC1,PCC2); % half does not work
                     for k=1:nodeNum
-                        R1 = [PCC1(k,:,:)+A(k,:), permute(PCC1(:,k,:)+A(:,k),[2 1 3])];
-                        R2 = [PCC2(k,:,:)+A(k,:), permute(PCC2(:,k,:)+A(:,k),[2 1 3])];
+                        R1 = [PCC1(k,:,:), permute(PCC1(:,k,:),[2 1 3])];
+                        R2 = [PCC2(k,:,:), permute(PCC2(:,k,:),[2 1 3])];
                         nC(k,7) = 5 * getCosSimilarity(R1, R2);
                     end
                 else
-                    PCC1 = single(squeeze(fi.xpcc(:,[1:pccLags,pccLags+2:end])));
-                    PCC2 = single(squeeze(fj.xpcc(:,[1:pccLags,pccLags+2:end])));
+                    PCC1 = single(squeeze(fi.xpcc(:,[1:pccLags,pccLags+2:end])) + A);
+                    PCC2 = single(squeeze(fj.xpcc(:,[1:pccLags,pccLags+2:end])) + A);
                     C(7) = 5 * getCosSimilarity(PCC1,PCC2); % half does not work
                 end
             end
