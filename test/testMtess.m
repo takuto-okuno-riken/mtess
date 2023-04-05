@@ -26,13 +26,20 @@ function testMtess
     figure; plotMtessSpiderPlot(P);
     title('cx-8x500-idx6 : MTESS polar chart');
 
+    % 3D bar graph
+    figure; h=bar3(MTS); title('MTESS matrix 3D bar graph');
+    for i=1:length(h) h(i).FaceAlpha=0.6; h(i).EdgeAlpha=0.6; end
+    xlabel('Cell number');
+    ylabel('Cell number');
+    zlabel('MTESS'); zticks([0 1 2 3 4 5]);
+
     % check 'half' data input
     for i=1:length(CX), CX{i}=half(CX{i}); end
     [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags);
     P=squeeze(MTSp(1,2:8,:));
     figure; plotMtessSpiderPlot(P);
     title('cx-8x500-idx6(half) : MTESS polar chart');
-
+        
     % test surrogate algorithms
     for i=1:length(CX), CX{i}=single(CX{i}); end
     algoNum = 7;
