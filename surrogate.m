@@ -41,7 +41,7 @@ function surrogate(varargin)
     handles.pcvar = 0;
     handles.vardnn = 0;
     handles.lazy = 0;
-    handles.multi = 1;
+    handles.multi = 0;
     handles.uni = 0;
     handles.noiseType = 'gaussian';
     handles.surrNum = 1;
@@ -130,6 +130,10 @@ function surrogate(varargin)
                 end
         end
         i = i + 1;
+    end
+
+    if handles.multi == 0 && handles.uni == 0
+        handles.multi = 1;
     end
     
     % check command input
