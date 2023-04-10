@@ -2,7 +2,8 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6381103.svg)](https://doi.org/10.5281/zenodo.6381103)
 
 # GSDGM and MTESS Toolbox
-Group Surrogate Data Generating Model (GSDGM) and Multivariate Time-series Ensemble Similarity Score (MTESS) Toolbox
+Group Surrogate Data Generating Model (GSDGM) and Multivariate Time-series Ensemble Similarity Score (MTESS) Toolbox for MATLAB
+(Python version is [here](https://github.com/takuto-okuno-riken/gsdgmpy))
 
 ## Introduction
 The GSDGM and MTESS Toolbox is a powerful tool for surrogate data generation and multivariate time-series similarity analysis.
