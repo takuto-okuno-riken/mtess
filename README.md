@@ -35,6 +35,7 @@ The GSDGM can generate the group centroid time-series and MTESS can quantify nor
 * MATLAB R2019b or later
 * Deep Learning Toolbox ver12.1 or later
 * Fuzzy Logic Toolbox ver2.6 or later
+* Econometrics Toolbox ver5.3 or later
 * Parallel Computing Toolbox ver7.1 or later
 * [VARDNN Toolbox](https://github.com/takuto-okuno-riken/vardnn)
 
