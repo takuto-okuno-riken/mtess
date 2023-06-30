@@ -26,8 +26,8 @@ function mtess(varargin)
     handles.commandError = 0;
     handles.csvFiles = {};
     handles.range = 'auto';
-    handles.nDft = 100;
     handles.pcc = 0;
+    handles.aclag = NaN;
     handles.cclag = NaN;
     handles.pcclag = NaN;
     handles.outpath = 'results';
@@ -55,11 +55,11 @@ function mtess(varargin)
             case {'--range'}
                 handles.range = varargin{i+1};
                 i = i + 1;
-            case {'--ndft'}
-                handles.nDft = str2num(varargin{i+1});
-                i = i + 1;
             case {'--pcc'}
                 handles.pcc = str2num(varargin{i+1});
+                i = i + 1;
+            case {'--aclag'}
+                handles.aclag = str2num(varargin{i+1});
                 i = i + 1;
             case {'--cclag'}
                 handles.cclag = str2num(varargin{i+1});
@@ -141,8 +141,8 @@ function showUsage()
     global exeName;
     disp(['usage: ' exeName ' [options] file1.mat file2.mat ...']);
     disp('  --range type        input group value range (default:"auto", sigma:<num>, full:<num> or <min>:<max>)');
-    disp('  --ndft num          DFT sampling <number> (even number) (default: 100)');
     disp('  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC, 3:PC-PCC (dafault:0)');
+    disp('  --aclag num         time lag <num> for Auto Correlation (default:15)');
     disp('  --cclag num         time lag <num> for Cross Correlation (default:8)');
     disp('  --pcclag num        time lag <num> for Partial Cross Correlation (default:8)');
     disp('  --outpath path      output files <path> (default:"results")');
@@ -296,6 +296,7 @@ function processInputFiles(handles)
     % calc MTESS
     pcName = 'PC';
     pccFunc = @calcPartialCrossCorrelation;
+    aclag = 15;
     cclag = 8;
     pcclag = 8;
     if handles.pcc == 1
@@ -313,13 +314,14 @@ function processInputFiles(handles)
             pcclag = 2;
         end
     end
+    if ~isnan(handles.aclag), aclag = handles.aclag; end
     if ~isnan(handles.cclag), cclag = handles.cclag; end
     if ~isnan(handles.pcclag), pcclag = handles.pcclag; end
 
     if handles.cache > 0
-        [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, handles.nDft, pccFunc, cclag, pcclag, names, handles.cachepath);
+        [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, pccFunc, aclag, cclag, pcclag, names, handles.cachepath);
     else
-        [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, handles.nDft, pccFunc, cclag, pcclag, {});
+        [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, pccFunc, aclag, cclag, pcclag, {});
     end
 
     % output result matrix files
@@ -348,7 +350,7 @@ function processInputFiles(handles)
     % show 1 vs. others MTESS statistical properties
     if handles.showProp > 0
         P=squeeze(MTSp(1,2:length(CX),:));
-        figure; plotMtessSpiderPlot(P, cclag, pcclag, pcName);
+        figure; plotMtessSpiderPlot(P);
         legend(names(2:length(CX)));
         title('MTESS polar chart : 1 vs. others');
     end
@@ -402,7 +404,7 @@ function saveResultFiles(handles, MTS, MTSp, nMTS, nMTSp, outname)
         outputCsvFile(MTS, [handles.outpath '/' outname '_mtess.csv']);
 
         % output result MTESS statistical property matrix csv file
-        props = {'M','SD','AC','CM','PCM','CCM','PCCM'};
+        props = {'SD','AC','PAC','CM','PCM','CCM','PCCM','mKT'};
         for i=1:length(props)
             outputCsvFile(MTSp(:,:,i), [handles.outpath '/' outname '_mtess_' props{i} '.csv']);
         end
