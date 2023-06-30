@@ -9,17 +9,17 @@ function testMtess
     load('data/cx-8x500-idx6.mat');
 
     range = [0 1];
-    nDft = 100;
+    acLags = 15;
     ccLags = 8;
     pccLags = 8;
     pccFunc = @calcPartialCrossCorrelation;
-    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags);
+    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, pccFunc, acLags, ccLags, pccLags);
     plotMtessAllMatrix(MTS, MTSp, 'cx-8x500-idx6');
     % cache version
     CXNames = {};
     for i=1:length(CX), CXNames{i} = ['dmy' num2str(i)]; end
-    [MTS2, MTSp2, nMTS2, nMTSp2] = calcMtess_c(CX, range, nDft, pccFunc, ccLags, pccLags, CXNames);
-    [MTS3, MTSp3, nMTS3, nMTSp3] = calcMtessCross_c(CX, CX, range, nDft, pccFunc, ccLags, pccLags, CXNames, CXNames);
+    [MTS2, MTSp2, nMTS2, nMTSp2] = calcMtess_c(CX, range, pccFunc, acLags, ccLags, pccLags, CXNames);
+    [MTS3, MTSp3, nMTS3, nMTSp3] = calcMtessCross_c(CX, CX, range, pccFunc, acLags, ccLags, pccLags, CXNames, CXNames);
 
 %    figure; plotMtessPolarplot(MTSp, 1);
     P=squeeze(MTSp(1,2:8,:));
@@ -35,7 +35,7 @@ function testMtess
 
     % check 'half' data input
     for i=1:length(CX), CX{i}=half(CX{i}); end
-    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags);
+    [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, pccFunc, acLags, ccLags, pccLags);
     P=squeeze(MTSp(1,2:8,:));
     figure; plotMtessSpiderPlot(P);
     title('cx-8x500-idx6(half) : MTESS polar chart');
@@ -54,7 +54,7 @@ function testMtess
     CX2{7} = single(surrogateFT(CX{1}, 1));
 %    CXt = CX; CX = CX2;
 %    save('data/cx-8x500-idx6-surrogate.mat','CX','names');
-    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX2, range, nDft, pccFunc, ccLags, pccLags);
+    [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs] = calcMtess(CX2, range, pccFunc, acLags, ccLags, pccLags);
     plotMtessAllMatrix(MTS, MTSp, 'surrogate algorithms');
     A=squeeze(nMTS(1,2:algoNum,:));
     figure; plot(A.'); title('surrogate algorithms : node MTESS');
@@ -91,7 +91,7 @@ function testMtess
     PCC = calcPartialCrossCorrelation(CX3{5}, [], [], [], pccLags);
     PC3 = PCC(:,:,pccLags+1);
 %}
-    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX3, range, nDft, pccFunc, ccLags, pccLags);
+    [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs] = calcMtess(CX3, range, pccFunc, acLags, ccLags, pccLags);
     P=squeeze(MTSp(1,2:5,:));
     figure; plotMtessSpiderPlot(P);
     legend('flat@0.5', 'flat@0.9', 'random', 'sin');
@@ -110,7 +110,7 @@ function testMtess
     CX3{5}(7,:)=sin([1:sigLen] * pi / 8) * 0.5 + 0.5; % sin
     figure; plotTwoSignals(CX2{4},CX3{4},false,[0,1]);
 
-    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX3, range, nDft, pccFunc, ccLags, pccLags);
+    [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs] = calcMtess(CX3, range, pccFunc, acLags, ccLags, pccLags);
     plotMtessAllMatrix(MTS, MTSp, 'node effect checking');
     A=squeeze(nMTS(1,2:6,:));
     figure; plot(A.'); title('node effect checking : node MTESS');
@@ -135,7 +135,7 @@ function testMtess
         CX{i} = X;
     end
 
-    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags);
+    [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, pccFunc, acLags, ccLags, pccLags);
     plotMtessAllMatrix(MTS, MTSp, 'ww32-* data');
 
 %    figure; plotMtessPolarplot(MTSp, 1);
@@ -158,8 +158,8 @@ function testMtess
         load('data/hcp-metest-132x1190.mat');
         pccLags = 2;
         pccFunc = @calcSvPartialCrossCorrelation;
-        [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags);
-        save(filename,'MTS', 'MTSp', 'nMTS', 'nMTSp', 'Means', 'Stds', 'Amps', 'FCs', 'PCs', 'CCs', 'PCCs');
+        [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, pccFunc, acLags, ccLags, pccLags);
+        save(filename,'MTS', 'MTSp', 'nMTS', 'nMTSp', 'Means', 'Stds', 'ACs', 'PACs', 'FCs', 'PCs', 'CCs', 'PCCs');
     end
     plotMtessAllMatrix(MTS, MTSp, 'real HCP fMRI signal');
     P=squeeze(MTSp(1,2:6,:));

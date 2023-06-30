@@ -1,28 +1,29 @@
 %%
 % Caluclate MTESS, MTESS statistical properties, Node MTESS and Node MTESS statistical properties
-% returns MTESS matrix (cell number x cell number)(MTS), MTESS statistical property matrix (cell number x cell number x 7)(MTSp), 
-%   Node MTESS (cell number x cell number x node)(nMTS) and Node MTESS statistical properties (cell number x cell number x node x 7)(nMTSp).
+% returns MTESS matrix (cell number x cell number)(MTS), MTESS statistical property matrix (cell number x cell number x 8)(MTSp), 
+%   Node MTESS (cell number x cell number x node)(nMTS) and Node MTESS statistical properties (cell number x cell number x node x 8)(nMTSp).
 %   Data in the middle of calculation, such as mean (Means), standard deviation (Stds), DFT amplitude (Amps), correlation matrix (FCs),
-%   partial correlation matrix (PCs), cross-correlation matrix (CCs) and partial cross-correlation matrix (PCCs).
+%   partial correlation matrix (PCs), cross-correlation matrix (CCs), partial cross-correlation matrix (PCCs) and multivariate kurtosis (mKTs).
 % input:
 %  CX               cells of multivariate time series matrix {(node x time series)} x cell number (time series length can be different)
 %  range            range [min, max] of time series for normalized mean and std dev (default: min and max of input CX)
-%  nDFT             DFT sampling number (even number) (default: 100)
 %  pccFunc          Partial Cross-Correlation function (default: @calcPartialCrossCorrelation)
+%  acLags           time lags for Auto-Correlation / Partial Auto-Correlation function (default: 15)
 %  ccLags           time lags for Cross-Correlation function (default: 8)
 %  pccLags          time lags for Partial Cross-Correlation function (default: 8)
 %  CXNames          CX signals names used for cache filename (default: {})
 %  cachePath        cache file path (default: 'results/cache')
 
-function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, nDft, pccFunc, ccLags, pccLags, CXNames, cachePath)
+function [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs, mKTs] = calcMtess(CX, range, pccFunc, acLags, ccLags, pccLags, CXNames, cachePath)
     if nargin < 8, cachePath = 'results/cache'; end 
     if nargin < 7, CXNames = {}; end
     if nargin < 6, pccLags = 8; end
     if nargin < 5, ccLags = 8; end
-    if nargin < 4, pccFunc = @calcPartialCrossCorrelation; end
-    if nargin < 3, nDft = 100; end
+    if nargin < 4, acLags = 15; end
+    if nargin < 3, pccFunc = @calcPartialCrossCorrelation; end
     if nargin < 2, range = NaN; end
 
+    itemNum = 8;
     cLen = length(CX);
     nodeNum = size(CX{1},1);
     memClass = class(CX{1});
@@ -58,15 +59,17 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
 
     Means = nan(cLen,nodeNum,memClass);
     Stds = nan(cLen,nodeNum,memClass);
-    Amps = nan(cLen,nodeNum,nDft/2-1,'single'); % half might take 'Inf'
+    ACs = nan(cLen,nodeNum,acLags+1,memClass);
+    PACs = nan(cLen,nodeNum,acLags+1,memClass);
     FCs = nan(cLen,nodeNum,nodeNum,memClass);
     PCs = nan(cLen,nodeNum,nodeNum,memClass);
     CCs = nan(cLen,nodeNum,nodeNum,2*ccLags+1,memClass);
     PCCs = nan(cLen,nodeNum,nodeNum,2*pccLags+1,memClass);
+    mKTs = nan(cLen,1,memClass);
     for nn=1:cLen
         X = CX{nn};
         if ~isempty(CXNames)
-            cachef = [cachePath '/mtess-' CXNames{nn} '-' num2str(size(X,1)) 'x' num2str(size(X,2)) 'd' num2str(nDft) 'c' num2str(ccLags) palgo num2str(pccLags) '.mat'];
+            cachef = [cachePath '/mtess-' CXNames{nn} '-' num2str(size(X,1)) 'x' num2str(size(X,2)) 'a' num2str(acLags) 'c' num2str(ccLags) palgo num2str(pccLags) '.mat'];
         end
         if ~isempty(CXNames) && exist(cachef,'file')
             disp(['load cache of ' CXNames{nn}]);
@@ -74,53 +77,61 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
         else
             xm = mean(X,2);
             xsd = std(X,1,2);
-            xamp = calcDft(single(X),nDft); % half might take 'Inf'
+            xac = calcAutoCorrelation(X,acLags);
+            xpac = calcPartialAutoCorrelation(X,acLags);
             xcc = calcCrossCorrelation_(X,[],[],[],ccLags); % faster version
             if isequal(pccFunc,@calcSvPartialCrossCorrelation)
                 xpcc = pccFunc(X,[],[],[],pccLags,'gaussian');
             else
                 xpcc = pccFunc(X,[],[],[],pccLags);
             end
+            [~, xmkt] = calcMskewKurt(X);
             if ~isempty(CXNames)
                 disp(['save cache of ' CXNames{nn}]);
-                save(cachef, 'xm', 'xsd', 'xamp', 'xcc', 'xpcc');
+                save(cachef, 'xm', 'xsd', 'xac', 'xpac', 'xcc', 'xpcc', 'xmkt');
             end
         end        
         Means(nn,:) = xm;
         Stds(nn,:) = xsd;
-        Amps(nn,:,:) = xamp;
+        ACs(nn,:,:) = xac;
+        PACs(nn,:,:) = xpac;
         CCs(nn,:,:,:) = xcc;
         PCCs(nn,:,:,:) = xpcc;
         FCs(nn,:,:) = squeeze(xcc(:,:,ccLags+1));
         PCs(nn,:,:) = squeeze(xpcc(:,:,pccLags+1));
-%        PCs(nn,:,:) = calcPartialCorrelation(si);
+        mKTs(nn) = xmkt;
     end
-    Amps = Amps * (nDft/2) / (tRange/2); % normalize
 
     % calc MTESS
     A = single(nan(nodeNum)); A= tril(A,0); % half does not support
-    MTSp = nan(cLen,cLen,7,memClass);
-    nMTSp = nan(cLen,cLen,nodeNum,7,memClass);
+    MTSp = nan(cLen,cLen,itemNum,memClass);
+    nMTSp = nan(cLen,cLen,nodeNum,itemNum,memClass);
     for i=1:cLen
-        B = nan(cLen,7,memClass);
-        nB = nan(cLen,nodeNum,7,memClass);
+        B = nan(cLen,itemNum,memClass);
+        nB = nan(cLen,nodeNum,itemNum,memClass);
         parfor j=i+1:cLen
-            C = nan(7,1,memClass);
-            nC = nan(nodeNum,7,memClass);
-            % calc mean distance (normalized)
-            dm = Means(i,:)-Means(j,:);
-            nC(:,1) = abs(dm) / (tRange/2); % normalize
+            C = nan(itemNum,1,memClass);
+            nC = nan(nodeNum,itemNum,memClass);
 
             % calc std deviation distance (normalized)
             ds = Stds(i,:)-Stds(j,:);
-            nC(:,2) = abs(ds) / (tRange/4); % normalize
+            D = 5 * (1 - abs(ds) / (tRange/4)); % normalize
+            D(D<0) = 0;
+            C(1) = nanmean(D);
+            nC(:,1) = D;
 
-            % calc amplitude similarity
-            C(3) = 5 * getCosSimilarity(Amps(i,:,:),Amps(j,:,:));
-            A1 = squeeze(Amps(i,:,:));
-            A2 = squeeze(Amps(j,:,:));
+            % calc AC/PAC similarity
+            C(2) = 5 * getCosSimilarity(ACs(i,:,2:end),ACs(j,:,2:end));
+            A1 = squeeze(ACs(i,:,:));
+            A2 = squeeze(ACs(j,:,:));
             for k=1:nodeNum
-                nC(k,3) = 5 * getCosSimilarity(A1(k,:),A2(k,:));
+                nC(k,2) = 5 * getCosSimilarity(A1(k,2:end),A2(k,2:end));
+            end
+            C(3) = 5 * getCosSimilarity(PACs(i,:,2:end),PACs(j,:,2:end));
+            A1 = squeeze(PACs(i,:,:));
+            A2 = squeeze(PACs(j,:,:));
+            for k=1:nodeNum
+                nC(k,3) = 5 * getCosSimilarity(A1(k,2:end),A2(k,2:end));
             end
             
             % calc zero-lag covariance similarity
@@ -158,26 +169,20 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calc
                 R2 = [PCC2(k,:,:), permute(PCC2(:,k,:),[2 1 3])];
                 nC(k,7) = 5 * getCosSimilarity(R1, R2);
             end
+
+            % multivariate kurtosis
+            mkt = nodeNum*(nodeNum+2) / 2; % 2 is empirically defined.
+            ds = 5 * (1 - abs(mKTs(i)-mKTs(j)) / mkt); % normalize
+            if ds < 0, ds = 0; end
+            C(8) = ds;
+            nC(:,8) = ds;
+            % output
             B(j,:) = C;
             nB(j,:,:) = nC;
         end
         MTSp(i,:,:) = B;
         nMTSp(i,:,:,:) = nB;
     end
-
-    % calc mean and std dev similarity
-    m1 = 5 * (1 - nanmean(nMTSp(:,:,:,1),3));
-    m2 = 5 * (1 - nanmean(nMTSp(:,:,:,2),3));
-    m1(m1<0) = 0;
-    m2(m2<0) = 0;
-    MTSp(:,:,1) = m1;
-    MTSp(:,:,2) = m2;
-    m1 = 5 * (1 - nMTSp(:,:,:,1));
-    m2 = 5 * (1 - nMTSp(:,:,:,2));
-    m1(m1<0) = 0;
-    m2(m2<0) = 0;
-    nMTSp(:,:,:,1) = m1;
-    nMTSp(:,:,:,2) = m2;
 
     % calc MTESS & Node MTESS
     MTSp(MTSp<0)=0;

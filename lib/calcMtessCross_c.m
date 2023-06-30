@@ -9,24 +9,25 @@
 %  CX               cells of multivariate time series matrix {(node x time series)} x cell number (time series length can be different)
 %  CY               cells of multivariate time series matrix {(node x time series)} x cell number (time series length can be different)
 %  range            range [min, max] of time series for normalized mean and std dev (default: min and max of input CX)
-%  nDFT             DFT sampling number (even number) (default: 100)
 %  pccFunc          Partial Cross-Correlation function (default: @calcPartialCrossCorrelation)
+%  acLags           time lags for Auto-Correlation / Partial Auto-Correlation function (default: 15)
 %  ccLags           time lags for Cross-Correlation function (default: 8)
 %  pccLags          time lags for Partial Cross-Correlation function (default: 8)
 %  CXNames          CX signals names used for cache filename (default: {})
 %  CYNames          CY signals names used for cache filename (default: {})
 %  cachePath        cache file path (default: 'results/cache')
 
-function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, nDft, pccFunc, ccLags, pccLags, CXNames, CYNames, cachePath)
+function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, pccFunc, acLags, ccLags, pccLags, CXNames, CYNames, cachePath)
     if nargin < 10, cachePath = 'results/cache'; end 
     if nargin < 9, CYNames = {}; end 
     if nargin < 8, CXNames = {}; end 
     if nargin < 7, pccLags = 8; end
     if nargin < 6, ccLags = 8; end
-    if nargin < 5, pccFunc = @calcPartialCrossCorrelation; end
-    if nargin < 4, nDft = 100; end
+    if nargin < 5, acLags = 15; end
+    if nargin < 4, pccFunc = @calcPartialCrossCorrelation; end
     if nargin < 3, range = NaN; end
 
+    itemNum = 8;
     cxLen = length(CX);
     cyLen = length(CY);
     nodeNum = size(CX{1},1);
@@ -70,19 +71,19 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, nDft, pccFun
     end
     if isnMTS, ostr=''; else, ostr='n'; end
 
-    calcStatProps(CX, nDft, pccFunc, palgo, ccLags, pccLags, CXNames, cachePath, isnMTS, ostr);
-    calcStatProps(CY, nDft, pccFunc, palgo, ccLags, pccLags, CYNames, cachePath, isnMTS, ostr);
+    calcStatProps(CX, pccFunc, palgo, acLags, ccLags, pccLags, CXNames, cachePath, isnMTS, ostr);
+    calcStatProps(CY, pccFunc, palgo, acLags, ccLags, pccLags, CYNames, cachePath, isnMTS, ostr);
 
     % calc MTESS
     A = nan(nodeNum,'single'); A= tril(A,0); % half does not support
     [sz1, sz2] = size(CX{1});
-    procf = [cachePath '/mtess-' CXNames{1} '-' CYNames{1} '-' num2str(sz1) 'x' num2str(sz2) 'd' num2str(nDft) 'c' num2str(ccLags) palgo num2str(pccLags) ostr '-xproc.mat'];
+    procf = [cachePath '/mtess-' CXNames{1} '-' CYNames{1} '-' num2str(sz1) 'x' num2str(sz2) 'a' num2str(acLags) 'c' num2str(ccLags) palgo num2str(pccLags) ostr '-xproc.mat'];
     if ~isempty(CXNames) && exist(procf,'file')
         load(procf);
     else
-        MTSp = nan(cxLen,cyLen,7,memClass);
+        MTSp = nan(cxLen,cyLen,itemNum,memClass);
         if isnMTS
-            nMTSp = nan(cxLen,cyLen,nodeNum,7,memClass);
+            nMTSp = nan(cxLen,cyLen,nodeNum,itemNum,memClass);
         else
             nMTSp = [];
         end
@@ -94,42 +95,43 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, nDft, pccFun
         end
         disp(['load cache of ' CXNames{i}]);
         [sz1, sz2] = size(CX{i});
-        cachef = [cachePath '/mtess-' CXNames{i} '-' num2str(sz1) 'x' num2str(sz2) 'd' num2str(nDft) 'c' num2str(ccLags) palgo num2str(pccLags) ostr '.mat'];
+        cachef = [cachePath '/mtess-' CXNames{i} '-' num2str(sz1) 'x' num2str(sz2) 'a' num2str(acLags) 'c' num2str(ccLags) palgo num2str(pccLags) ostr '.mat'];
         fi = load(cachef);
 
-        B = nan(cyLen,7,memClass);
-        if isnMTS, nB = nan(cyLen,nodeNum,7,memClass); end
+        B = nan(cyLen,itemNum,memClass);
+        if isnMTS, nB = nan(cyLen,nodeNum,itemNum,memClass); end
         parfor j=1:cyLen
             tj=tic;
-            C = nan(7,1,memClass);
-            if isnMTS, nC = nan(nodeNum,7,memClass); end
+            C = nan(itemNum,1,memClass);
+            if isnMTS, nC = nan(nodeNum,itemNum,memClass); end
             [sz1, sz2] = size(CY{j});
-            cachef = [cachePath '/mtess-' CYNames{j} '-' num2str(sz1) 'x' num2str(sz2) 'd' num2str(nDft) 'c' num2str(ccLags) palgo num2str(pccLags) ostr '.mat'];
+            cachef = [cachePath '/mtess-' CYNames{j} '-' num2str(sz1) 'x' num2str(sz2) 'a' num2str(acLags) 'c' num2str(ccLags) palgo num2str(pccLags) ostr '.mat'];
             fj = load(cachef);
-
-            % calc mean distance (normalized)
-            dm = fi.xm - fj.xm;
-            D = abs(dm) / (tRange/2); % normalize
-            D(D<0) = 0;
-            C(1) = 5 * (1 - nanmean(D));
-            if isnMTS, nC(:,1)=D; end
 
             % calc std deviation distance (normalized)
             ds = fi.xsd - fj.xsd;
-            D = abs(ds) / (tRange/4); % normalize
+            D = 5 * (1 - abs(ds) / (tRange/4)); % normalize
             D(D<0) = 0;
-            C(2) = 5 * (1 - nanmean(D));
-            if isnMTS, nC(:,2)=D; end
+            C(1) = nanmean(D);
+            if isnMTS, nC(:,1)=D; end
 
-            % calc amplitude similarity
-            C(3) = 5 * getCosSimilarity(fi.xamp,fj.xamp);
+            % calc AC/PAC similarity
+            C(2) = 5 * getCosSimilarity(fi.xac,fj.xac);
             if isnMTS
-                A1 = single(squeeze(fi.xamp));
-                A2 = single(squeeze(fj.xamp));
+                A1 = single(squeeze(fi.xac));
+                A2 = single(squeeze(fj.xac));
                 for k=1:nodeNum
-                    nC(k,3) = 5 * getCosSimilarity(A1(k,:),A2(k,:));
+                    nC(k,2) = 5 * getCosSimilarity(A1(k,2:end),A2(k,2:end));
                 end
-            end            
+            end
+            C(3) = 5 * getCosSimilarity(fi.xpac,fj.xpac);
+            if isnMTS
+                A1 = squeeze(fi.xpac);
+                A2 = squeeze(fj.xpac);
+                for k=1:nodeNum
+                    nC(k,3) = 5 * getCosSimilarity(A1(k,2:end),A2(k,2:end));
+                end
+            end
             % calc zero-lag covariance similarity
             if isnMTS
                 FC1 = single(squeeze(fi.xcc(:,:,ccLags+1)) + A);
@@ -210,6 +212,13 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, nDft, pccFun
                     C(7) = 5 * getCosSimilarity(PCC1,PCC2); % half does not work
                 end
             end
+            % multivariate kurtosis
+            mkt = nodeNum*(nodeNum+2) / 2; % 2 is empirically defined.
+            ds = 5 * (1 - abs(fi.xmkt - fj.xmkt) / mkt); % normalize
+            if ds < 0, ds = 0; end
+            C(8) = ds;
+            if isnMTS, nC(:,8) = ds; end
+
             B(j,:) = C;
             if isnMTS, nB(j,:,:) = nC; end
             s = toc(tj);
@@ -228,21 +237,6 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, nDft, pccFun
         end
     end
 
-    % calc mean and std dev similarity
-    if isnMTS
-        m1 = 5 * (1 - nanmean(nMTSp(:,:,:,1),3));
-        m2 = 5 * (1 - nanmean(nMTSp(:,:,:,2),3));
-        m1(m1<0) = 0;
-        m2(m2<0) = 0;
-        MTSp(:,:,1) = m1;
-        MTSp(:,:,2) = m2;
-        m1 = 5 * (1 - nMTSp(:,:,:,1));
-        m2 = 5 * (1 - nMTSp(:,:,:,2));
-        m1(m1<0) = 0;
-        m2(m2<0) = 0;
-        nMTSp(:,:,:,1) = m1;
-        nMTSp(:,:,:,2) = m2;
-    end
     % calc MTESS & Node MTESS
     MTSp(MTSp<0)=0;
     nMTSp(nMTSp<0)=0;
@@ -252,7 +246,7 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, nDft, pccFun
     nMTS = nanmean(nMTSp,4);
 end
 
-function calcStatProps(CX, nDft, pccFunc, palgo, ccLags, pccLags, CXNames, cachePath, isnMTS, ostr)
+function calcStatProps(CX, pccFunc, palgo, acLags, ccLags, pccLags, CXNames, cachePath, isnMTS, ostr)
     nodeNum = size(CX{1},1);
     memClass = class(CX{1});
     A = ones(nodeNum,'logical'); A = triu(A,1);
@@ -260,14 +254,15 @@ function calcStatProps(CX, nDft, pccFunc, palgo, ccLags, pccLags, CXNames, cache
     for nn=1:cxLen
         X = CX{nn};
         if ~isempty(CXNames)
-            cachef = [cachePath '/mtess-' CXNames{nn} '-' num2str(size(X,1)) 'x' num2str(size(X,2)) 'd' num2str(nDft) 'c' num2str(ccLags) palgo num2str(pccLags) ostr '.mat'];
+            cachef = [cachePath '/mtess-' CXNames{nn} '-' num2str(size(X,1)) 'x' num2str(size(X,2)) 'a' num2str(acLags) 'c' num2str(ccLags) palgo num2str(pccLags) ostr '.mat'];
         end
         if ~isempty(CXNames) && exist(cachef,'file')
             disp(['cache exist : ' CXNames{nn}]);
         else
             xm = mean(X,2);
             xsd = std(X,1,2);
-            xamp = calcDft(single(X),nDft); % half might take 'Inf'
+            xac = calcAutoCorrelation(X,acLags);
+            xpac = calcPartialAutoCorrelation(X,acLags);
             tc = tic;
             xcc = calcCrossCorrelation_(X,[],[],[],ccLags,0,false); % use gpu false
             s = toc(tc); disp([num2str(nn) ' : calcCrossCorr ' num2str(s) ' sec'])
@@ -301,9 +296,10 @@ function calcStatProps(CX, nDft, pccFunc, palgo, ccLags, pccLags, CXNames, cache
                 end
                 xpcc = xpcc2; clear xpcc2;
             end
+            [~, xmkt] = calcMskewKurt(X);
             if ~isempty(CXNames)
                 disp(['save cache of ' CXNames{nn}]);
-                save(cachef, 'xm', 'xsd', 'xamp', 'xcc', 'xpcc', 'pc', '-v7.3');
+                save(cachef, 'xm', 'xsd', 'xac', 'xpac', 'xcc', 'xpcc', 'xmkt', 'pc', '-v7.3');
             end
         end
     end
