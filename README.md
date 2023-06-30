@@ -15,7 +15,7 @@ This allows us to achieve the most biologically plausible standardized human bra
 <img src="data/fig1a.jpg" width="70%">
 </div>
 
-MTESS can quantify the similarity between two multivariate time-series. It is composed of the normalized distance or cos-similarity of seven basic statistical properties. These are the mean, standard deviation, auto-correlation, correlation matrix, partial correlation matrix, cross-correlation matrix, and partial cross-correlation matrix. By considering each of these statistical properties, it is possible to identify which of them differ between two multivariate time-series using a “MTESS radar chart.”  The total difference between two multivariate time-series is expressed by a single value [0, 5] (0: not similar to 5: similar)(MTESS), and the  difference in each univariate time-series, which we consider as nodes of a network, is expressed as a Node MTESS value.
+MTESS can quantify the similarity between two multivariate time-series. It is composed of the normalized distance or cos-similarity of seven basic statistical properties. These are the standard deviation, auto-correlation, partial auto-correlation, correlation matrix, partial correlation matrix, cross-correlation matrix and partial cross-correlation matrix, and multivariate kurtosis. By considering each of these statistical properties, it is possible to identify which of them differ between two multivariate time-series using a “MTESS radar chart.”  The total difference between two multivariate time-series is expressed by a single value [0, 5] (0: not similar to 5: similar)(MTESS), and the  difference in each univariate time-series, which we consider as nodes of a network, is expressed as a Node MTESS value.
 
 The combination of GSDGM and MTESS allows us to perform fingerprint analysis of a group of multivariate time-series.
 The GSDGM can generate the group centroid time-series and MTESS can quantify normality and abnormality based on a comparison between the group centroid and each individual multivariate time-series.
@@ -208,8 +208,8 @@ Then, the multivariate time-series similarity among subjects are calculated and 
 >> mtess -h
 usage: mtess [options] file1.mat file2.mat ...
   --range type        input group value range (default:"auto", sigma:<num>, full:<num> or <min>:<max>)
-  --ndft num          DFT sampling <number> (even number) (default: 100)
   --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC, 3:PC-PCC (dafault:0)
+  --aclag num         time lag <num> for Auto Correlation (default:15)
   --cclag num         time lag <num> for Cross Correlation (default:8)
   --pcclag num        time lag <num> for Partial Cross Correlation (default:8)
   --outpath path      output files <path> (default:"results")
