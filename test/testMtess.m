@@ -163,7 +163,7 @@ function testMtess
     end
     plotMtessAllMatrix(MTS, MTSp, 'real HCP fMRI signal');
     P=squeeze(MTSp(1,2:6,:));
-    figure; plotMtessSpiderPlot(P,8,2,'SVgPC'); title('real HCP fMRI : MTESS polar chart');
+    figure; plotMtessSpiderPlot(P); title('real HCP fMRI : MTESS polar chart');
     
     A=squeeze(nMTS(1,2:6,:));
     figure; plot(A.'); title('real HCP fMRI : node MTESS');
