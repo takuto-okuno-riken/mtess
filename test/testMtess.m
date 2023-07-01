@@ -13,8 +13,11 @@ function testMtess
     ccLags = 8;
     pccLags = 8;
     pccFunc = @calcPartialCrossCorrelation;
-    [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, pccFunc, acLags, ccLags, pccLags);
+    [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, pccFunc, acLags, ccLags, pccLags);
     plotMtessAllMatrix(MTS, MTSp, 'cx-8x500-idx6');
+    P=squeeze(MTSp(1,2:8,:));
+    figure; plotMtessSpiderPlot(P);
+    figure; h=bar3(MTS); 
     % cache version
     CXNames = {};
     for i=1:length(CX), CXNames{i} = ['dmy' num2str(i)]; end

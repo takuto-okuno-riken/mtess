@@ -321,7 +321,7 @@ function processInputFiles(handles)
     if handles.cache > 0
         [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, pccFunc, aclag, cclag, pcclag, names, handles.cachepath);
     else
-        [MTS, MTSp, nMTS, nMTSp, Means, Stds, Amps, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, pccFunc, aclag, cclag, pcclag, {});
+        [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, pccFunc, aclag, cclag, pcclag, {});
     end
 
     % output result matrix files
