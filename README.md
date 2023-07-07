@@ -240,11 +240,11 @@ The output .mat file includes the following matrix data:
 | name | matrix | description |
 |:---|:---|:---|
 |MTS |&lt;cell number&gt; x &lt;cell number&gt; | MTESS matrix (2D)|
-|MTSp |&lt;cell number&gt; x &lt;cell number&gt; x 7| MTESS statistical property matrix (3D)|
+|MTSp |&lt;cell number&gt; x &lt;cell number&gt; x 8| MTESS statistical property matrix (3D)|
 |nMTS |&lt;cell number&gt; x &lt;cell number&gt; x &lt;nodes&gt;| Node MTESS matrix (3D)|
-|nMTSp |&lt;cell number&gt; x &lt;cell number&gt; x &lt;nodes&gt; x 7| Node MTESS statistical property matrix (4D)|
+|nMTSp |&lt;cell number&gt; x &lt;cell number&gt; x &lt;nodes&gt; x 8| Node MTESS statistical property matrix (4D)|
 
-Similarities are generated for the following 7 statistical properties: mean, standard deviation, DFT amplitude, correlation, partial correlation, cross-correlation and partial cross-correlation.
+Similarities are generated for the following 8 statistical properties: mean, standard deviation, DFT amplitude, correlation, partial correlation, cross-correlation and partial cross-correlation.
 
 ##
 <b>gsdgm command</b><br>
