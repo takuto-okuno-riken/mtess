@@ -28,6 +28,7 @@ function mtess(varargin)
     handles.range = 'auto';
     handles.pcc = 0;
     handles.aclag = NaN;
+    handles.paclag = NaN;
     handles.cclag = NaN;
     handles.pcclag = NaN;
     handles.outpath = 'results';
@@ -60,6 +61,9 @@ function mtess(varargin)
                 i = i + 1;
             case {'--aclag'}
                 handles.aclag = str2num(varargin{i+1});
+                i = i + 1;
+            case {'--paclag'}
+                handles.paclag = str2num(varargin{i+1});
                 i = i + 1;
             case {'--cclag'}
                 handles.cclag = str2num(varargin{i+1});
@@ -142,9 +146,10 @@ function showUsage()
     disp(['usage: ' exeName ' [options] file1.mat file2.mat ...']);
     disp('  --range type        input group value range (default:"auto", sigma:<num>, full:<num> or <min>:<max>)');
     disp('  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC, 3:PC-PCC (dafault:0)');
-    disp('  --aclag num         time lag <num> for Auto Correlation (default:15)');
-    disp('  --cclag num         time lag <num> for Cross Correlation (default:8)');
-    disp('  --pcclag num        time lag <num> for Partial Cross Correlation (default:8)');
+    disp('  --aclag num         time lag <num> for Auto Correlation (default:5)');
+    disp('  --paclag num        time lag <num> for Partial Auto Correlation (default:13)');
+    disp('  --cclag num         time lag <num> for Cross Correlation (default:2)');
+    disp('  --pcclag num        time lag <num> for Partial Cross Correlation (default:4)');
     disp('  --outpath path      output files <path> (default:"results")');
     disp('  --format type       save file format <type> 0:csv, 1:mat (default:1)');
     disp('  --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)');
@@ -296,9 +301,10 @@ function processInputFiles(handles)
     % calc MTESS
     pcName = 'PC';
     pccFunc = @calcPartialCrossCorrelation;
-    aclag = 15;
-    cclag = 8;
-    pcclag = 8;
+    aclag = 5;
+    paclag = 13;
+    cclag = 2;
+    pcclag = 4;
     if handles.pcc == 1
         % same as default
     elseif handles.pcc == 2
@@ -315,13 +321,14 @@ function processInputFiles(handles)
         end
     end
     if ~isnan(handles.aclag), aclag = handles.aclag; end
+    if ~isnan(handles.paclag), paclag = handles.paclag; end
     if ~isnan(handles.cclag), cclag = handles.cclag; end
     if ~isnan(handles.pcclag), pcclag = handles.pcclag; end
 
     if handles.cache > 0
-        [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, pccFunc, aclag, cclag, pcclag, names, handles.cachepath);
+        [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, pccFunc, aclag, paclag, cclag, pcclag, names, handles.cachepath);
     else
-        [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, pccFunc, aclag, cclag, pcclag, {});
+        [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs] = calcMtess(CX, range, pccFunc, aclag, paclag, cclag, pcclag, {});
     end
 
     % output result matrix files

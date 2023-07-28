@@ -10,20 +10,22 @@
 %  CY               cells of multivariate time series matrix {(node x time series)} x cell number (time series length can be different)
 %  range            range [min, max] of time series for normalized mean and std dev (default: min and max of input CX)
 %  pccFunc          Partial Cross-Correlation function (default: @calcPartialCrossCorrelation)
-%  acLags           time lags for Auto-Correlation / Partial Auto-Correlation function (default: 15)
-%  ccLags           time lags for Cross-Correlation function (default: 8)
-%  pccLags          time lags for Partial Cross-Correlation function (default: 8)
+%  acLags           time lags for Auto-Correlation function (default: 5)
+%  pacLags          time lags for Partial Auto-Correlation function (default: 13)
+%  ccLags           time lags for Cross-Correlation function (default: 2)
+%  pccLags          time lags for Partial Cross-Correlation function (default: 4)
 %  CXNames          CX signals names used for cache filename (default: {})
 %  CYNames          CY signals names used for cache filename (default: {})
 %  cachePath        cache file path (default: 'results/cache')
 
-function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, pccFunc, acLags, ccLags, pccLags, CXNames, CYNames, cachePath)
-    if nargin < 10, cachePath = 'results/cache'; end 
-    if nargin < 9, CYNames = {}; end 
-    if nargin < 8, CXNames = {}; end 
-    if nargin < 7, pccLags = 8; end
-    if nargin < 6, ccLags = 8; end
-    if nargin < 5, acLags = 15; end
+function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, pccFunc, acLags, pacLags, ccLags, pccLags, CXNames, CYNames, cachePath)
+    if nargin < 11, cachePath = 'results/cache'; end 
+    if nargin < 10, CYNames = {}; end 
+    if nargin < 9, CXNames = {}; end 
+    if nargin < 8, pccLags = 4; end
+    if nargin < 7, ccLags = 2; end
+    if nargin < 6, pacLags = 13; end
+    if nargin < 5, acLags = 5; end
     if nargin < 4, pccFunc = @calcPartialCrossCorrelation; end
     if nargin < 3, range = NaN; end
 
@@ -71,8 +73,8 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, pccFunc, acL
     end
     if isnMTS, ostr=''; else, ostr='n'; end
 
-    calcStatProps(CX, pccFunc, palgo, acLags, ccLags, pccLags, CXNames, cachePath, isnMTS, ostr);
-    calcStatProps(CY, pccFunc, palgo, acLags, ccLags, pccLags, CYNames, cachePath, isnMTS, ostr);
+    calcStatProps(CX, pccFunc, palgo, acLags, pacLags, ccLags, pccLags, CXNames, cachePath, isnMTS, ostr);
+    calcStatProps(CY, pccFunc, palgo, acLags, pacLags, ccLags, pccLags, CYNames, cachePath, isnMTS, ostr);
 
     % calc MTESS
     A = nan(nodeNum,'single'); A= tril(A,0); % half does not support
@@ -246,7 +248,7 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, pccFunc, acL
     nMTS = nanmean(nMTSp,4);
 end
 
-function calcStatProps(CX, pccFunc, palgo, acLags, ccLags, pccLags, CXNames, cachePath, isnMTS, ostr)
+function calcStatProps(CX, pccFunc, palgo, acLags, pacLags, ccLags, pccLags, CXNames, cachePath, isnMTS, ostr)
     nodeNum = size(CX{1},1);
     memClass = class(CX{1});
     A = ones(nodeNum,'logical'); A = triu(A,1);
@@ -262,7 +264,7 @@ function calcStatProps(CX, pccFunc, palgo, acLags, ccLags, pccLags, CXNames, cac
             xm = mean(X,2);
             xsd = std(X,1,2);
             xac = calcAutoCorrelation(X,acLags);
-            xpac = calcPartialAutoCorrelation(X,acLags);
+            xpac = calcPartialAutoCorrelation(X,pacLags);
             tc = tic;
             xcc = calcCrossCorrelation_(X,[],[],[],ccLags,0,false); % use gpu false
             s = toc(tc); disp([num2str(nn) ' : calcCrossCorr ' num2str(s) ' sec'])

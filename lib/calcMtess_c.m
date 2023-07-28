@@ -9,20 +9,22 @@
 %  CX               cells of multivariate time series matrix {(node x time series)} x cell number (time series length can be different)
 %  range            range [min, max] of time series for normalized mean and std dev (default: min and max of input CX)
 %  pccFunc          Partial Cross-Correlation function (default: @calcPartialCrossCorrelation)
-%  acLags           time lags for Auto-Correlation / Partial Auto-Correlation function (default: 15)
-%  ccLags           time lags for Cross-Correlation function (default: 8)
-%  pccLags          time lags for Partial Cross-Correlation function (default: 8)
+%  acLags           time lags for Auto-Correlation function (default: 5)
+%  pacLags          time lags for Partial Auto-Correlation function (default: 13)
+%  ccLags           time lags for Cross-Correlation function (default: 2)
+%  pccLags          time lags for Partial Cross-Correlation function (default: 4)
 %  CXNames          CX signals names used for cache filename (default: {})
 %  cachePath        cache file path (default: 'results/cache')
 %  pccPca           PCA structure for pcc calculation (default: [])
 
-function [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, pccFunc, acLags, ccLags, pccLags, CXNames, cachePath, pccPca)
-    if nargin < 9, pccPca = []; end
-    if nargin < 8, cachePath = 'results/cache'; end 
-    if nargin < 7, CXNames = {}; end 
-    if nargin < 6, pccLags = 8; end
-    if nargin < 5, ccLags = 8; end
-    if nargin < 4, acLags = 15; end
+function [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, pccFunc, acLags, pacLags, ccLags, pccLags, CXNames, cachePath, pccPca)
+    if nargin < 10, pccPca = []; end
+    if nargin < 9, cachePath = 'results/cache'; end 
+    if nargin < 8, CXNames = {}; end 
+    if nargin < 7, pccLags = 4; end
+    if nargin < 6, ccLags = 2; end
+    if nargin < 5, pacLags = 13; end
+    if nargin < 4, acLags = 5; end
     if nargin < 3, pccFunc = @calcPartialCrossCorrelation; end
     if nargin < 2, range = NaN; end
 
@@ -80,7 +82,7 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, pccFunc, acLags, ccLa
             xm = mean(X,2);
             xsd = std(X,1,2);
             xac = calcAutoCorrelation(X,acLags);
-            xpac = calcPartialAutoCorrelation(X,acLags);
+            xpac = calcPartialAutoCorrelation(X,pacLags);
             tc = tic;
             xcc = calcCrossCorrelation_(X,[],[],[],ccLags,0,false); % use gpu false
             s = toc(tc); disp([num2str(nn) ' : calcCrossCorr ' num2str(s) ' sec'])

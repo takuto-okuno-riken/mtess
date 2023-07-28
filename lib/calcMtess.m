@@ -8,18 +8,20 @@
 %  CX               cells of multivariate time series matrix {(node x time series)} x cell number (time series length can be different)
 %  range            range [min, max] of time series for normalized mean and std dev (default: min and max of input CX)
 %  pccFunc          Partial Cross-Correlation function (default: @calcPartialCrossCorrelation)
-%  acLags           time lags for Auto-Correlation / Partial Auto-Correlation function (default: 15)
-%  ccLags           time lags for Cross-Correlation function (default: 8)
-%  pccLags          time lags for Partial Cross-Correlation function (default: 8)
+%  acLags           time lags for Auto-Correlation function (default: 5)
+%  pacLags          time lags for Partial Auto-Correlation function (default: 13)
+%  ccLags           time lags for Cross-Correlation function (default: 2)
+%  pccLags          time lags for Partial Cross-Correlation function (default: 4)
 %  CXNames          CX signals names used for cache filename (default: {})
 %  cachePath        cache file path (default: 'results/cache')
 
-function [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs, mKTs] = calcMtess(CX, range, pccFunc, acLags, ccLags, pccLags, CXNames, cachePath)
-    if nargin < 8, cachePath = 'results/cache'; end 
-    if nargin < 7, CXNames = {}; end
-    if nargin < 6, pccLags = 8; end
-    if nargin < 5, ccLags = 8; end
-    if nargin < 4, acLags = 15; end
+function [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs, mKTs] = calcMtess(CX, range, pccFunc, acLags, pacLags, ccLags, pccLags, CXNames, cachePath)
+    if nargin < 9, cachePath = 'results/cache'; end 
+    if nargin < 8, CXNames = {}; end
+    if nargin < 7, pccLags = 4; end
+    if nargin < 6, ccLags = 2; end
+    if nargin < 5, pacLags = 13; end
+    if nargin < 4, acLags = 5; end
     if nargin < 3, pccFunc = @calcPartialCrossCorrelation; end
     if nargin < 2, range = NaN; end
 
@@ -60,7 +62,7 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs, m
     Means = nan(cLen,nodeNum,memClass);
     Stds = nan(cLen,nodeNum,memClass);
     ACs = nan(cLen,nodeNum,acLags+1,memClass);
-    PACs = nan(cLen,nodeNum,acLags+1,memClass);
+    PACs = nan(cLen,nodeNum,pacLags+1,memClass);
     FCs = nan(cLen,nodeNum,nodeNum,memClass);
     PCs = nan(cLen,nodeNum,nodeNum,memClass);
     CCs = nan(cLen,nodeNum,nodeNum,2*ccLags+1,memClass);
@@ -78,7 +80,7 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs, m
             xm = mean(X,2);
             xsd = std(X,1,2);
             xac = calcAutoCorrelation(X,acLags);
-            xpac = calcPartialAutoCorrelation(X,acLags);
+            xpac = calcPartialAutoCorrelation(X,pacLags);
             xcc = calcCrossCorrelation_(X,[],[],[],ccLags); % faster version
             if isequal(pccFunc,@calcSvPartialCrossCorrelation)
                 xpcc = pccFunc(X,[],[],[],pccLags,'gaussian');
