@@ -42,9 +42,15 @@ function TS = spatialTemporalTimeseries(CM, spectra)
     SS = sum(spectra.^2, 2);
     CS = (spectra * spectra') ./ sqrt(SS * SS'); % cosine similarity
     CV = CM ./ CS; % covariance matrix
-    if min(svd(CV)) < -1e-8
-        disp('Correlation matrix is not possible with those spectra using this method!');
-        return;
+    % must be a positive semi-definite matrix.
+    [V,D] = eig(CV);
+    E = diag(D);
+    if min(E) < 0
+        E(E < 0) = 0;
+        s = sum(E);
+        E(end) = E(end) - (s - length(E));
+        disp(['Warning (spatialTemporalTimeseries): eigenvalues of covmat were less than zero in source matrix by ' num2str(s - length(E))]);
+        CV = V * diag(E) * inv(V);
     end
     M  = zeros(1,nodeNum);
     rvs = mvnrnd(M,CV,nFreqs*2);
