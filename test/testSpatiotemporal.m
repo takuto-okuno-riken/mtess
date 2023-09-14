@@ -83,7 +83,7 @@ function testSpatiotemporal
         load(['data/spatio/test_sptmsurrno' num2str(i-1) '.mat']);
         params = double(params); % hmm.
         % surrogate spatio temporal time-series
-        X = surrogateSpatiotemporal(distance_matrix, params(1), params(2), ta_delta1s, tsLen, tr, 1);
+        X = surrogateSpatiotemporal(distance_matrix, params(1), params(2), ta_delta1s, tsLen, tr, [], 1);
         figure; plot(X'); title(['surrogate spatio temporal saLambda=' num2str(params(1)) ', saInf=' num2str(params(2))]);
 
         % check TA-Δ1 with surrogate time-series
