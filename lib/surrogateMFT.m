@@ -20,9 +20,7 @@ function Y = surrogateMFT(X, surrNum)
             r = exp(2i*pi*rand(1, (sigLen-1)/2));
             v = [1, r, flip(conj(r))];
         end
-        for i=1:nodeNum
-            y = fft(X(i,:));
-            Y(i,:,k) = ifft(y .* v);
-        end
+        Yk = fft(X,[],2);
+        Y(:,:,k) = ifft(Yk .* repmat(v,nodeNum,1),[],2);
     end
 end
