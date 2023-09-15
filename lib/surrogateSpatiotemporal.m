@@ -31,14 +31,13 @@ function Y = surrogateSpatiotemporal(D, saLambda, saInf, TA, tsLen, tr, highpass
     % Compute timeseries from desired correlation matrix and frequency spectra
     Y = nan(nodeNum,tsLen,surrNum);
     for i=1:surrNum
-        Y(:,:,i) = spatialTemporalTimeseries(cm, spectra);
+        Y(:,:,i) = spatialTemporalTimeseries(cm, spectra, tsLen);
     end
 end
 
-function TS = spatialTemporalTimeseries(CM, spectra)
+function TS = spatialTemporalTimeseries(CM, spectra, tsLen)
     nodeNum = size(CM,1);
     nFreqs = size(spectra,2);
-    tsLen = (nFreqs-1)*2;
     SS = sum(spectra.^2, 2);
     CS = (spectra * spectra') ./ sqrt(SS * SS'); % cosine similarity
     CV = CM ./ CS; % covariance matrix
