@@ -145,7 +145,7 @@ function showUsage()
     global exeName;
     disp(['usage: ' exeName ' [options] file1.mat file2.mat ...']);
     disp('  --range type        input group value range (default:"auto", sigma:<num>, full:<num> or <min>:<max>)');
-    disp('  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC, 3:PC-PCC (dafault:0)');
+    disp('  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC, 3:PC-PCC, 4:[] (dafault:0)');
     disp('  --aclag num         time lag <num> for Auto Correlation (default:5)');
     disp('  --paclag num        time lag <num> for Partial Auto Correlation (default:13)');
     disp('  --cclag num         time lag <num> for Cross Correlation (default:2)');
@@ -314,6 +314,9 @@ function processInputFiles(handles)
     elseif handles.pcc == 3
         pccFunc = @calcPcPartialCrossCorrelation;
         pcName = 'PCPC';
+    elseif handles.pcc == 4
+        pccFunc = [];
+        pcName = '';
     else
         % auto
         if nodeNum >= 48
@@ -388,7 +391,7 @@ function processInputFiles(handles)
     % show force weight effect graph
     if handles.showForce > 0
         X = 5 - MTS;
-        dn = cell(1,length(CX));
+        dn = cell(1,size(MTS,1));
         for i=1:length(dn), dn{i}=[num2str(i)]; end
         G = graph(X, dn, 'omitselfloops','upper');
         figure; gp=plot(G,'Layout','force','WeightEffect','direct');%'force','UseGravity',true);

@@ -82,7 +82,9 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs, m
             xac = calcAutoCorrelation(X,acLags);
             xpac = calcPartialAutoCorrelation(X,pacLags);
             xcc = calcCrossCorrelation_(X,[],[],[],ccLags); % faster version
-            if isequal(pccFunc,@calcSvPartialCrossCorrelation)
+            if isempty(pccFunc)
+                xpcc = [];
+            elseif isequal(pccFunc,@calcSvPartialCrossCorrelation)
                 xpcc = pccFunc(X,[],[],[],pccLags,'gaussian');
             else
                 xpcc = pccFunc(X,[],[],[],pccLags);
@@ -98,9 +100,11 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs, m
         ACs(nn,:,:) = xac;
         PACs(nn,:,:) = xpac;
         CCs(nn,:,:,:) = xcc;
-        PCCs(nn,:,:,:) = xpcc;
         FCs(nn,:,:) = squeeze(xcc(:,:,ccLags+1));
-        PCs(nn,:,:) = squeeze(xpcc(:,:,pccLags+1));
+        if ~isempty(xpcc)
+            PCCs(nn,:,:,:) = xpcc;
+            PCs(nn,:,:) = squeeze(xpcc(:,:,pccLags+1));
+        end
         mKTs(nn) = xmkt;
     end
 
@@ -145,11 +149,13 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs, m
             end
             
             % calc zero-lag partial covariance similarity
-            PC1 = squeeze(PCs(i,:,:)) + A;
-            PC2 = squeeze(PCs(j,:,:)) + A;
-            C(5) = 5 * getCosSimilarity(PC1, PC2);
-            for k=1:nodeNum
-                nC(k,5) = 5 * getCosSimilarity([PC1(k,:), PC1(:,k).'], [PC2(k,:), PC2(:,k).']);
+            if ~isempty(pccFunc)
+                PC1 = squeeze(PCs(i,:,:)) + A;
+                PC2 = squeeze(PCs(j,:,:)) + A;
+                C(5) = 5 * getCosSimilarity(PC1, PC2);
+                for k=1:nodeNum
+                    nC(k,5) = 5 * getCosSimilarity([PC1(k,:), PC1(:,k).'], [PC2(k,:), PC2(:,k).']);
+                end
             end
             
             % calc cross-covariance simirality
@@ -163,13 +169,15 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs, m
             end
 
             % calc partial cross-covariance simirality
-            PCC1 = squeeze(PCCs(i,:,:,[1:pccLags,pccLags+2:end])) + A;
-            PCC2 = squeeze(PCCs(j,:,:,[1:pccLags,pccLags+2:end])) + A;
-            C(7) = 5 * getCosSimilarity(PCC1,PCC2);
-            for k=1:nodeNum
-                R1 = [PCC1(k,:,:), permute(PCC1(:,k,:),[2 1 3])];
-                R2 = [PCC2(k,:,:), permute(PCC2(:,k,:),[2 1 3])];
-                nC(k,7) = 5 * getCosSimilarity(R1, R2);
+            if ~isempty(pccFunc)
+                PCC1 = squeeze(PCCs(i,:,:,[1:pccLags,pccLags+2:end])) + A;
+                PCC2 = squeeze(PCCs(j,:,:,[1:pccLags,pccLags+2:end])) + A;
+                C(7) = 5 * getCosSimilarity(PCC1,PCC2);
+                for k=1:nodeNum
+                    R1 = [PCC1(k,:,:), permute(PCC1(:,k,:),[2 1 3])];
+                    R2 = [PCC2(k,:,:), permute(PCC2(:,k,:),[2 1 3])];
+                    nC(k,7) = 5 * getCosSimilarity(R1, R2);
+                end
             end
 
             % multivariate kurtosis
