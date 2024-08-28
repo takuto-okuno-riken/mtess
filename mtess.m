@@ -31,6 +31,7 @@ function mtess(varargin)
     handles.paclag = NaN;
     handles.cclag = NaN;
     handles.pcclag = NaN;
+    handles.lambda = 0;
     handles.outpath = 'results';
     handles.cachepath = 'results/cache';
     handles.format = 1;
@@ -70,6 +71,9 @@ function mtess(varargin)
                 i = i + 1;
             case {'--pcclag'}
                 handles.pcclag = str2num(varargin{i+1});
+                i = i + 1;
+            case {'--lambda'}
+                handles.lambda = str2num(varargin{i+1});
                 i = i + 1;
             case {'--outpath'}
                 handles.outpath = varargin{i+1};
@@ -150,6 +154,7 @@ function showUsage()
     disp('  --paclag num        time lag <num> for Partial Auto Correlation (default:13)');
     disp('  --cclag num         time lag <num> for Cross Correlation (default:2)');
     disp('  --pcclag num        time lag <num> for Partial Cross Correlation (default:4)');
+    disp('  --lambda num        ridge regression param <num> for Partial Cross Correlation (default:0)');
     disp('  --outpath path      output files <path> (default:"results")');
     disp('  --format type       save file format <type> 0:csv, 1:mat (default:1)');
     disp('  --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)');
@@ -320,13 +325,13 @@ function processInputFiles(handles)
     else
         % auto
         if nodeNum >= 48
-            pcclag = 2;
+            pcclag = {2, handles.lambda};
         end
     end
     if ~isnan(handles.aclag), aclag = handles.aclag; end
     if ~isnan(handles.paclag), paclag = handles.paclag; end
     if ~isnan(handles.cclag), cclag = handles.cclag; end
-    if ~isnan(handles.pcclag), pcclag = handles.pcclag; end
+    if ~isnan(handles.pcclag), pcclag = {handles.pcclag, handles.lambda}; end
 
     if handles.cache > 0
         [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, pccFunc, aclag, paclag, cclag, pcclag, names, handles.cachepath);

@@ -33,6 +33,12 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, pccFunc, acLags, pacL
     nodeNum = size(CX{1},1);
     memClass = class(CX{1});
     isnMTS = nargout >= 3;
+    if iscell(pccLags)
+        lambda = pccLags{2}; % for redge regression
+        pccLags = pccLags{1};
+    else
+        lambda = 0; % for redge regression
+    end
     % check data file. node num should be same.
     for i=2:cLen
         if size(CX{i},1) ~= nodeNum
@@ -107,6 +113,8 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtess_c(CX, range, pccFunc, acLags, pacL
                 pc = pccFunc(X,[],[],[],0);
             elseif isequal(pccFunc,@calcSvPartialCrossCorrelation)
                 xpcc = pccFunc(X,[],[],[],pccLags,'gaussian');
+            elseif isequal(pccFunc,@calcPartialCrossCorrelation)
+                xpcc = pccFunc(X,[],[],[],pccLags,0,lambda); % linear or ridge regress
             else
                 xpcc = pccFunc(X,[],[],[],pccLags,0,false); % use gpu
             end

@@ -66,6 +66,12 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs, m
     FCs = nan(cLen,nodeNum,nodeNum,memClass);
     PCs = nan(cLen,nodeNum,nodeNum,memClass);
     CCs = nan(cLen,nodeNum,nodeNum,2*ccLags+1,memClass);
+    if iscell(pccLags)
+        lambda = pccLags{2}; % for redge regression
+        pccLags = pccLags{1};
+    else
+        lambda = 0; % for redge regression
+    end
     PCCs = nan(cLen,nodeNum,nodeNum,2*pccLags+1,memClass);
     mKTs = nan(cLen,1,memClass);
     for nn=1:cLen
@@ -86,6 +92,8 @@ function [MTS, MTSp, nMTS, nMTSp, Means, Stds, ACs, PACs, FCs, PCs, CCs, PCCs, m
                 xpcc = [];
             elseif isequal(pccFunc,@calcSvPartialCrossCorrelation)
                 xpcc = pccFunc(X,[],[],[],pccLags,'gaussian');
+            elseif isequal(pccFunc,@calcPartialCrossCorrelation)
+                xpcc = pccFunc(X,[],[],[],pccLags,0,lambda); % linear or ridge regress
             else
                 xpcc = pccFunc(X,[],[],[],pccLags);
             end

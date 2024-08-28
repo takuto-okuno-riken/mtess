@@ -75,6 +75,9 @@ function [MTS, MTSp, nMTS, nMTSp] = calcMtessCross_c(CX, CY, range, pccFunc, acL
 
     calcStatProps(CX, pccFunc, palgo, acLags, pacLags, ccLags, pccLags, CXNames, cachePath, isnMTS, ostr);
     calcStatProps(CY, pccFunc, palgo, acLags, pacLags, ccLags, pccLags, CYNames, cachePath, isnMTS, ostr);
+    if iscell(pccLags)
+        pccLags = pccLags{1};
+    end
 
     % calc MTESS
     A = nan(nodeNum,'single'); A= tril(A,0); % half does not support
@@ -253,6 +256,12 @@ function calcStatProps(CX, pccFunc, palgo, acLags, pacLags, ccLags, pccLags, CXN
     memClass = class(CX{1});
     A = ones(nodeNum,'logical'); A = triu(A,1);
     cxLen = length(CX);
+    if iscell(pccLags)
+        lambda = pccLags{2}; % for redge regression
+        pccLags = pccLags{1};
+    else
+        lambda = 0; % for redge regression
+    end
     for nn=1:cxLen
         X = CX{nn};
         if ~isempty(CXNames)
@@ -285,6 +294,8 @@ function calcStatProps(CX, pccFunc, palgo, acLags, pacLags, ccLags, pccLags, CXN
                 pc = pccFunc(X,[],[],[],0);
             elseif isequal(pccFunc,@calcSvPartialCrossCorrelation)
                 xpcc = pccFunc(X,[],[],[],pccLags,'gaussian');
+            elseif isequal(pccFunc,@calcPartialCrossCorrelation)
+                xpcc = pccFunc(X,[],[],[],pccLags,0,lambda); % linear or ridge regress
             else
                 xpcc = pccFunc(X,[],[],[],pccLags,0,false); % use gpu
             end
