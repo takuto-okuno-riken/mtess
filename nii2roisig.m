@@ -134,6 +134,7 @@ function processInputFiles(handles)
 
     atlasInfo = niftiinfo(handles.atlasFile);
     atlasV = niftiread(atlasInfo);
+    atlasV = adjustVolumeDir(atlasV, atlasInfo);
     R = unique(atlasV);
     R(R==0) = []; % remove 0
     nodeNum = length(R);
@@ -199,7 +200,7 @@ function processInputFiles(handles)
     end
 
     % process each file
-    CX = {}; names = {}; savename = '';
+    CX = {}; CXm = {}; names = {}; savename = '';
     for i = 1:N
         % load multivariate time-series csv or mat file
         argv = handles.niiFiles{i};
@@ -225,6 +226,7 @@ function processInputFiles(handles)
             if handles.noCache > 0 || ~exist(cachename,'file')
                 info = niftiinfo(fname);
                 V = niftiread(info);
+                V = adjustVolumeDir(V, info);
 
                 if size(V,1) ~= size(atlasV,1) || size(V,2) ~= size(atlasV,2) || size(V,3) ~= size(atlasV,3)
                     disp(['atlas space and fMRI space does not match. ignoring : ' fname]);
@@ -244,7 +246,8 @@ function processInputFiles(handles)
             else
                 load(cachename)
             end
-            X = X - mean(X,2);
+            Xm = mean(X,2);
+            X = X - Xm;
 
             % signal transform raw or not
             if handles.transform == 1
@@ -269,12 +272,13 @@ function processInputFiles(handles)
             end
 
             CX{end+1} = X;
+            CXm{end+1} = Xm;
             names{end+1} = name;
         end
     end
     
     if ~isempty(CX)
-        saveResultFiles(handles, CX, names, savename);
+        saveResultFiles(handles, CX, CXm, names, savename);
     end
 end
 
@@ -284,17 +288,18 @@ end
 %%
 % output result matrix files
 %
-function saveResultFiles(handles, CX, names, outname)
+function saveResultFiles(handles, CX, CXm, names, outname)
     if handles.format == 1
         for i=1:length(CX)
             X = single(CX{i});
+            m = CXm{i};
             outfname = [handles.outpath '/' names{i} '.mat'];
-            save(outfname,'X');
+            save(outfname,'X','m');
             disp(['output mat file : ' outfname]);
         end
     elseif handles.format == 2
         outfname = [handles.outpath '/' outname '_all.mat'];
-        save(outfname, 'CX', 'names', '-v7.3');
+        save(outfname, 'CX', 'CXm', 'names', '-v7.3');
         disp(['output mat file : ' outfname]);
     else
         % output result matrix csv file
