@@ -208,11 +208,12 @@ Then, the multivariate time-series similarity among subjects are calculated and 
 >> mtess -h
 usage: mtess [options] file1.mat file2.mat ...
   --range type        input group value range (default:"auto", sigma:<num>, full:<num> or <min>:<max>)
-  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC, 3:PC-PCC (dafault:0)
+  --pcc type          Partial Cross-Correlation algorithm 0:auto, 1:PCC, 2:SV-PCC, 3:PC-PCC, 4:[] (dafault:0)
   --aclag num         time lag <num> for Auto Correlation (default:5)
   --paclag num        time lag <num> for Partial Auto Correlation (default:13)
   --cclag num         time lag <num> for Cross Correlation (default:2)
   --pcclag num        time lag <num> for Partial Cross Correlation (default:4)
+  --lambda num        ridge regression param <num> for Partial Cross Correlation (default:0)
   --outpath path      output files <path> (default:"results")
   --format type       save file format <type> 0:csv, 1:mat (default:1)
   --transform type    input signal transform <type> 0:raw, 1:sigmoid (default:0)
